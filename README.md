@@ -1,6 +1,7 @@
 # 🐍 Python Project — First Real-World Application
 
 📅 *Started: January 14, 2026*
+	*Current Date: January 20, 2026*
 
 This repository contains my **first real Python project**, developed as part of my transition from learning exercises to building practical, real-world solutions.
 
