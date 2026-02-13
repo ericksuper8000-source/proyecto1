@@ -1,6 +1,1 @@
-print (f'Uno')
-print (f'Dos')
-print (f'Tres')
-print (f'Cuatro')
-print (f'Cinco')
-print (f'Cuatro')
+print (f'One')
