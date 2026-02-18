@@ -1,1 +1,1 @@
-print (f'One')
+print (f'Uno')
