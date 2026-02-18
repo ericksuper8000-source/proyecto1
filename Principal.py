@@ -1,5 +1,1 @@
 print (f'One')
-print (f'Two')
-print (f'Three')
-print (f'Four')
-print (f'Five')
