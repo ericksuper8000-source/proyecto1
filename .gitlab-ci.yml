@@ -7,4 +7,4 @@ run_python_script:
   stage: run
   script:
     - python --version
-    - python main.py
+    - python Principal.py
