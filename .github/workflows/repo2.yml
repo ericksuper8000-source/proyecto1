@@ -1,0 +1,21 @@
+name: Repo2 Practica
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Esta accion hara un checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Valida la version de python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Con esta instruccion corremos el script
+        run: python Principal.py
