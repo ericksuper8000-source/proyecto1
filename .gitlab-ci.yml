@@ -1,0 +1,10 @@
+image: python:3.12
+
+stages:
+  - run
+
+run_python_script:
+  stage: run
+  script:
+    - python --version
+    - python main.py
