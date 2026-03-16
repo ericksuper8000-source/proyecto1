@@ -18,4 +18,4 @@ jobs:
           python-version: '3.11'
 
       - name: Corremos el script
-        run: python Practica.py
+        run: python Principal.py
