@@ -1,5 +1,2 @@
-print (f'Antes de la primera')
-print (f'Primera')
-print (f'Segunda')
-print (f'Tercera')
-print (f'Cuarta')
+print (f'cuarta')
+print (f'quinta')
