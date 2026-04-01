@@ -1,6 +1,1 @@
-print (f'Durazno')
-print (f'Manzana')
-print (f'Uva')
-print (f'Fresa')
-print (f'Papaya')
-print (f'Pitaya')
+print("Hola Mundo desde mi primer pipeline 🚀")
