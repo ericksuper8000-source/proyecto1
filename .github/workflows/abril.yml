@@ -1,0 +1,21 @@
+name: Practica 04/02/2026
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hacemos checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Validamos la version de python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Corremos el script
+        run: python Principal.py
