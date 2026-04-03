@@ -1,10 +1,23 @@
-image: python:3.12
-
 stages:
-  - run
+  - build
+  - test
 
-run_python_script:
-  stage: run
+image: python:3.14
+
+before_script:
+  - python --version
+  - pip install --upgrade pip
+
+build_job:
+  stage: build
   script:
-    - python --version
+    - echo "Ejecutando script..."
     - python Principal.py
+
+test_job:
+  stage: test
+  script:
+    - echo "Instalando pytest..."
+    - pip install pytest
+    - echo "Ejecutando tests..."
+    - python -m pytest

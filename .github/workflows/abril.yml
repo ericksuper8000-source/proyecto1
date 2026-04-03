@@ -1,8 +1,10 @@
-name: Practica 04/02/2026
+name: Practica Pipeline 04/03/2026
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -12,10 +14,16 @@ jobs:
       - name: Hacemos checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: Validamos la version de python
+      - name: Configuramos Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
-      - name: Corremos el script
+      - name: Ejecutamos el script
         run: python Principal.py
+
+      - name: Instalamos pytest
+        run: pip install pytest
+
+      - name: Ejecutamos tests
+        run: python -m pytest
