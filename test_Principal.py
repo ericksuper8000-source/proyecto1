@@ -1,2 +1,7 @@
-def test_dummy():
-    assert 1 + 1 == 2
+from Principal import suma, resta
+
+def test_suma():
+    assert suma(2, 3) == 5
+
+def test_resta():
+    assert resta(5, 3) == 2

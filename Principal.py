@@ -1,5 +1,5 @@
-print (f'Uno')
-print (f'Dos')
-print (f'Tres')
-print (f'Cuatro')
-print (f'Cinco')
+def suma(a, b):
+    return a + b
+
+def resta(a, b):
+    return a - b
