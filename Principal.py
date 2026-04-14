@@ -1,6 +1,2 @@
-print (f'Cero')
-print (f'Uno')
-print (f'Dos')
-print (f'Tres')
-print (f'Cuatro')
-print (f'Cinco')
+# Esto se creo desde el escritorio
+# Hola Repo2 como estas?
