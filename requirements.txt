@@ -1,0 +1,7 @@
+# Testing y Calidad (Desarrollo)
+flake8==7.0.0
+pytest==8.0.0
+
+# Dependencias del Proyecto (Producción)
+# Aquí irán las librerías que tu main.py necesite, por ejemplo:
+# requests==2.31.0
