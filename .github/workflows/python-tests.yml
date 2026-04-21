@@ -1,10 +1,9 @@
 name: CI de Pruebas Unitarias 4/21/26
 
-# Configuramos el disparador (trigger)
 on:
   pull_request:
     branches:
-      - master    # La rama destino del PR
+      - master
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -14,8 +13,6 @@ jobs:
     steps:
     - name: Checkout del código
       uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
 
     - name: Configurar Python
       uses: actions/setup-python@v5
@@ -25,8 +22,9 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -s requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Ejecutar pruebas unitarias
       run: |
+        # Asegúrate de que el nombre coincida con tu archivo real
         python Test_Principal.py
