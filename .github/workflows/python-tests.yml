@@ -26,5 +26,5 @@ jobs:
 
     - name: Ejecutar pruebas unitarias
       run: |
-        # Asegúrate de que el nombre coincida con tu archivo real
-        python Test_Principal.py
+        # Ejecuta las pruebas y muestra el reporte de cobertura en consola
+        pytest --cov=Principal Test_Principal.py
