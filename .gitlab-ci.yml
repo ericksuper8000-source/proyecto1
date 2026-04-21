@@ -1,0 +1,34 @@
+# .gitlab-ci.yml 04/21/26
+
+# Definimos la imagen base de Python
+image: python:3.10
+
+# Definimos las etapas del pipeline
+stages:
+  - test
+
+# Trabajo de pruebas unitarias
+unit-testing:
+  stage: test
+  script:
+    - python -m pip install --upgrade pip
+    # Instalamos las dependencias (pytest, etc.) si el archivo tiene contenido
+    - if [ -s requirements.txt ]; then pip install -r requirements.txt; fi
+    # Ejecutamos las pruebas usando pytest (que instalamos vía requirements)
+    # Si prefieres no usar pytest, cambia a: python test_Principal.py
+    - pytest --cov=Principal Test_Principal.py
+  
+  rules:
+    # Esta regla asegura que solo se ejecute en Merge Requests
+    # y cuando la rama de destino sea 'master'
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+      when: always
+    # Evita que se ejecute en commits normales fuera de un MR
+    - when: never
+
+# Opcional: Guardar el reporte de cobertura como un artefacto
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
