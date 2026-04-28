@@ -1,26 +1,18 @@
-class A():
-    def Mostrar(self):
-        print (f'Hola A')
+def sumar(a, b):
+    return a + b
 
-class E():
-    def Mostrar(self):
-        print(f'Hola E')
 
-class B(E):
-    def Mostrar(self):
-        print(f'Hola B')
+def dividir(a, b):
+    if b == 0:
+        raise ValueError("No se puede dividir entre cero")
+    return a / b
 
-class C(A):
-    def Mostrar(self):
-        print(f'Hola C')
 
-class D(B,C):
-    def Mostrar(self):
-        print(f'Hola D')
+def es_par(numero):
+    return numero % 2 == 0
 
-Objeto1 = D()
 
-Objeto1.Mostrar()
-
-print (f'Uno')
-print (f'Dos')
+if __name__ == "__main__":
+    print("Suma:", sumar(2, 3))
+    print("División:", dividir(10, 2))
+    print("¿Es par?:", es_par(4))
