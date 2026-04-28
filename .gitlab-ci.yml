@@ -1,12 +1,25 @@
 stages:
+  - lint
   - test
+  - run
 
-variables:
-  PYTHON_VERSION: "3.11"
+lint_job:
+  stage: lint
+  image: python:3.11
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+  before_script:
+    - pip install flake8
+
+  script:
+    - flake8 .
 
 test_job:
   stage: test
-  image: python:$PYTHON_VERSION
+  image: python:3.11
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "develop"'
@@ -18,3 +31,17 @@ test_job:
 
   script:
     - pytest
+
+run_app_job:
+  stage: run
+  image: python:3.11
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+  before_script:
+    - python -m pip install --upgrade pip
+
+  script:
+    - python Principal.py
