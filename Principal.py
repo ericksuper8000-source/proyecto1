@@ -14,3 +14,11 @@ class C(A):
     def Mostrar(self):
         print(f'Hola C')
 
+class D(B,C):
+    def Mostrar(self):
+        print(f'Hola D')
+
+Objeto1 = D()
+
+Objeto1.Mostrar()
+
