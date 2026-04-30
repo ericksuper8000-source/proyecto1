@@ -2,6 +2,7 @@ stages:
   - lint
   - test
   - run
+  - docker
 
 lint_job:
   stage: lint
@@ -47,3 +48,22 @@ run_app_job:
 
   script:
     - python Principal.py
+
+docker_job:
+  stage: docker
+  image: docker:latest
+
+  services:
+    - docker:dind
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+
+  script:
+    - docker build -t mi-app .
+    - docker run mi-app
