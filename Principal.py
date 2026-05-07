@@ -1,18 +1,23 @@
-def sumar(a, b):
+import time
+
+
+def suma(a, b):
     return a + b
 
 
-def dividir(a, b):
-    if b == 0:
-        raise ValueError("No se puede dividir entre cero")
+def division(a, b):
     return a / b
 
 
-def es_par(numero):
-    return numero % 2 == 0
+def es_par(n):
+    return n % 2 == 0
 
 
 if __name__ == "__main__":
-    print("Suma:", sumar(2, 3))
-    print("División:", dividir(10, 2))
-    print("¿Es par?:", es_par(4))
+    while True:
+        print("Suma:", suma(2, 3))
+        print("División:", division(10, 2))
+        print("¿Es par?:", es_par(4))
+        print("---- ejecutándose ----\n")
+
+        time.sleep(5)

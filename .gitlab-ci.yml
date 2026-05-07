@@ -1,69 +1,35 @@
 stages:
   - lint
   - test
-  - run
   - docker
 
-lint_job:
+lint:
   stage: lint
   image: python:3.11
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install flake8 black
-
   script:
+    - pip install flake8 black
     - flake8 .
     - black --check .
 
-test_job:
+test:
   stage: test
   image: python:3.11
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install -r requirements.txt
-
   script:
+    - pip install -r requirements.txt
     - pytest
 
-run_app_job:
-  stage: run
-  image: python:3.11
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-  before_script:
-    - python -m pip install --upgrade pip
-
-  script:
-    - python Principal.py
-
-docker_job:
+docker:
   stage: docker
   image: docker:latest
-
   services:
     - docker:dind
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
   variables:
-    DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
-
+  before_script:
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
   script:
-    - docker build -t mi-app .
-    - docker run mi-app
+    - docker build -t erickdev8/mi-app:latest .
+    - docker push erickdev8/mi-app:latest
+  only:
+    - develop
+    - merge_requests
