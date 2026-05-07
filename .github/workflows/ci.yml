@@ -47,23 +47,9 @@ jobs:
       - name: Ejecutar tests
         run: pytest
 
-  run_app:
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Ejecutar script
-        run: python Principal.py
-
   docker:
     runs-on: ubuntu-latest
-    needs: run_app
+    needs: [lint, test]
 
     steps:
       - uses: actions/checkout@v4
