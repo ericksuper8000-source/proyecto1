@@ -1,0 +1,6 @@
+version: "3.9"
+
+services:
+  app:
+    image: erickdev8/mi-app:latest
+    container_name: mi_app_container
