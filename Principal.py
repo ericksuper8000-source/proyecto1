@@ -22,11 +22,3 @@ if __name__ == "__main__":
 
         time.sleep(5)
         
-# Este es mi primer comentario
-# Este es mi segundo comentario
-# Este es mi tercer comentario
-<<<<<<< HEAD
-# Este es mi cuarto comentario
-=======
-# Este es mi quinto comentario
->>>>>>> 8e3f417 (feature4 commit 1)
