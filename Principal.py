@@ -21,9 +21,3 @@ if __name__ == "__main__":
         print("---- ejecutándose ----\n")
 
         time.sleep(5)
-        
-# Este es mi primer comentario
-# Este es mi segundo comentario
-# Este es mi tercer comentario
-# Este es mi cuarto comentario
-# Este es mi quinto comentario
