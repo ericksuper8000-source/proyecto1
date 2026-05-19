@@ -3,5 +3,13 @@ services:
     image: erickdev8/mi-app:latest
     container_name: mi_app_container
     restart: always
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - APP_ENV=production
+      - DOCKER_API_VERSION=1.41
+    command: --interval 30
