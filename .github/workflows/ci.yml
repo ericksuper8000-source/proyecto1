@@ -68,3 +68,6 @@ jobs:
 
       - name: Push a Docker Hub
         run: docker push erickdev8/mi-app:latest
+    
+      - name: Push a GHCR
+        run: docker push ghcr.io/ericksuper8000-source/mi-app:latest
