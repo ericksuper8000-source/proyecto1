@@ -63,5 +63,8 @@ jobs:
       - name: Build Docker image
         run: docker build -t erickdev8/mi-app:latest .
 
+      - name: Tag image for GHCR
+        run: docker tag erickdev8/mi-app:latest ghcr.io/ericksuper8000-source/mi-app:latest
+
       - name: Push a Docker Hub
         run: docker push erickdev8/mi-app:latest
