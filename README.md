@@ -1,6 +1,6 @@
 # 🚀 Python CI/CD & Docker Deployment Practice Project
 
-📅 Started: 05/19/2026
+📅 Started: 05/28/2026
 
 This repository documents my transition from writing isolated Python exercises to building and operating a small real-world software delivery pipeline.
 
