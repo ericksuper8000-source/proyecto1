@@ -1,0 +1,7 @@
+XPC 197121 5.6K May 21 08:56 README.md
+-rw-r--r-- 1 XPC 197121  378 May 21 09:49 ERICK.py
+drwxr-xr-x 1 XPC 197121    0 May 26 17:42 ..
+-rw-r--r-- 1 XPC 197121   14 May 28 09:16 nuevo.py
+drwxr-xr-x 1 XPC 197121    0 May 28 09:19 .git
+HolaMundo
+Thu May 28 09:39:40 CAST 2026
