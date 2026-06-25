@@ -77,3 +77,6 @@ jobs:
     
       - name: Push a GHCR
         run: docker push ghcr.io/ericksuper8000-source/mi-app:latest
+        
+      - name: Push a GitLab Registry
+        run: docker push registry.gitlab.com/ericksuper80-group/repo2:latest
