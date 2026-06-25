@@ -1,0 +1,46 @@
+1. Ejecuta flake8
+2. Ejecuta black
+3. Ejecuta pytest
+4. Construye la imagen Docker
+5. Publica en Docker Hub
+6. Publica en GHCR
+7. Publica en GitLab Container Registry
+
+
+
+Calidad de código
+
+✅ flake8
+
+✅ black
+
+Testing
+
+✅ pytest
+
+Contenedores
+
+✅ Dockerfile
+
+✅ Docker Compose
+
+✅ Docker Desktop
+
+Automatización
+
+✅ GitHub Actions
+
+✅ GitLab CI/CD (repositorio configurado)
+
+Registries
+
+✅ Docker Hub
+erickdev8/mi-app:latest
+
+✅ GHCR
+ghcr.io/ericksuper8000-source/mi-app:latest
+
+✅ GitLab Registry
+registry.gitlab.com/ericksuper80-group/repo2:latest
+
+✅ Watchtower
