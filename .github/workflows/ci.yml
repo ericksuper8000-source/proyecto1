@@ -68,6 +68,9 @@ jobs:
 
       - name: Tag image for GHCR
         run: docker tag erickdev8/mi-app:latest ghcr.io/ericksuper8000-source/mi-app:latest
+        
+      - name: Tag image for GitLab Registry
+        run: docker tag erickdev8/mi-app:latest registry.gitlab.com/ericksuper80-group/repo2:latest
 
       - name: Push a Docker Hub
         run: docker push erickdev8/mi-app:latest
