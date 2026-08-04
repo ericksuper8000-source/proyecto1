@@ -1,0 +1,434 @@
+# EXECUTION PLAN
+
+## Sequential Execution State & Checklists
+
+**Project:** CI/CD Pipeline Labs
+**Version:** 1.0 (2026 revision)
+**Status:** In Progress
+
+---
+
+## How to Use This File
+
+This is the **single source of truth** for project status. It does not contain theory or
+stages — it tells you exactly where the project is and what to do next.
+
+- **Every day starts with the recap mini-session** (see `AGENTS.md` — Daily Recap &
+  Validation), then reads the **Current Status** block below.
+- **Every session ends** by updating the **Current Status** block and ticking every
+  checkbox completed during that session.
+- A phase or stage is only marked complete when it is **understood, documented,
+  evidenced, committed, and pushed** (see Definition of Done in `AGENTS.md`).
+- Any AI agent joining the project reads this file first (see `AGENTS.md`).
+
+---
+
+## 📌 CURRENT STATUS
+
+> **This block is updated at the end of every session.**
+
+- **Current phase:** Phase 8 — SSH & Remote Connections
+- **Current stage / task:** Stage 08 — Understand what SSH is and what a remote session does
+- **Phase 0 (Planning):** ✅ Complete
+- **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
+- **Last completed item:** Documentation architecture created (this plan, AGENTS.md, memory files)
+- **Daily recap status:** Protocol defined in `AGENTS.md` — runs from the next session
+- **Next session target:** Stage 08 — the SSH mental model (questions before any command)
+- **Blockers / open questions:** None recorded
+- **Last session:** 2026-08-04 — created the full memory/documentation architecture
+- **Last commit / push:** See `docs/session-log.md` (repo lives in `C:\Repo2`)
+
+---
+
+## General Status
+
+| Item | State |
+|---|---|
+| Project | ☒ In progress |
+| Plan | ☒ Defined |
+| Zero-cost policy | ☒ Active (ADR-0005) |
+| Version control | ☒ Active (GitHub + GitLab mirrored) |
+| Application | ☒ Basic Python app + tests |
+| Code quality | ☒ Active (Ruff, Flake8, Black, MyPy, Pytest) |
+| CI/CD | ☒ Active (GitHub Actions + GitLab CI) |
+| Docker | ☒ Active (images, compose, 3 registries) |
+| CD simulation | ☒ Active (Watchtower) |
+| SSH | ⬜ Next (Phase 8) |
+| VPS | ⬜ Not started (Phase 9) |
+
+---
+
+## Phase 0 — Planning & Documentation Architecture
+
+**Objective:** Fully define the project before continuing the technical work.
+
+- [x] Define the general objective
+- [x] Define the methodology
+- [x] Define the project philosophy
+- [x] Define the mentor role
+- [x] Define the student role
+- [x] Create the Project Specification
+- [x] Create the Execution Plan
+- [x] Create the Learning Roadmap
+- [x] Define the documentation strategy
+- [x] Define the repository structure
+- [x] Decide to version from day one (see ADR-0001)
+- [x] Decide to mirror GitHub + GitLab (see ADR-0002)
+- [x] Decide multi-registry publishing (see ADR-0003)
+- [x] Decide Docker Compose early + Watchtower for CD simulation (see ADR-0004)
+- [x] Adopt the zero-cost principle (see ADR-0005)
+- [x] Decide public documentation in English (see ADR-0006)
+- [x] Define the daily recap & validation ritual
+
+**Status:** ✅ COMPLETE
+
+---
+
+## Phase 1 — Application Development
+
+**Objective:** Have a real application to deliver. Without software, there is no delivery pipeline.
+
+**Estimated duration:** Completed (2–3 months, prior work)
+
+- [x] Python fundamentals: variables, conditionals, loops, functions
+- [x] Python: classes, exceptions, regex, files, modules, decorators, type hints
+- [x] Create the first application (`Principal.py`)
+- [x] Application runs locally without errors
+- [x] Structure the code so tests can import it (`test_principal.py`)
+- [x] Run the app and verify it behaves as expected
+
+**Status:** ✅ COMPLETE
+
+> ⚠️ The application is intentionally **small**. The project's focus is the delivery
+> lifecycle. The app evolves into FastAPI in Phase 13.
+
+---
+
+## Phase 2 — Code Quality & Automated Testing
+
+**Objective:** Guarantee the code is correct and consistent **before** it is published. A professional pipeline never ships broken code.
+
+**Estimated duration:** Completed (1 week, prior work)
+
+- [x] Ruff — fast linting
+- [x] Flake8 — Python best practices
+- [x] Black — automatic formatting
+- [x] MyPy — static type checking
+- [x] Pytest — unit tests
+- [x] Tests written for the core functions (`suma`, `division`, `es_par`)
+- [x] All quality tools pass locally before pushing
+
+**Status:** ✅ COMPLETE
+
+> ⚠️ Note: Ruff and MyPy were learned and validated locally. The current pipelines
+> (`ci.yml`, `.gitlab-ci.yml`) run Flake8 + Black + Pytest. Adding Ruff/MyPy to the CI is
+> a recommended **optional improvement** to record in a future stage.
+
+---
+
+## Phase 3 — Version Control & Repositories
+
+**Objective:** Version the project from day one on two platforms (multi-platform practice + redundancy).
+
+**Estimated duration:** Completed (2 weeks, prior work)
+
+- [x] Git basics: commits, branches, merge, push
+- [x] GitHub repository created (`proyecto1`)
+- [x] GitLab repository created (`repo2`)
+- [x] Branch strategy: `master` (stable) + `develop` (integration)
+- [x] Remotes configured on both platforms
+- [x] Feature-branch practice exercised (multiple `feature*` branches merged)
+- [x] Push to both remotes verified
+
+**Status:** ✅ COMPLETE
+
+---
+
+## Phase 4 — CI/CD Pipelines
+
+**Objective:** Automate validation and build. Stop doing manually what the pipeline should do.
+
+**Estimated duration:** Completed (1–2 weeks, prior work)
+
+- [x] Understand the difference between CI and CD
+- [x] GitHub Actions workflow: `.github/workflows/ci.yml`
+  - [x] Triggers: push on `develop`, pull request on `master`
+  - [x] Job `lint`: Flake8 + Black
+  - [x] Job `test`: Pytest
+  - [x] Job `docker`: needs `lint` + `test`, builds and pushes the image
+- [x] GitLab CI pipeline: `.gitlab-ci.yml`
+  - [x] Stages: `lint`, `test`, `docker`
+  - [x] Docker-in-Docker for building
+  - [x] Pushes to Docker Hub
+- [x] Secrets management (DOCKER_USERNAME, DOCKER_TOKEN, GITLAB_TOKEN, etc.)
+- [x] Pipelines run green on both platforms
+
+**Status:** ✅ COMPLETE
+
+> 💡 Future improvement (Phase 12): split into CI + CD stages so a green pipeline also
+> deploys to the server.
+
+---
+
+## Phase 5 — Containerization
+
+**Objective:** Guarantee the application runs identically anywhere. Enter Docker.
+
+**Estimated duration:** Completed (1–2 weeks, prior work)
+
+- [x] Understand why Docker exists (portability problem)
+- [x] Write the `Dockerfile` (python:3.11-slim)
+- [x] `docker build` produces an image
+- [x] Understand images: layers, immutability, build context
+- [x] Run the image locally and verify behavior
+- [x] Understand images vs containers
+
+**Status:** ✅ COMPLETE
+
+---
+
+## Phase 6 — Registries & Image Publishing
+
+**Objective:** Give images a permanent home so any server can download them.
+
+**Estimated duration:** Completed (1 week, prior work)
+
+- [x] Understand why local images are not enough
+- [x] Publish to **Docker Hub** (`erickdev8/mi-app:latest`)
+- [x] Publish to **GHCR** (`ghcr.io/ericksuper8000-source/mi-app:latest`)
+- [x] Publish to **GitLab Container Registry** (`registry.gitlab.com/ericksuper80-group/repo2:latest`)
+- [x] Publish the **same image** to the three registries from a single pipeline
+- [x] Registry authentication (tokens vs passwords; `--password-stdin`)
+- [x] `docker pull` the image back from a registry
+
+**Status:** ✅ COMPLETE
+
+---
+
+## Phase 7 — Orchestration & CD Simulation
+
+**Objective:** Describe the desired running state with Docker Compose and simulate continuous deployment with Watchtower.
+
+**Estimated duration:** Completed (1 week, prior work)
+
+- [x] Understand Compose vs Engine (Compose decides, Engine executes)
+- [x] Write `docker-compose.yml`
+  - [x] Service `app` with `restart: always`
+  - [x] Service `watchtower` with Docker socket access
+  - [x] Watchtower poll interval configured (30 s)
+- [x] Run the stack with `docker compose up`
+- [x] Watchtower detects a new image and recreates the container (CD simulation)
+- [x] Understand container lifecycle and restart policies
+- [x] Understand why persistence will matter in Phase 12
+
+**Status:** ✅ COMPLETE
+
+---
+
+## Phase 8 — SSH & Remote Connections 🔄
+
+**Objective:** Understand what it means to connect to a remote machine. **No VPS is created yet.** Every later command must make sense, not be copy-paste.
+
+**Estimated duration:** 1–2 sessions
+
+**Stage document:** [`docs/stages/stage-08-ssh-remote-connection.md`](docs/stages/stage-08-ssh-remote-connection.md)
+
+- [ ] Understand what SSH is and what problem it solves
+- [ ] Understand what really happens when you run `ssh usuario@servidor`
+- [ ] Understand how authentication works (keys: private/public)
+- [ ] Understand why a server normally has no graphical interface
+- [ ] Understand who you control and what you are controlling over SSH
+- [ ] (Practice only, no VPS) Generate a local key pair and inspect it
+- [ ] Answer the Stage 08 mentor questions in your own words
+- [ ] Document the stage + evidence + update state
+
+**Status:** 🔄 IN PROGRESS
+
+---
+
+## Phase 9 — VPS Provisioning (Oracle Cloud Always Free)
+
+**Objective:** Create the first real server, deliberately — understanding each choice.
+
+**Estimated duration:** 2–3 sessions
+
+**Stage document:** [`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)
+
+- [ ] Create the Oracle Cloud account (free tier only — see ADR-0005)
+- [ ] Understand quotas and how to avoid costs
+- [ ] Create the VPS (instance)
+  - [ ] Choose Ubuntu
+  - [ ] Understand what an instance really is
+  - [ ] Understand the shape/resources (ARM vs x86) and their limits
+- [ ] Get the SSH key material that Oracle provides
+- [ ] Connect for the first time with `ssh`
+- [ ] Basic first-contact: whoami, OS version, resources
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 10 — Linux Server Administration
+
+**Objective:** Administer the VPS like a professional. Nothing is copy-paste.
+
+**Estimated duration:** ~6–8 sessions
+
+- [ ] First contact with the Linux CLI on the server
+- [ ] Update/upgrade the system (understand what `apt` does)
+- [ ] Users, groups, permissions (why they exist)
+- [ ] Filesystem layout and navigation (FHS)
+- [ ] Package management (apt) — install and justify tools
+- [ ] Firewall (UFW) — only the needed ports open
+- [ ] SSH hardening (keys only, no root login, no password login)
+- [ ] Install Docker Engine (understand what is installed)
+- [ ] Install Docker Compose plugin (understand the difference)
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 11 — Deployment to the Server
+
+**Objective:** The pipeline delivers. First real deployment.
+
+**Estimated duration:** 2–3 sessions
+
+- [ ] `git clone` the project on the server
+- [ ] Understand why we clone the compose file and not build on the server
+- [ ] Configure environment variables on the server (`.env`)
+- [ ] `docker compose up -d` — first run
+- [ ] Watch the server pull the image from the registry and create containers
+- [ ] Verify the application responds (curl)
+- [ ] Restart behavior: reboot the server, app comes back (restart policies)
+- [ ] Optional: CD job in the pipeline that SSHes and redeploys on push
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 12 — Production Hardening & Observability
+
+**Objective:** Move from "it runs" to "it runs like production".
+
+**Estimated duration:** ~6–8 sessions
+
+- [ ] Nginx reverse proxy (understand why the app is not exposed directly)
+- [ ] HTTPS with Let's Encrypt (why HTTPS is non-negotiable)
+- [ ] Environment variables and secrets management
+- [ ] Persistence: named volumes, bind mounts (understand ephemerality)
+- [ ] Logs: container logs, Nginx logs, log rotation
+- [ ] Backups: strategy + **test a restore**
+- [ ] Monitoring: health checks, simple monitoring (e.g., Uptime Kuma or equivalent)
+- [ ] Split pipeline into CI + CD (deploy on push with rollback basics)
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 13 — FastAPI Full Stack & Evolving the App
+
+**Objective:** Turn the toy app into a real service with a database — the kind of app a DevOps engineer actually deploys.
+
+**Estimated duration:** ~4–6 sessions
+
+- [ ] Integrate FastAPI into the repository
+- [ ] Add a health endpoint (for monitoring)
+- [ ] PostgreSQL service (why the DB is separate, why it persists)
+- [ ] Compose grows: app + database (+ optional Redis)
+- [ ] Migrations and initialization
+- [ ] Environment-based configuration (dev vs prod)
+- [ ] Full pipeline: build → test → push → deploy the evolved app
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 14 — Final Portfolio & Interview Defense
+
+**Objective:** Turn the work into a story you can defend in an interview.
+
+**Estimated duration:** 2–3 sessions
+
+- [ ] Final architecture diagram (user → Nginx → app → DB)
+- [ ] Final README polish
+- [ ] Walk through the repository as an interviewer would
+- [ ] Rehearse "why" for every major decision (use the ADRs)
+- [ ] Prepare answers for the most common DevOps Junior questions
+- [ ] Record the final portfolio review
+
+**Status:** ⬜ Pending
+
+---
+
+## Timeline (2 sessions/week, 1.5–2 h each)
+
+| Phase | When | Sessions |
+|---|---|---|
+| 0 Planning | 2026-08 (week 0) | 1 |
+| 1 Application Dev | ✅ prior work | — |
+| 2 Code Quality | ✅ prior work | — |
+| 3 Version Control | ✅ prior work | — |
+| 4 CI/CD Pipelines | ✅ prior work | — |
+| 5 Containerization | ✅ prior work | — |
+| 6 Registries | ✅ prior work | — |
+| 7 Orchestration & CD Sim | ✅ prior work | — |
+| 8 SSH & Remote Access | Weeks 1–2 | 1–2 |
+| 9 VPS Provisioning | Weeks 2–3 | 2–3 |
+| 10 Linux Administration | Weeks 3–5 | 6–8 |
+| 11 Deployment to Server | Weeks 5–6 | 2–3 |
+| 12 Production Hardening | Weeks 6–9 | 6–8 |
+| 13 FastAPI Full Stack | Weeks 9–12 | 4–6 |
+| 14 Portfolio & Interview | Weeks 12–13 | 2–3 |
+
+> Total remaining ≈ 25–35 sessions ≈ 3 months. Cadence may be adjusted — understanding
+> is the only fixed requirement.
+
+---
+
+## Session Workflow
+
+**Daily recap mini-session (before anything else, every day):**
+
+1. The mentor gives the simple summary of the journey so far.
+2. Question round: **one question at a time** (commands, decisions, processes).
+3. Gate: pass → progress; gaps → reinforcement, no new material.
+4. Result recorded in `session-log.md` (passed ✅ / reinforce ⚠️).
+
+**Start of the progress session (10 min):**
+
+1. Read **Current Status** above.
+2. Read the last entry of `session-log.md`.
+3. Read the current stage document.
+4. Tell the mentor what you remember from the previous session.
+
+**During the session:**
+
+5. Work the stage checklist. The mentor guides with questions.
+
+**End of session (20 min):**
+
+6. Fill the stage report section in the stage document.
+7. Save screenshots/evidence in `screenshots/stage-NN/`.
+8. Append an entry to `session-log.md`.
+9. Tick completed checkboxes in this file and update **Current Status**.
+10. Write an ADR if a meaningful decision was made.
+11. Sync this folder with `C:\Repo2`, commit with a conventional message, push to
+    **both** GitHub and GitLab.
+12. Confirm the next session's target.
+
+---
+
+## Related Documents
+
+- [`AGENTS.md`](../AGENTS.md) — AI operating manual & Definition of Done
+- [`project-specification.md`](project-specification.md) — vision and scope
+- [`mentor-constitution.md`](mentor-constitution.md) — mentoring principles
+- [`learning-roadmap.md`](learning-roadmap.md) — competency map
+- [`session-log.md`](session-log.md) — daily diary
+- [`environment.md`](environment.md) — local environment preparation

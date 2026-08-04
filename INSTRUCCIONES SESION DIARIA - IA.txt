@@ -1,0 +1,117 @@
+===================================================================
+ INSTRUCCIONES - COMO INICIAR UNA SESION DIARIA CON LA IA
+ Proyecto: CI/CD Pipeline Labs (Flujo Completo CI/CD)
+===================================================================
+
+-------------------------------------------------------------------
+ 1) QUE COMPARTIR CON LA IA CADA MANANA
+-------------------------------------------------------------------
+
+Compartele el folder:
+
+   C:\Users\XPC\Desktop\CICD - Flujo Completo -BORRADOR
+
+Este folder es la "memoria" del proyecto. La IA NO necesita leer todo;
+solo debe LEER estas 4 cosas (en este orden, segun AGENTS.md):
+
+   1. AGENTS.md                    -> reglas del mentor + protocolo de sesion
+   2. docs/execution-plan.md       -> ESTADO ACTUAL (bloque "Current Status")
+   3. docs/session-log.md          -> la ULTIMA entrada (lo que paso ayer)
+   4. docs/stages/<stage actual>   -> la etapa en curso
+
+Con esas 4 lecturas la IA "recuerda" todo: que es el proyecto, que
+esta hecho, que sigue y que paso en la ultima sesion.
+
+REGLAS DE SINCRONIZACION (MUY IMPORTANTE):
+
+ - Los archivos que la IA lee deben estar ACTUALIZADOS. Si le das
+   archivos viejos, el resumen y el repaso seran de informacion vieja.
+ - El repo "real" vive en C:\Repo2 (se publica en GitHub y GitLab).
+   Este folder de Windows es la memoria para planear y hablar con la IA.
+ - Al final de cada sesion debes dejar AMBOS en sincronia:
+   lo que ves en este folder = lo que esta commiteado/pusheado en
+   C:\Repo2. (Detalle en el punto 4.)
+
+-------------------------------------------------------------------
+ 2) GUION PARA INICIAR LA SESION (copia y pega esto)
+-------------------------------------------------------------------
+
+"Vamos a iniciar una nueva sesion del proyecto CI/CD Pipeline Labs.
+
+Te comparto el folder C:\Users\XPC\Desktop\CICD - Flujo Completo -BORRADOR.
+
+1) Lee el contexto siguiendo el protocolo de AGENTS.md:
+   - AGENTS.md
+   - docs/execution-plan.md (Current Status + fase activa)
+   - docs/session-log.md (ultima entrada)
+   - la etapa actual en docs/stages/
+
+2) Hazme un resumen MUY simple de todo lo que ya hemos hecho hasta
+   ahora y donde estamos parados.
+
+3) Inicia el repaso diario: preguntame UNA pregunta a la vez sobre
+   comandos, decisiones o procesos que ya vimos. Espera mi respuesta,
+   analizala, y solo avanza a la siguiente pregunta si mi respuesta
+   fue satisfactoria. Si no fue buena, explícame el hueco y vuelve
+   a preguntar de otra forma.
+
+4) Cuando el repaso pase, dime que haremos HOY (el siguiente checkbox
+   del plan) y guiame en la sesion."
+
+-------------------------------------------------------------------
+ 3) QUE DEBE HACER LA IA DURANTE LA SESION
+-------------------------------------------------------------------
+
+La IA debe actuar como un mentor DevOps Senior (reglas en AGENTS.md):
+
+ - Ensenar el "por que" antes del "como".
+ - Hacer UNA pregunta a la vez para validar que entiendes.
+ - Usar escenarios reales del ciclo de entrega de software.
+ - NO darte respuestas completas si puedes llegar tu con guia.
+ - Ante un error: dejarte investigar, pedirte hipotesis y evidencia.
+ - No introducir tecnologia nueva hasta que exista una necesidad real.
+ - No asumir conocimiento previo; todo se construye paso a paso.
+
+TU trabajo durante la sesion (en C:\Repo2 y en los servicios web):
+
+ - Ejecutar los pasos de la etapa.
+ - Tomar capturas / evidencia en screenshots/stage-NN/.
+ - Explicar con TUS palabras lo que haces (no copiar y pegar).
+ - Preguntar todo lo que no entiendas. No hay preguntas tontas.
+
+-------------------------------------------------------------------
+ 4) COMO DEBE TERMINAR LA SESION (Definition of Done)
+-------------------------------------------------------------------
+
+Antes de cerrar, la IA debe verificar contigo esta lista:
+
+ [ ] El reporte de la etapa quedo llenado (objetivo, procedimiento,
+     explicacion, problemas, soluciones, lecciones).
+ [ ] Las capturas/evidencia estan en screenshots/stage-NN/.
+ [ ] Si hubo una decision importante -> se escribio un ADR.
+ [ ] docs/session-log.md tiene la entrada del dia (con el resultado
+     del repaso: aprobado o refuerzo).
+ [ ] docs/execution-plan.md tiene los checkboxes marcados y el
+     Current Status actualizado.
+ [ ] Se definio el objetivo exacto de la proxima sesion.
+ [ ] TUE confirmas la "puerta": puedes explicar lo que aprendiste.
+
+La IA puede actualizar directamente los archivos de memoria de este
+folder (execution-plan.md y session-log.md) al terminar.
+
+LUEGO, en C:\Repo2, tu haces el commit + push:
+
+   cd C:\Repo2
+   git add .
+   git commit -m "docs(stage-NN): resumen de lo terminado"
+   git push github develop
+   git push gitlab develop
+
+   (ajusta la rama segun donde estes trabajando; el repo usa
+    master y develop)
+
+Y confirmas que este folder de Windows quedo sincronizado con
+C:\Repo2 (copia los archivos de memoria actualizados si trabajaste
+directo en la carpeta del repo).
+
+===================================================================
