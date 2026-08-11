@@ -1,5 +1,1 @@
 print("Uno")
-print("Dos")
-print("Tres")
-print("Four")
-print("Five")
