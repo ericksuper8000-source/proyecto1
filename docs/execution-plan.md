@@ -31,12 +31,16 @@ stages — it tells you exactly where the project is and what to do next.
 - **Current stage / task:** Stage 08 — Understand what SSH is and what a remote session does
 - **Phase 0 (Planning):** ✅ Complete
 - **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
-- **Last completed item:** Documentation architecture created (this plan, AGENTS.md, memory files)
-- **Daily recap status:** Protocol defined in `AGENTS.md` — runs from the next session
-- **Next session target:** Stage 08 — the SSH mental model (questions before any command)
+- **Last completed item:** Method adopted — general recap (Block A→H) + cadence ~15 min/day
+  (full summary daily, questions from 1–2 blocks/day) — see `AGENTS.md`
+- **Daily recap status:** General recap running — first session passed blocks A, B, C ✅;
+  block D partial (pipeline structure `needs` vs `stages` pending)
+- **Next session target:** Close Block D, then Block E (containers) → proceed to Stage 08
+  (SSH mental model)
 - **Blockers / open questions:** None recorded
-- **Last session:** 2026-08-04 — created the full memory/documentation architecture
-- **Last commit / push:** See `docs/session-log.md` (repo lives in `C:\Repo2`)
+- **Last session:** 2026-08-11 — method adopted + first general recap (no stage work)
+- **Last commit / push:** Pending — memory changes (method/cadence/sticky frames/renames)
+  to be synced to `C:\Repo2` and pushed
 
 ---
 
@@ -397,8 +401,11 @@ stages — it tells you exactly where the project is and what to do next.
 
 1. The mentor gives the simple summary of the journey so far.
 2. Question round: **one question at a time** (commands, decisions, processes).
-3. Gate: pass → progress; gaps → reinforcement, no new material.
-4. Result recorded in `session-log.md` (passed ✅ / reinforce ⚠️).
+3. The recap is **general** — it reviews the **complete delivery flow** (Block map in
+   `AGENTS.md`), with the **daily summary every day** but questions from **only 1–2 blocks
+   per day** (rotating, ~15 min). Never all 8 blocks in one day.
+4. Gate per block: pass → next block; gap → reinforcement, no new material.
+5. Result recorded in `session-log.md` (passed ✅ / reinforce ⚠️).
 
 **Start of the progress session (10 min):**
 

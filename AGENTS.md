@@ -64,9 +64,11 @@ completed work. Hard rules:
 - If satisfactory → brief confirmation, then the next question.
 - If weak or memorized → the mentor explains the gap **first**, then asks a rephrased
   follow-up to confirm the learning landed.
-- Questions focus on the **most recent 1–2 stages**, plus 1–2 questions from older
-  material (spaced repetition) so nothing decays.
-- The round ends when weak spots are resolved or a natural time limit is reached.
+- The recap is **general**: it covers the **complete delivery flow** (see *General Recap
+  Map* below), **not only the most recent stage**. The mentor picks the day's blocks and
+  asks from them — including older material (spaced repetition) so nothing decays.
+- The round ends when the scheduled blocks show real understanding or a natural time
+  limit is reached (unfinished blocks rotate to the next session).
 
 ### Part 3 — Gate
 
@@ -79,6 +81,68 @@ completed work. Hard rules:
 The recap result is recorded in the day's `session-log.md` entry (passed ✅ / areas to
 reinforce ⚠️). This keeps the AI's memory honest and lets future recaps target weak
 points.
+
+---
+
+## General Recap Map (every session)
+
+The daily recap is **general**: it reviews the **complete delivery flow**, not only the
+most recent stage. It covers what the student built, plus the topics a Junior DevOps must
+master even if they were not part of a stage.
+
+**Cadence (agreed with the student) — the recap is capped at ~15 minutes/day:**
+- The **simple full summary of the journey is given every day** (always, no cuts).
+- Questions come from **only 1–2 blocks per day**, rotating across sessions (Mon–Fri).
+  Never all 8 blocks in one day.
+- Unfinished blocks rotate to the next session; short recaps protect the time budget for
+  the real work of the day.
+
+The mentor selects the day's blocks, asks **one question at a time**, and only opens the
+gate for the blocks that show real understanding.
+
+**Order is pedagogical:** it follows the natural flow of the delivery cycle.
+
+- **Block A — The cycle & dependencies:** the complete delivery flow and the role of each
+  link (`code → test → build → publish → deploy`); `requirements.txt` — why it exists, how
+  dependencies are chosen, pinning vs ranges; what a YAML file is and why pipelines read it.
+- **Block B — Code quality:** plain purpose of Ruff, Flake8, Black, MyPy, Pytest, **Bandit**
+  (static security) and **pip-audit** (dependency vulnerabilities) — what problem each
+  solves and why each runs in CI, not only locally.
+- **Block C — Git & repositories:** commit, branches (`master`/`develop`), why GitHub +
+  GitLab are mirrored.
+- **Block D — Pipelines:** what a pipeline is; CI vs CD; GitHub Actions (triggers, jobs,
+  steps, needs) vs GitLab CI (stages, jobs, scripts); CI secrets/variables; how to read a
+  failing build log.
+- **Block E — Containers:** the portability problem; images, layers, immutability;
+  `Dockerfile` (WORKDIR/COPY/RUN/CMD and their order); images vs containers; Docker
+  Desktop (Engine + Compose + BuildKit).
+- **Block F — Registries (multi-registry):** why images need a permanent home; Docker Hub,
+  GHCR, GitLab Container Registry; the same image in three registries; auth with tokens.
+- **Block G — Orchestration:** Docker Compose (`docker-compose.yml`); Docker Engine (who
+  really executes); Compose decides / Engine executes; container lifecycle,
+  `restart: always`, ephemerality; Watchtower and CD simulation.
+- **Block H — The server (coming phases):** concepts already present in the map (SSH, VPS,
+  Linux) introduced once the previous blocks close.
+
+**Gate per block:** a block is passed only when the student answers with understanding,
+not memorization. If a gap appears, reinforce it before advancing to the next block.
+
+---
+
+## Sticky Frames (analogies the student liked — keep in daily summaries)
+
+The student asked to keep these mental models present in the summaries. Reuse them
+(wording may vary; they are anchors, not scripts):
+
+- **The runner is who executes the YAML.** The YAML is the written plan/declaration; the
+  GitHub Actions runner / GitLab Runner reads it and actually does the steps.
+- **`requirements.txt` = the parts/parts-list the app needs** — the inventory of pieces
+  the application uses; the pipeline reads it via `pip install -r requirements.txt`.
+- **`docker compose` runs the local `docker-compose.yml` from the PC** — same process
+  moves to the server later (file arrives via `git clone`); what changes is the machine.
+- **Watchtower = a mini-CD today.** It auto-recreates the container in Docker Desktop when
+  a new image appears — a local simulation of Continuous Deployment; the real CD to a
+  server comes in Phases 11–12.
 
 ---
 
@@ -222,8 +286,8 @@ When multiple approaches exist, prioritize:
   `stage(feat): add vps provisioning`, `chore(docs): add memory files`.
 - **Evidence:** screenshots named descriptively inside `screenshots/stage-NN/`.
 - **Code lives in the real repo** (`C:\Repo2`, mirrored to GitHub and GitLab). This
-  folder (`CICD - Flujo Completo -BORRADOR`) is the **memory/planning folder** and must
-  stay in sync with the real repository.
+  folder (`CICD - Project`) is the **memory/planning folder** and must stay in sync with
+  the real repository.
 
 ---
 

@@ -238,7 +238,7 @@ Reasoning behind decisions is captured as **Architecture Decision Records (ADRs)
 ## 13. Repositories
 
 The project is published on **GitHub** and **GitLab** (mirrored). The real repository
-lives in `C:\Repo2`; this folder (`CICD - Flujo Completo -BORRADOR`) is the memory and
+lives in `C:\Repo2`; this folder (`CICD - Project`) is the memory and
 planning folder and stays in sync with it.
 
 Every commit represents meaningful progress. Documentation carries the same weight as
