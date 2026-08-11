@@ -49,6 +49,58 @@ work instantly. The mentor reviews the latest entry at the start of every sessio
 
 ---
 
+## 2026-08-11 — Session 01 (Recap method + first general recap)
+
+**Phase / Stage:** Phase 8 (in progress) · Method change + recap only (no stage work)
+
+**Daily recap (start of day):**
+- First general recap run. Passed ✅: **Block A** (cycle + `requirements.txt` + YAML),
+  **Block B** (quality tools), **Block C** (Git & branches). Partially covered ⚠️:
+  **Block D** (pipeline + CI/CD definitions clear; the structure comparison `needs` vs
+  `stages` left pending).
+- Reinforced during the round: Python version lives in Dockerfile/setup-python, **not** in
+  `requirements.txt`; flake8 is a **linter**, not a formatter; **CI = Continuous
+  Integration** (Integración Continua); CD = Delivery / Deployment.
+
+**Worked on:**
+- Adopted the **general recap** covering the complete delivery flow (Block A→H) instead of
+  only the recent stage. Recorded in `AGENTS.md` (*General Recap Map*) and `execution-plan.md`.
+- Refined cadence with the student: recap capped at **~15 min/day** — full simple summary
+  every day, **questions from only 1–2 blocks/day** (rotating Mon–Fri), never all 8.
+- Saved **Sticky Frames** in `AGENTS.md` (the 4 analogies the student asked to keep in the
+  summaries: runner executes the YAML, requirements = app's parts list, compose reads the
+  local file then moves to the server, Watchtower = local mini-CD).
+- Corrected memory-folder name references to `CICD - Project` and refreshed
+  `environment.md` file list (added `.gitattributes`, removed nonexistent `Mapa CI-CD.txt`).
+- Reviewed the real repo `C:\Repo2` (read-only): pipelines run Flake8 + Black + Pytest;
+  GitHub Actions pushes to the 3 registries, GitLab CI only to Docker Hub. Repo is out of
+  sync with the memory changes made today.
+
+**Concepts learned / reinforced:**
+- `requirements.txt` = the app's parts list · YAML = the plan, runner = the executor ·
+  linter (Ruff/flake8) vs formatter (Black) · `--check` in CI · CI vs CD (Delivery vs
+  Deployment) · professional compose flow is automated by a CD pipeline on the server.
+
+**Commands / tools used:**
+- None (recap + documentation only).
+
+**Errors encountered:**
+- None.
+
+**Questions still open:**
+- Block D pending: relationship between GitHub `needs` and GitLab `stages`.
+- `requirements.txt` is unpinned (only `pytest`) — dependency pinning is planned material.
+
+**Next session (target):**
+- Recap: close **Block D** (pipeline structure `needs` vs `stages`), then **Block E**
+  (containers).
+- Then **Stage 08** — the SSH mental model (questions before any command, no VPS created).
+
+**Commit / push:** Pending — memory folder changes to be synced to `C:\Repo2` and pushed
+(method, cadence, sticky frames, folder renames).
+
+---
+
 ## 2026-08-04 — Session 00 (Documentation Architecture)
 
 **Phase / Stage:** Phase 0 — Planning · Created the memory/documentation architecture

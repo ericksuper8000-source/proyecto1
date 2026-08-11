@@ -32,7 +32,7 @@ assume a verified baseline instead of unknown state.
 | Path | Role |
 |---|---|
 | `C:\Repo2` | **The real repository** — code + pipelines + all project files. Lives here. |
-| `C:\Users\XPC\Desktop\CICD - Flujo Completo -BORRADOR` | **Memory/planning folder** — documentation, session log, execution plan. Kept in sync with `C:\Repo2`. |
+| `C:\Users\XPC\Desktop\CICD - Project` | **Memory/planning folder** — documentation, session log, execution plan. Kept in sync with `C:\Repo2`. |
 | `C:\Users\XPC\Desktop\Linux VPS -BORRADOR` | Reference project (Linux DevOps Labs) — structure inspiration only. |
 | `C:\Users\XPC\Desktop\Portafolio` | Personal portfolio materials. |
 
@@ -43,6 +43,7 @@ Current key files:
 ```
 C:\Repo2\
 ├── .github/workflows/ci.yml   # GitHub Actions pipeline
+├── .gitattributes             # Line-ending policy (LF normalization)
 ├── .gitlab-ci.yml             # GitLab CI pipeline
 ├── Dockerfile                 # Image definition
 ├── docker-compose.yml         # Stack: app + watchtower
@@ -51,7 +52,6 @@ C:\Repo2\
 ├── test_principal.py          # Unit tests
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # Existing public README
-├── Mapa CI-CD.txt             # Scratch notes (planned: move to _archive/)
 └── .git/
 ```
 
@@ -73,7 +73,7 @@ Remotes: `github` (https://github.com/ericksuper8000-source/proyecto1.git) and
 ## Sync Rule
 
 - **Real work and commits** happen in `C:\Repo2`.
-- **Planning and AI memory** live in the Desktop folder `CICD - Flujo Completo -BORRADOR`.
+- **Planning and AI memory** live in the Desktop folder `CICD - Project`.
 - At the end of every session, the memory folder and `C:\Repo2` must show the **same**
   documentation state (the docs are copied into `C:\Repo2\docs/` and committed).
 
