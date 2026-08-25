@@ -27,10 +27,12 @@ Then, stage by stage, the story unfolds:
 6. The same image is published to **three registries** — Docker Hub, GHCR, and GitLab
    Container Registry (Phase 6).
 7. **Docker Compose + Watchtower** simulate continuous deployment locally (Phase 7).
-8. Next: understanding **SSH**, then provisioning a **free VPS**, and finally deploying
-   the application to a real server with production practices (Phases 8–12).
-9. The application evolves into a **FastAPI service** with a database (Phase 13).
-10. The repository ends as a documented, interview-ready portfolio (Phase 14).
+8. **SSH** is understood — remote connections, key-based authentication, and the mental
+   model needed before provisioning a real server (Phase 8).
+9. Next: provisioning a **free VPS** (Oracle Cloud Always Free), then deploying
+   the application to a real server with production practices (Phases 9–12).
+10. The application evolves into a **FastAPI service** with a database (Phase 13).
+11. The repository ends as a documented, interview-ready portfolio (Phase 14).
 
 Every step is documented with evidence, screenshots, and the reasoning behind each
 decision. This is not a tutorial; it is a complete engineering journey.
@@ -99,8 +101,8 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 | 5 | Containerization | ✅ Complete |
 | 6 | Registries & Image Publishing | ✅ Complete |
 | 7 | Orchestration & CD Simulation | ✅ Complete |
-| 8 | SSH & Remote Connections | 🔄 Current |
-| 9 | VPS Provisioning (Oracle Cloud Always Free) | ⬜ Pending |
+| 8 | SSH & Remote Connections | ✅ Complete |
+| 9 | VPS Provisioning (Oracle Cloud Always Free) | 🔄 Current |
 | 10 | Linux Server Administration | ⬜ Pending |
 | 11 | Deployment to the Server | ⬜ Pending |
 | 12 | Production Hardening & Observability | ⬜ Pending |
@@ -134,7 +136,7 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 ## First Steps
 
 1. Read [`docs/execution-plan.md`](docs/execution-plan.md) → **Current Status**.
-2. Complete **Stage 08 — SSH & Remote Connections** ([`docs/stages/stage-08-ssh-remote-connection.md`](docs/stages/stage-08-ssh-remote-connection.md)).
+2. Phase 8 (SSH) is complete. Start **Phase 9 — VPS Provisioning** ([`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)).
 3. Continue through the remaining phases with the mentor.
 
 ---
