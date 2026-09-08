@@ -1,0 +1,16 @@
+# Line ending policy
+# All text files are normalized to LF in the repository.
+# This is the cross-platform standard and prevents
+# "LF would be replaced by CRLF" errors on Windows.
+* text=auto
+
+*.py              text eol=lf
+*.md              text eol=lf
+*.txt             text eol=lf
+*.yml             text eol=lf
+*.yaml            text eol=lf
+*.sh              text eol=lf
+Dockerfile        text eol=lf
+.dockerignore     text eol=lf
+.gitignore        text eol=lf
+.gitattributes    text eol=lf
