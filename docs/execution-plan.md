@@ -36,8 +36,8 @@ stages — it tells you exactly where the project is and what to do next.
 - **Daily recap status:** Session 02 — recap passed ✅ (Blocks A-C reinforced); all SSH concepts validated
 - **Next session target:** Phase 9 — Stage 09: create Oracle Cloud Free Tier account, generate VPS key pair (`id_ed25519_vps`), provision Ubuntu server, connect for the first time
 - **Blockers / open questions:** None recorded
-- **Last session:** 2026-08-25 — Stage 08 COMPLETE (SSH mental model + practice + Part C)
-- **Last commit / push:** Pending — memory changes (session log, AGENTS.md, execution plan, stage-08 complete) to be synced to `C:\Repo2` and pushed
+- **Last session:** 2026-09-08 — Methodology update: spiral repetition v2 (per-topic summary+analogy → check → varied Qs → student Q&A → immediate work transition) + exhaustive flow coverage (YAML, .gitignore/.dockerignore, Bandit/pip-audit, Kubernetes conceptual) — AGENTS.md, session-log template, learning-roadmap, execution-plan updated
+- **Last commit / push:** `db953fa` — `docs(learning): spiral repetition v2` — pushed to GitHub ✅ GitLab ✅ (2026-09-08) — resolves pending from 2026-08-25
 
 ---
 
