@@ -9,43 +9,123 @@
 ## How to Write an Entry
 
 Append every entry at the **top** of this file (under this header). One entry per session.
-Keep it honest and specific: this log is the "memory" that any AI (and you) uses to resume
-work instantly. The mentor reviews the latest entry at the start of every session.
+Keep it honest and specific: this log is the **permanent memory** that any AI (and you)
+uses to resume work instantly. The mentor reviews the latest entry at the start of every
+session and consults the per-topic question bank to avoid exact duplication.
 
-### Template
+### Template — v2 (Spiral Repetition + Permanent Memory)
 
 ```markdown
 ## YYYY-MM-DD — Session NN
 
 **Phase / Stage:** Phase X — <phase name> · Stage NN — <stage title>
 
-**Daily recap (start of day):**
-- Passed ✅ / Areas to reinforce ⚠️: <what was asked and how it went>
+**Daily recap (start of day) — per-topic log (1–2 blocks, spiral repetition):**
 
-**Worked on:**
-- <what was done this session>
+> General journey summary given: <1 sentence — where we started → where we are>
 
-**Concepts learned / reinforced:**
-- <concept, in your own words>
+| # | Block/Topic | Summary + Analogy given by mentor | Comprehension check | Evaluation Qs (varied, 1 at a time) + Your answers + Verdict | Your Qs for this topic | Topic verdict |
+|---|---|---|---|---|---|---|
+| 1 | Block B — Ruff vs Flake8 vs Black | "Ruff=fast guard, Flake8=style police, Black=formatter..." | ¿Entendido? → Asimilado ✅ (or Needed re-explanation → re-explained with X) | Q1: ¿Por qué Black usa --check en CI? → "para no modificar..." → ✅ correct / Q2: ... → ⚠️ gap → rephrased Q2b → ✅ | "¿y Bandit?" → explained: scans secrets... | ✅ |
+| 2 | Block E — .dockerignore vs .gitignore | ".gitignore=qué no va a Git, .dockerignore=qué no va al contexto de build..." | Asimilado ✅ | Q1: ¿Qué pasa si .venv va a la imagen? → ... → ✅ | None | ✅ |
 
-**Commands / tools used:**
-- <command> — why
+**Recap meta:** Topics repeated intentionally for retention; exact question repeated only if flagged `refuerzo útil ⏰`. All Qs above added to permanent bank.
+**Recap timing:** 12 min — Blocks B,E (or Actual duration)
 
-**Errors encountered:**
-- <error> → <what you investigated> → <resolution>
+**Work session (today's build — feeds future recaps):**
+- **What we built / did:** <stage checklist items, commands with why>
+- **Concepts newly learned / deepened:** <tool purpose + how it intervenes in flow + failure mode>
+- **Commands / tools used:** <command> — why (e.g., `docker build` — creates immutable layers)
+- **Decisions made:** <ADR link if any>
+- **Errors encountered:** <error> → <hypothesis> → <investigation> → <resolution>
+- **Evidence:** screenshots/stage-NN/...
 
-**Questions still open:**
+**Questions still open (for next recap rotation):**
 - <question> (if none, write "None")
 
 **Next session (target):**
-- <exact next checkbox to complete>
+- **Recap next:** <next blocks in rotation, e.g., Block F (registries) + Block C (Git) — with varied Qs, no exact repeat>
+- **Work next:** <exact next checkbox, e.g., Phase 9 — generate id_ed25519_vps>
+
+**Question bank update:** Added Qs: [list Q ids / hashes] — Last exact repeat: <none / Q X flagged refuerzo útil>
 
 **Commit / push:** `docs(stage-08): ...` — pushed to GitHub ✅ GitLab ✅
 ```
 
+**Rules for the log:**
+- One row per topic of the day (1–2 rows). Never log "general recap only" — always per-topic.
+- The `Summary + Analogy` column is mandatory and becomes source material for future spiral recaps.
+- `Evaluation Qs` column must show variety: if a topic repeats, the question wording must differ unless marked `refuerzo útil ⏰`.
+- The `Work session` section is **also permanent memory** — its concepts become future recap topics.
+- The `Recap meta` + `Question bank update` lines let the next AI instantly avoid duplicate questions while keeping intentional topic repetition.
+
 ---
 
 ## Entries
+
+---
+
+## 2026-08-25 — Session 02 (Stage 08 — SSH mental model + practice + Part C)
+
+**Phase / Stage:** Phase 8 — SSH & Remote Connections · Stage 08 — COMPLETE ✅
+
+**Daily recap (start of day):**
+- Recap covered Blocks A-C (Phases 1-7). Passed ✅: general summary of the delivery
+  cycle, quality tools, Git & branches.
+- Reinforced: SSH concept (canal seguro, puerto 22), host authenticity warning (seguridad
+  contra ataques hombre-en-el-medio), public vs private keys (cerradura/llave).
+
+**Worked on:**
+- Explained **what SSH is and what problem it solves** (secure tunnel for remote access).
+- Explained **why the first connection shows a host authenticity warning** (host key
+  verification, man-in-the-middle protection).
+- Explained **public key vs private key authentication** (asymmetric cryptography, why it's
+  more secure than passwords).
+- Explained **why SSH is relevant to this project** (only way to reach the VPS, install
+  Docker, clone repo, run compose, deploy).
+- Explained **why servers have no GUI** (resources for processing, not peripherals).
+- Explained **SSH daemon (sshd)** — the service that accepts connections on port 22.
+- Explained **6-step SSH connection process** (DNS → TCP → key exchange → encryption → auth → shell).
+- Updated **AGENTS.md** with new Student Session Rules (recap question categories, memory
+  of explanations, 3 question categories, no questions on unregistered topics).
+- **Practiced with ssh-keygen**: generated practice key pair, inspected both files
+  (public and private), deleted them.
+- **Fixed private key permissions** on Windows (changed to read-only for user).
+- **Decided SSH key strategy for Phase 9**: create third separate key pair (`id_ed25519_vps`).
+- **Answered all 7 Part C questions** with mentor validation — all correct.
+
+**Concepts learned / reinforced:**
+- SSH = secure shell, encrypted channel over untrusted network.
+- Port 22 = the specific port SSH daemon listens on.
+- SSH daemon (sshd) = service on server that accepts SSH connections.
+- Host authenticity warning = first-time key exchange, man-in-the-middle protection.
+- Private key stays on user's machine, never shared; public key goes to server.
+- Key-based auth uses challenge-response: server encrypts with public key, private key
+  decrypts without ever leaving the machine.
+- 6-step connection: DNS → TCP port 22 → host key exchange → encryption negotiation → auth → shell.
+- Servers have no GUI to save resources for processing.
+- SSH is the only door into the VPS for all future phases (9-14).
+
+**Commands / tools used:**
+- `ssh-keygen -t ed25519 -C "practice@demo"` — generated practice key pair
+- `cat ~/.ssh/id_ed25519_practice.pub` — inspected public key format
+- `cat ~/.ssh/id_ed25519_practice` — inspected private key format
+- `rm ~/.ssh/id_ed25519_practice*` — deleted practice keys
+- `icacls` — fixed Windows permissions on private key
+
+**Errors encountered:**
+- `chmod` didn't work properly on Windows (Git Bash POSIX layer doesn't affect NTFS permissions). Solution: used `icacls` (Windows native tool).
+
+**Questions still open:**
+- Block D pending from Session 01 (relationship between GitHub `needs` and GitLab `stages`).
+- `requirements.txt` unpinned (only `pytest`).
+
+**Next session (target):**
+- Phase 9 — VPS Provisioning: create Oracle Cloud Free Tier account, generate VPS key
+  pair, provision Ubuntu server, connect for the first time.
+
+**Commit / push:** Pending — memory folder changes (session log, AGENTS.md, execution
+plan, stage-08 complete) to be synced to `C:\Repo2` and pushed.
 
 ---
 

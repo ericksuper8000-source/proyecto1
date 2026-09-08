@@ -36,12 +36,16 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 2 — Code Quality & Automated Testing
+## Phase 2 — Code Quality & Automated Testing (incl. exhaustive flow tools)
 
-- [ ] I can explain the responsibility of each tool: Ruff, Flake8, Black, MyPy, Pytest.
+- [ ] I can explain the responsibility of each tool: Ruff, Flake8, Black, MyPy, Pytest, **Bandit (security)**, **pip-audit (supply chain)**.
 - [ ] I can explain why Black runs as `--check` in CI instead of modifying files.
 - [ ] I can explain what a unit test is and what makes a good test.
 - [ ] I can justify why a professional pipeline never ships broken code.
+- [ ] I can explain **what Bandit scans** (hardcoded secrets, injection) and why it runs in CI.
+- [ ] I can explain **what pip-audit checks** vs Bandit, and how both protect the flow.
+- [ ] I can explain **`.gitignore` vs `.dockerignore` vs `.gitattributes`** — what each excludes, why `.venv/__pycache__/*.pem/.env` must not go to Git nor to image, and what breaks if they do.
+- [ ] I can explain **YAML** as a language (maps, lists, indentation, why a missing space breaks the pipeline) and why the runner reads it.
 
 ---
 
@@ -54,22 +58,26 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 4 — CI/CD Pipelines
+## Phase 4 — CI/CD Pipelines (incl. YAML & secrets)
 
 - [ ] I can explain the difference between CI and CD with a real example.
 - [ ] I can explain every element of the GitHub Actions workflow (triggers, jobs, steps, needs).
 - [ ] I can explain the equivalent concepts in GitLab CI (stages, jobs, scripts).
 - [ ] I can explain how a pipeline builds and pushes a Docker image automatically.
 - [ ] I can explain why secrets are stored as CI variables and not in the repository.
+- [ ] I can explain **YAML syntax pitfalls** (indentation, `:` vs `-`) that break a pipeline.
+- [ ] I can explain **`.env` files vs CI secrets** and why `.env` is in `.gitignore`.
 
 ---
 
-## Phase 5 — Containerization
+## Phase 5 — Containerization (incl. .dockerignore)
 
 - [ ] I can explain the problem Docker solves.
 - [ ] I can explain images vs containers and why images are immutable.
 - [ ] I can write a Dockerfile and explain what a layer is.
 - [ ] I can explain what `WORKDIR`, `COPY`, `RUN`, `CMD` do and why the order matters.
+- [ ] I can explain **`.dockerignore`** — why it exists separately from `.gitignore`, what it prevents from entering the build context, and its impact on image size / cache / security.
+- [ ] I can explain **build context** vs `.dockerignore` vs `.gitignore`.
 
 ---
 
@@ -82,13 +90,15 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 7 — Orchestration & CD Simulation
+## Phase 7 — Orchestration & CD Simulation (incl. exhaustive flow)
 
 - [ ] I can explain the difference between Docker Compose and Docker Engine.
 - [ ] I can read a `docker-compose.yml` and explain every field we use.
 - [ ] I can explain what Watchtower does and how it simulates CD.
 - [ ] I can explain why containers are ephemeral and what `restart: always` does.
 - [ ] I can explain why persistence will matter in production (Phase 12).
+- [ ] I can explain **how each piece intervenes in the flow**: `docker build → image → registry → compose (decides) → engine (executes, pulls, creates) → Watchtower (recreates)` — and what breaks if one link disappears.
+- [ ] I can explain **Kubernetes conceptually**: what problem it solves when Compose is not enough (multi-host, scheduler, declarative state), how it compares to `docker compose up`, and why we do not install it (out of scope, reference only).
 
 ---
 
@@ -173,7 +183,7 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 | 5 Containerization | ✅ | ✅ | prior work |
 | 6 Registries | ✅ | ✅ | prior work |
 | 7 Orchestration & CD Sim | ✅ | ✅ | prior work |
-| 8 SSH & Remote Access | ⬜ | ⬜ | |
+| 8 SSH & Remote Access | ✅ | ✅ | 2026-08-25 |
 | 9 VPS Provisioning | ⬜ | ⬜ | |
 | 10 Linux Administration | ⬜ | ⬜ | |
 | 11 Deployment to Server | ⬜ | ⬜ | |

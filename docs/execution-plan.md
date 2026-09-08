@@ -27,20 +27,17 @@ stages — it tells you exactly where the project is and what to do next.
 
 > **This block is updated at the end of every session.**
 
-- **Current phase:** Phase 8 — SSH & Remote Connections
-- **Current stage / task:** Stage 08 — Understand what SSH is and what a remote session does
+- **Current phase:** Phase 9 — VPS Provisioning (Oracle Cloud Always Free)
+- **Current stage / task:** Stage 09 — Create Oracle Cloud account + provision VPS
 - **Phase 0 (Planning):** ✅ Complete
 - **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
-- **Last completed item:** Method adopted — general recap (Block A→H) + cadence ~15 min/day
-  (full summary daily, questions from 1–2 blocks/day) — see `AGENTS.md`
-- **Daily recap status:** General recap running — first session passed blocks A, B, C ✅;
-  block D partial (pipeline structure `needs` vs `stages` pending)
-- **Next session target:** Close Block D, then Block E (containers) → proceed to Stage 08
-  (SSH mental model)
+- **Phase 8 (SSH & Remote Connections):** ✅ Complete — mental model, practice, Part C questions answered
+- **Last completed item:** Stage 08 complete — SSH mental model validated, practice key pair generated/inspected/deleted, 7 Part C questions answered correctly, SSH key strategy decided for Phase 9
+- **Daily recap status:** Session 02 — recap passed ✅ (Blocks A-C reinforced); all SSH concepts validated
+- **Next session target:** Phase 9 — Stage 09: create Oracle Cloud Free Tier account, generate VPS key pair (`id_ed25519_vps`), provision Ubuntu server, connect for the first time
 - **Blockers / open questions:** None recorded
-- **Last session:** 2026-08-11 — method adopted + first general recap (no stage work)
-- **Last commit / push:** Pending — memory changes (method/cadence/sticky frames/renames)
-  to be synced to `C:\Repo2` and pushed
+- **Last session:** 2026-08-25 — Stage 08 COMPLETE (SSH mental model + practice + Part C)
+- **Last commit / push:** Pending — memory changes (session log, AGENTS.md, execution plan, stage-08 complete) to be synced to `C:\Repo2` and pushed
 
 ---
 
@@ -57,8 +54,8 @@ stages — it tells you exactly where the project is and what to do next.
 | CI/CD | ☒ Active (GitHub Actions + GitLab CI) |
 | Docker | ☒ Active (images, compose, 3 registries) |
 | CD simulation | ☒ Active (Watchtower) |
-| SSH | ⬜ Next (Phase 8) |
-| VPS | ⬜ Not started (Phase 9) |
+| SSH | ✅ Complete (Phase 8) |
+| VPS | 🔄 Next (Phase 9) |
 
 ---
 
@@ -110,9 +107,9 @@ stages — it tells you exactly where the project is and what to do next.
 
 ## Phase 2 — Code Quality & Automated Testing
 
-**Objective:** Guarantee the code is correct and consistent **before** it is published. A professional pipeline never ships broken code.
+**Objective:** Guarantee the code is correct and consistent **before** it is published. A professional pipeline never ships broken code. Exhaustive flow coverage includes security and ignore-files.
 
-**Estimated duration:** Completed (1 week, prior work)
+**Estimated duration:** Completed (1 week, prior work) — exhaustive tooling (Bandit/pip-audit, .gitignore/.dockerignore/YAML) reinforced via spiral recaps from now on.
 
 - [x] Ruff — fast linting
 - [x] Flake8 — Python best practices
@@ -121,12 +118,16 @@ stages — it tells you exactly where the project is and what to do next.
 - [x] Pytest — unit tests
 - [x] Tests written for the core functions (`suma`, `division`, `es_par`)
 - [x] All quality tools pass locally before pushing
+- [x] `.gitignore` / `.gitattributes` — understood (what never goes to Git)
+- [ ] **Bandit** (static security) — to be practiced: `bandit -r .` and CI integration
+- [ ] **pip-audit** (dependency vulnerabilities) — to be practiced and CI integration
+- [ ] **`.dockerignore`** — to be added and explained vs `.gitignore` + YAML syntax mastery
 
-**Status:** ✅ COMPLETE
+**Status:** ✅ COMPLETE (core) — exhaustive extensions (Bandit/pip-audit/.dockerignore/YAML deep) tracked in learning-roadmap and spiral recaps
 
 > ⚠️ Note: Ruff and MyPy were learned and validated locally. The current pipelines
-> (`ci.yml`, `.gitlab-ci.yml`) run Flake8 + Black + Pytest. Adding Ruff/MyPy to the CI is
-> a recommended **optional improvement** to record in a future stage.
+> (`ci.yml`, `.gitlab-ci.yml`) run Flake8 + Black + Pytest. Adding Ruff/MyPy/Bandit/pip-audit to the CI is
+> a recommended **optional improvement** to record in a future stage. `.dockerignore` and deep YAML are now part of Block A/B recaps.
 
 ---
 
@@ -211,7 +212,7 @@ stages — it tells you exactly where the project is and what to do next.
 
 ## Phase 7 — Orchestration & CD Simulation
 
-**Objective:** Describe the desired running state with Docker Compose and simulate continuous deployment with Watchtower.
+**Objective:** Describe the desired running state with Docker Compose and simulate continuous deployment with Watchtower. Deepen exhaustive understanding of how each piece intervenes.
 
 **Estimated duration:** Completed (1 week, prior work)
 
@@ -224,29 +225,31 @@ stages — it tells you exactly where the project is and what to do next.
 - [x] Watchtower detects a new image and recreates the container (CD simulation)
 - [x] Understand container lifecycle and restart policies
 - [x] Understand why persistence will matter in Phase 12
+- [x] Understand exhaustive flow `build → image → registry → compose → engine → watchtower` and failure modes
+- [ ] **Kubernetes (conceptual)** — understand what it solves when Compose is not enough (multi-host, scheduler) — reference only, no install (see AGENTS.md Technology Introduction Rule)
 
-**Status:** ✅ COMPLETE
+**Status:** ✅ COMPLETE (core) — Kubernetes conceptual added to Block G/H spiral recaps
 
 ---
 
-## Phase 8 — SSH & Remote Connections 🔄
+## Phase 8 — SSH & Remote Connections ✅
 
 **Objective:** Understand what it means to connect to a remote machine. **No VPS is created yet.** Every later command must make sense, not be copy-paste.
 
-**Estimated duration:** 1–2 sessions
+**Estimated duration:** 1–2 sessions (completed in Session 02)
 
 **Stage document:** [`docs/stages/stage-08-ssh-remote-connection.md`](docs/stages/stage-08-ssh-remote-connection.md)
 
-- [ ] Understand what SSH is and what problem it solves
-- [ ] Understand what really happens when you run `ssh usuario@servidor`
-- [ ] Understand how authentication works (keys: private/public)
-- [ ] Understand why a server normally has no graphical interface
-- [ ] Understand who you control and what you are controlling over SSH
-- [ ] (Practice only, no VPS) Generate a local key pair and inspect it
-- [ ] Answer the Stage 08 mentor questions in your own words
-- [ ] Document the stage + evidence + update state
+- [x] Understand what SSH is and what problem it solves
+- [x] Understand what really happens when you run `ssh usuario@servidor`
+- [x] Understand how authentication works (keys: private/public)
+- [x] Understand why a server normally has no graphical interface
+- [x] Understand who you control and what you are controlling over SSH
+- [x] (Practice only, no VPS) Generate a local key pair and inspect it
+- [x] Answer the Stage 08 mentor questions in your own words
+- [x] Document the stage + evidence + update state
 
-**Status:** 🔄 IN PROGRESS
+**Status:** ✅ COMPLETE
 
 ---
 
@@ -258,14 +261,18 @@ stages — it tells you exactly where the project is and what to do next.
 
 **Stage document:** [`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)
 
+**SSH key strategy (decided in Stage 08):** Create a **third separate key pair** (`id_ed25519_vps`) following the existing pattern of separate keys for GitHub and GitLab. See [`docs/stages/stage-08-ssh-remote-connection.md`](docs/stages/stage-08-ssh-remote-connection.md#ssh-key-strategy-for-phase-9-students-decision) for details.
+
 - [ ] Create the Oracle Cloud account (free tier only — see ADR-0005)
 - [ ] Understand quotas and how to avoid costs
 - [ ] Create the VPS (instance)
   - [ ] Choose Ubuntu
   - [ ] Understand what an instance really is
   - [ ] Understand the shape/resources (ARM vs x86) and their limits
-- [ ] Get the SSH key material that Oracle provides
-- [ ] Connect for the first time with `ssh`
+- [ ] Generate VPS key pair: `ssh-keygen -t ed25519 -C "vps-oracle@project"` → save to `~/.ssh/id_ed25519_vps`
+- [ ] Add public key to Oracle Cloud console
+- [ ] Add VPS entry to `~/.ssh/config`
+- [ ] Connect for the first time with `ssh mi-vps`
 - [ ] Basic first-contact: whoami, OS version, resources
 - [ ] Document + evidence + update state
 
@@ -395,39 +402,55 @@ stages — it tells you exactly where the project is and what to do next.
 
 ---
 
-## Session Workflow
+## Session Workflow — v2 (Spiral Repetition + Feedback Loop)
 
-**Daily recap mini-session (before anything else, every day):**
+**Daily recap mini-session v2 (before anything else, every day, ~15 min cap):**
 
-1. The mentor gives the simple summary of the journey so far.
-2. Question round: **one question at a time** (commands, decisions, processes).
-3. The recap is **general** — it reviews the **complete delivery flow** (Block map in
-   `AGENTS.md`), with the **daily summary every day** but questions from **only 1–2 blocks
-   per day** (rotating, ~15 min). Never all 8 blocks in one day.
-4. Gate per block: pass → next block; gap → reinforcement, no new material.
-5. Result recorded in `session-log.md` (passed ✅ / reinforce ⚠️).
+1. The mentor gives the **general journey summary** (2–3 min, always).
+2. For **each of the 1–2 blocks of the day** (rotating, cyclical A→H then loop), execute the
+   per-topic micro-cycle (`AGENTS.md`):
+   - **Specific summary + analogy** for that topic (what it is, why it exists, how it
+     intervenes in `CICD.txt` flow, failure mode)
+   - **Comprehension check:** *"¿Lo entendiste o necesitas otra explicación?"* → if needed,
+     re-explain differently; if asimilado, proceed
+   - **Varied evaluation:** exactly **one question at a time**, topic repeats but exact
+     question never repeats unless `refuerzo útil ⏰`
+   - **Student Q&A slot:** *"¿Tienes preguntas tú sobre este tema?"* → log Q&A
+   - **Topic gate:** ✅ next topic / ⚠️ reinforce with different question next session
+3. The recap is **general and cyclical** — covers **complete delivery flow + every tool/file
+   in CICD.txt** (Blocks A–H), always with intentional topic repetition for retention after
+   a full A→H cycle loops to A with varied Qs.
+4. **When the day's practice is judged complete** (1–2 topics validated), **immediately
+   transition to the work session** — no gap.
+5. Result recorded **per-topic** in `session-log.md` (table: summary/analogy, check,
+   Qs+answers+verdict, your Qs, verdict) + `Recap meta` (timing, bank update). This log is
+   permanent memory and feeds future recaps.
 
 **Start of the progress session (10 min):**
 
 1. Read **Current Status** above.
-2. Read the last entry of `session-log.md`.
+2. Read the last entry of `session-log.md` (per-topic table + work log).
 3. Read the current stage document.
 4. Tell the mentor what you remember from the previous session.
 
 **During the session:**
 
-5. Work the stage checklist. The mentor guides with questions.
+5. Work the stage checklist. The mentor guides with questions (why-first, 1 at a time).
+   New concepts are taught with the same micro-cycle (summary+analogy → check → evaluation).
 
 **End of session (20 min):**
 
 6. Fill the stage report section in the stage document.
 7. Save screenshots/evidence in `screenshots/stage-NN/`.
-8. Append an entry to `session-log.md`.
-9. Tick completed checkboxes in this file and update **Current Status**.
+8. Append an entry to `session-log.md` with **per-topic recap table + work session log**
+   (what was built, decisions, commands with why, errors/hypotheses/resolutions — this
+   becomes future recap material).
+9. Tick completed checkboxes in this file and update **Current Status** + confirm question
+   bank updated (no exact duplicate unless refuerzo útil).
 10. Write an ADR if a meaningful decision was made.
 11. Sync this folder with `C:\Repo2`, commit with a conventional message, push to
-    **both** GitHub and GitLab.
-12. Confirm the next session's target.
+     **both** GitHub and GitLab.
+12. Confirm the next session's target (next blocks in rotation + next work checkbox).
 
 ---
 
