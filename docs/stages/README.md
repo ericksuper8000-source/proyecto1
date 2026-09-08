@@ -10,8 +10,8 @@
 
 | Stage | Title | Phase | Status |
 |---|---|---|---|
-| 08 | [SSH & Remote Connections](stage-08-ssh-remote-connection.md) | 8 | 🔄 In progress |
-| 09 | [VPS Provisioning](stage-09-vps-provisioning.md) | 9 | ⬜ Pending |
+| 08 | [SSH & Remote Connections](stage-08-ssh-remote-connection.md) | 8 | ✅ Complete (2026-08-25) |
+| 09 | [VPS Provisioning](stage-09-vps-provisioning.md) | 9 | ⬜ Pending — Current |
 
 > More stages are created progressively — each one is written in detail only when we reach
 > its phase (see `docs/execution-plan.md` for the full roadmap).

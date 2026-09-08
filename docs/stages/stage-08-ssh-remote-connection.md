@@ -2,7 +2,7 @@
 
 > **Phase:** Phase 8 — SSH & Remote Access
 > **Estimated duration:** 1–2 sessions
-> **Status:** 🔄 In progress
+> **Status:** ✅ Complete (2026-08-25) — validated, see Report & execution-plan.md
 > **Prerequisites:** Phases 1–7 complete. This stage is **theory-first**: no VPS is
 > created yet.
 
@@ -128,17 +128,54 @@ Answer these **in your own words** in the Report before marking this stage done:
 
 ---
 
+## SSH Key Strategy for Phase 9 (Student's Decision)
+
+The student already has **two separate SSH key pairs** configured:
+
+| Key pair | Purpose | Config file entry |
+|---|---|---|
+| `id_ed25519` / `id_ed25519.pub` | GitHub (ericksuper80@gmail.com) | `Host github.com` |
+| `id_ed25519_gitlab` / `id_ed25519_gitlab.pub` | GitLab (ericksuper80@hotmail.com) | `Host gitlab.com` |
+
+**Decision:** For the VPS (Phase 9), create a **third separate key pair**:
+- `id_ed25519_vps` — private key (stays on local machine)
+- `id_ed25519_vps.pub` — public key (uploaded to Oracle Cloud VPS)
+
+**Why separate keys:**
+- Follows the same pattern already established (GitHub key ≠ GitLab key)
+- Principle of least privilege: if one key is compromised, others remain safe
+- Easy to revoke VPS key without affecting Git operations
+- Consistent with professional security practices
+
+**Config entry to add in Phase 9:**
+```
+Host mi-vps
+    HostName <VPS-IP>
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519_vps
+    AddKeysToAgent yes
+```
+
+**Commands for Phase 9:**
+```bash
+ssh-keygen -t ed25519 -C "vps-oracle@project"
+# Save to: ~/.ssh/id_ed25519_vps
+# Then add the public key to Oracle Cloud console
+```
+
+---
+
 ## Checklist
 
-- [ ] I can explain what SSH is and what problem it solves.
-- [ ] I can explain what happens on a `ssh usuario@servidor` connection (client, server,
+- [x] I can explain what SSH is and what problem it solves.
+- [x] I can explain what happens on a `ssh usuario@servidor` connection (client, server,
       port 22, host key, encryption, auth, shell).
-- [ ] I can explain how key-based authentication works (private vs public key).
-- [ ] I can explain why a server has no GUI and what I control over the shell.
-- [ ] I generated a local key pair with `ssh-keygen` and inspected both files.
-- [ ] I verified the private key permissions (it must be readable only by me).
-- [ ] I answered the 7 questions above in the Report.
-- [ ] I understand that **no VPS is created in this stage** — Phase 9 is next.
+- [x] I can explain how key-based authentication works (private vs public key).
+- [x] I can explain why a server has no GUI and what I control over the shell.
+- [x] I generated a local key pair with `ssh-keygen` and inspected both files.
+- [x] I verified the private key permissions (it must be readable only by me).
+- [x] I answered the 7 questions above in the Report.
+- [x] I understand that **no VPS is created in this stage** — Phase 9 is next.
 
 ---
 
@@ -153,10 +190,40 @@ reinforce before moving to Phase 9.
 ## Report (student fills after the session)
 
 ### What I did
+- Session 02 (2026-08-25): Explained SSH mental model (what is SSH, port 22, host authenticity warning, public vs private keys, why SSH is relevant to the project).
+- Reviewed existing SSH configuration (~/.ssh/config, existing key pairs for GitHub/GitLab).
+- Decided on SSH key strategy for Phase 9: create a third separate key pair (`id_ed25519_vps`).
+- Generated a practice key pair with `ssh-keygen`, inspected both files (public and private), then deleted them.
+- Fixed private key permissions (changed from `-rw-r--r--` to `-rw-------` using `icacls`).
+- Answered the 7 Part C questions with mentor validation.
 
 ### How it works / why
 
-(Your answers to the 7 questions in Part C.)
+**1. What is SSH, and what problem does it solve?**
+SSH es un túnel de comunicación seguro que permite comunicación privada entre un cliente y un servidor. Utiliza el puerto 22 como un "número de teléfono" específico. Para crear el túnel se necesita un par de claves SSH: la pública (cerradura) viaja por internet, la privada (llave) vive solo en mi equipo. Es un método muy seguro porque para comprometer el canal se necesitan ambas claves, y la privada además de ser muy grande, nunca sale de mi máquina.
+
+**2. What runs on the server to accept SSH connections? (name and port)**
+El SSH daemon (sshd) es el servicio que acepta conexiones. Está escuchando permanentemente en el puerto 22, como un guardia de seguridad en la puerta.
+
+**3. Walk through what happens between typing `ssh usuario@servidor` and getting a prompt.**
+1. Mi computadora busca el IP del servidor
+2. Mi cliente SSH abre una conexión a través del puerto 22
+3. Se hace el intercambio de claves con el servidor
+4. Ambos lados negocian y acuerdan cómo cifrar la comunicación
+5. Me autentico (con contraseña o clave)
+6. Se inicia una terminal tipo shell del lado del servidor y me permite conectarme
+
+**4. Why does the first connection show a warning about the host's authenticity?**
+Es parte del proceso, siempre se muestra si es la primera vez que se hace la conexión. Durante el intercambio de claves, el cliente verifica a través de mi archivo known_hosts si existe una conexión previa. Si no existe, se envía el mensaje de autenticidad. Es una manera segura de evitar que un intruso tome control del puerto de comunicación (ataque hombre-en-el-medio).
+
+**5. What is the difference between the private key and the public key? Which one can you share?**
+La clave privada es la llave, la pública es la cerradura. La pública tiene acceso a internet y se comunica con el sshd. La privada es la llave que entra en esa cerradura. La clave pública se puede compartir; la clave privada jamás debería compartirse, vive únicamente en mi equipo.
+
+**6. Why does a server usually have no graphical interface? What do you actually control when you type commands over SSH?**
+Los periféricos como mouse o monitor consumen recursos de memoria que pueden utilizarse para el procesamiento, por eso no se utilizan. Toda la comunicación con el servidor se realiza por medio de terminales de comando.
+
+**7. Who authenticates you, and how does key-based authentication avoid sending secrets?**
+El SSH daemon autentica. La autenticación por claves evita enviar secretos por la red porque el servidor envía un mensaje cifrado que únicamente mi clave privada puede resolver. Este desafío es descifrado por la clave privada sin salir de mi equipo, y por medio de esto se valida al usuario.
 
 ### Commands I used
 

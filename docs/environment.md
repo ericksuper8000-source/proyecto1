@@ -4,7 +4,7 @@
 **Objective:** Document the local environment where the project lives, so every stage can
 assume a verified baseline instead of unknown state.
 
-**Last verified:** 2026-08-04
+**Last verified:** 2026-09-08 — memory path updated to `E:\Datos\IA\CICD - Project`, `.dockerignore` added, `requirements.txt` pinned to `pytest==8.2.2`
 
 ---
 
@@ -32,7 +32,7 @@ assume a verified baseline instead of unknown state.
 | Path | Role |
 |---|---|
 | `C:\Repo2` | **The real repository** — code + pipelines + all project files. Lives here. |
-| `C:\Users\XPC\Desktop\CICD - Project` | **Memory/planning folder** — documentation, session log, execution plan. Kept in sync with `C:\Repo2`. |
+| `E:\Datos\IA\CICD - Project` | **Memory/planning folder** — documentation, session log, execution plan. Kept in sync with `C:\Repo2`. (Historically `C:\Users\XPC\Desktop\CICD - Project` — moved to `E:\Datos\IA\` on 2026-09-08) |
 | `C:\Users\XPC\Desktop\Linux VPS -BORRADOR` | Reference project (Linux DevOps Labs) — structure inspiration only. |
 | `C:\Users\XPC\Desktop\Portafolio` | Personal portfolio materials. |
 

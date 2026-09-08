@@ -9,7 +9,8 @@
 
 Compartele el folder:
 
-C:\Users\XPC\Desktop\CICD - Project
+E:\Datos\IA\CICD - Project
+  (ruta historica: C:\Users\XPC\Desktop\CICD - Project — actualizada 2026-09-08)
 
 Este folder es la "memoria" del proyecto. La IA NO necesita leer todo;
 solo debe LEER estas 4 cosas (en este orden, segun AGENTS.md):
@@ -38,7 +39,7 @@ REGLAS DE SINCRONIZACION (MUY IMPORTANTE):
 
 "Vamos a iniciar una nueva sesion del proyecto CI/CD Pipeline Labs.
 
-Te comparto el folder C:\Users\XPC\Desktop\CICD - Project.
+Te comparto el folder E:\Datos\IA\CICD - Project.
 
 1) Lee el contexto siguiendo el protocolo de AGENTS.md:
    - AGENTS.md

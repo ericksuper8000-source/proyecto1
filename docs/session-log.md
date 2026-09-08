@@ -117,15 +117,13 @@ session and consults the per-topic question bank to avoid exact duplication.
 - `chmod` didn't work properly on Windows (Git Bash POSIX layer doesn't affect NTFS permissions). Solution: used `icacls` (Windows native tool).
 
 **Questions still open:**
-- Block D pending from Session 01 (relationship between GitHub `needs` and GitLab `stages`).
-- `requirements.txt` unpinned (only `pytest`).
+- Block D pending from Session 01 (relationship between GitHub `needs` and GitLab `stages`) — to be closed in next recap with varied Qs.
 
 **Next session (target):**
 - Phase 9 — VPS Provisioning: create Oracle Cloud Free Tier account, generate VPS key
   pair, provision Ubuntu server, connect for the first time.
 
-**Commit / push:** Pending — memory folder changes (session log, AGENTS.md, execution
-plan, stage-08 complete) to be synced to `C:\Repo2` and pushed.
+**Commit / push:** `4b31242` — `docs(execution-plan): update Current Status` — pushed to GitHub ✅ GitLab ✅ (2026-09-08). Prior pending from 2026-08-25 resolved via `db953fa`/`4b31242`. `requirements.txt` pin fixed in next commit.
 
 ---
 
@@ -168,16 +166,14 @@ plan, stage-08 complete) to be synced to `C:\Repo2` and pushed.
 - None.
 
 **Questions still open:**
-- Block D pending: relationship between GitHub `needs` and GitLab `stages`.
-- `requirements.txt` is unpinned (only `pytest`) — dependency pinning is planned material.
+- Block D pending: relationship between GitHub `needs` and GitLab `stages` — carried to next spiral cycle with varied Qs.
 
 **Next session (target):**
 - Recap: close **Block D** (pipeline structure `needs` vs `stages`), then **Block E**
   (containers).
 - Then **Stage 08** — the SSH mental model (questions before any command, no VPS created).
 
-**Commit / push:** Pending — memory folder changes to be synced to `C:\Repo2` and pushed
-(method, cadence, sticky frames, folder renames).
+**Commit / push:** `4b31242` — resolved via `db953fa`/`4b31242` (2026-09-08) — methodology v2 + path fixes. Original `Pending` from 2026-08-11 now synced.
 
 ---
 
