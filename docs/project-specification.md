@@ -197,8 +197,8 @@ Production Hardening (Nginx, HTTPS, Volumes, Logs, Backups)
 | 5 | Containerization | Dockerfile, build, images | ✅ |
 | 6 | Registries | Docker Hub, GHCR, GitLab Registry | ✅ |
 | 7 | Orchestration & CD Sim | Docker Compose + Watchtower | ✅ |
-| 8 | SSH & Remote Access | Understand and use SSH | 🔄 |
-| 9 | VPS Provisioning | Oracle Cloud Always Free, Ubuntu | ⬜ |
+| 8 | SSH & Remote Access | Understand and use SSH | ✅ Complete (2026-08-25) |
+| 9 | VPS Provisioning | Oracle Cloud Always Free, Ubuntu | 🔄 Current |
 | 10 | Linux Administration | Users, permissions, filesystem, packages, firewall | ⬜ |
 | 11 | Deployment to Server | Docker Engine, Compose, git clone, compose up | ⬜ |
 | 12 | Production Hardening | Nginx, HTTPS, env, volumes, logs, backups, monitoring | ⬜ |
