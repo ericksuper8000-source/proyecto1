@@ -45,11 +45,10 @@ stages — it tells you exactly where the project is and what to do next.
 - **Next session target:** Verify both pipelines green after push (runs 110+ GitHub, new
   GitLab pipeline), create GitLab CI variables `GHCR_USERNAME`/`GHCR_TOKEN` (student), then
   Block F evaluation + Phase 9 — Stage 09: Oracle Cloud account
-- **Blockers / open questions:** None — the GHCR PAT requirement was dropped by ADR-0007
-  (single publisher: GitHub only). Pending verification: student checks the GitLab pipeline
-  is green after push (repo is private; mentor cannot query the GitLab API)
+- **Blockers / open questions:** None. Both pipelines verified green 2026-09-29
+  (GitHub runs 110–113 via API; GitLab confirmed by student — repo private, no mentor token)
 - **Last session:** 2026-09-10 — Session 03 recap-only (Blocks D-E): closed D pending (needs), validated E (Dockerfile/cache, image vs container, Watchtower local-only vs SSH CD + GitOps, 3 disks, Git vs registry, pull-then-up, local vs fresh) — analogies saved to AGENTS.md Sticky Frames + session-log Session 03; Stage 09 work deferred by student
-- **Last commit / push:** audit improvement commits (2026-09-29, SHAs in session-log Session 04) — push pending confirmation of GitLab variables; prior: `db953fa` — `docs(learning): spiral repetition v2` — pushed to GitHub ✅ GitLab ✅ (2026-09-08)
+- **Last commit / push:** `a23d1b6` — `docs(adr): ADR-0007 single image publisher, validation-only GitLab, sync Session 04` — pushed to GitHub ✅ GitLab ✅ (2026-09-29, both pipelines green — closes Session 04 audit work; prior: `db953fa` (2026-09-08))
 
 ---
 

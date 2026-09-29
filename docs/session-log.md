@@ -153,8 +153,11 @@ feedback. Carried to next session.
 ruff I001 · `25a0c8d` ci: jobs/tags/3 registries alignment · `05a5256` fix(compose)
 watchtower pin · `90a343d` docs(audit) Session 04 · `17892b8` ci(gitlab) validation-only
 (ADR-0007) · plus this docs/ADR-0007 sync commit.
-Pushed to GitHub → run 110 success (4 jobs green), Docker Hub shows `90a343d1` + `latest`.
-Push to GitLab pending final verification (student checks pipeline — repo private).
+Pushed to GitHub ✅ → runs 110–113 all success (4 jobs green each; push + open PR events),
+Docker Hub shows `90a343d1` + `latest`. Pushed to GitLab ✅ → pipeline green with
+`lint`/`test`/`security`, no `docker` job — **confirmed by student in session**
+(evidence `05-gitlab-pipeline-green-confirmed.txt`). Session closed, ADR-0007 architecture
+in effect.
 
 ---
 

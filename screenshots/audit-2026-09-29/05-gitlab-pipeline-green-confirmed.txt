@@ -1,0 +1,16 @@
+EVIDENCE — GitLab pipeline post-decision verification (ADR-0007)
+Date: 2026-09-29
+Commit: a23d1b6 (develop)
+
+Verification source: CONFIRMED BY STUDENT VERBALLY in session ("si todo quedo en verde
+y paso las pruebas"). The GitLab repo is private and the mentor has no API token, so the
+mentor could not query it independently. Visual screenshot was NOT captured — if saved
+later, place it next to this file.
+
+Expected/confirmed state after push:
+  - pipeline on develop (a23d1b6): stages lint -> test -> security
+  - jobs green: lint (flake8+black+ruff+mypy), test (pytest 4 passed), security (bandit+pip-audit)
+  - job "docker": NOT PRESENT anymore (publishing removed from GitLab per ADR-0007)
+
+GitHub side (mentor-verified via API same day): runs 112 (push) + 113 (pull_request),
+head a23d1b66, conclusion=success, jobs lint/test/security/docker all green.
