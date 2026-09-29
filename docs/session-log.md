@@ -161,8 +161,9 @@ feedback. Carried to next session.
 - **Lección (para el banco):** **una sola PR basta** — la PR sigue la rama en vivo; si
   empujas más commits a `develop` la PR abierta los incluye sola. No abrir PR #2.
   `git merge --ff-only` cuando el target es ancestro; merge real cuando no (espejos).
-- **Pendiente:** push a `gitlab/master` dispara el pipeline de GitLab en esa rama
-  (lint/test/security sin `only:`) — estudiante confirma verde.
+- **Pipelines tras el fix:** ✅ **verde confirmado por el estudiante en GitHub Y GitLab**
+  (incluidos los pipelines disparados por los pushes a `master` — lint/test/security).
+  Sesión con cero pendientes.
 
 **Commit / push:** 7 commits on `develop` 2026-09-29:
 `fd6c212` chore(repo) hygiene · `48d5fbd` chore(deps) pytest 9.0.3 · `04c2726` fix(tests)
