@@ -1,5 +1,5 @@
 print("Uno")
 print("Dos")
-print("Three")
-print("Cuatro")
-print("Five")
+print("Tres")
+print("Four")
+print("Cinco")
