@@ -4,7 +4,9 @@
 **Objective:** Document the local environment where the project lives, so every stage can
 assume a verified baseline instead of unknown state.
 
-**Last verified:** 2026-09-08 — memory path updated to `E:\Datos\IA\CICD - Project`, `.dockerignore` added, `requirements.txt` pinned to `pytest==8.2.2`
+**Last verified:** 2026-09-29 — audit session: `requirements.txt` pinned to `pytest==9.0.3`
+(upgraded from 8.2.2 — PYSEC-2026-1845), scratch file `nuevo.py` removed, `__pycache__`
+untracked, CI/CD improvements applied (see `session-log.md` Session 04).
 
 ---
 
@@ -21,6 +23,7 @@ assume a verified baseline instead of unknown state.
 | Visual Studio Code | Main editor |
 | Git | Version control |
 | Python 3.11 | The application runtime |
+| Python 3.11 quality toolchain | flake8, black, ruff, mypy, bandit, pip-audit, pytest 9.0.3 (mirrors the CI jobs) |
 | Docker Desktop | Docker Engine + Compose + BuildKit on Windows |
 | Git Bash | Git CLI and command convenience |
 
@@ -48,7 +51,6 @@ C:\Repo2\
 ├── Dockerfile                 # Image definition
 ├── docker-compose.yml         # Stack: app + watchtower
 ├── Principal.py               # The application
-├── nuevo.py                   # Scratch/learning file
 ├── test_principal.py          # Unit tests
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # Existing public README

@@ -224,6 +224,51 @@ The student asked to keep these mental models present in the summaries. Reuse th
 - **SSH keys = one pair per service.** GitHub has its key, GitLab has its key, the VPS will
   have its own key. The `~/.ssh/config` file tells SSH which key to use for each
   connection. Private keys never leave the machine.
+- **Mudanza chain (added 2026-09-10 — student liked, use in future recaps):**
+  `Dockerfile`=plano de fábrica, pipeline YML=jefe robot que obedece la lista,
+  imagen=caja sellada inmutable (same box tagged 3x), registries=3 bodegas permanentes
+  (Docker Hub/GHCR/GitLab), `docker-compose.yml`=plano de la sala, `docker compose`=
+  decorador que lee el plano, Engine=brazos que ejecutan (`pull`/crea/inicia),
+  Watchtower=vigilante nocturno que cambia solo en local cada 30s, Docker Desktop=
+  edificio en el PC (Engine+Compose+BuildKit), VPS flow=`git clone` trae el plano →
+  Compose pide → Engine hace `pull` desde la bodega → crea contenedor.
+- **Watchtower = mini-CD de mentira en el PC. CD real = pipeline ordenando al VPS por SSH.**
+  Watchtower vigila solo y cambia ciego; CD real is `ssh ubuntu@vps "docker compose
+  pull && docker compose up -d"` with logs, pinned version, only if `lint+test` passed.
+- **Watchtower tonto vs GitOps inteligente (added 2026-09-10):** Watchtower only asks
+  "¿hay imagen nueva?"; ArgoCD/Flux ask "¿lo que dice Git que debe correr es igual a lo
+  real?" with healthchecks and rollback. Never use Watchtower in prod (no approval, no
+  healthcheck, `:latest` risk, socket=root).
+- **Capas lasaña + deps primero (added 2026-09-10 Session 03 second half):** each
+  `COPY/RUN` is a frozen layer; changing one layer rebuilds it + all after, reuses before.
+  `COPY requirements.txt + RUN pip install` before `COPY Principal.py` so code changes reuse
+  `pip install` cache. Inverted order still works (FROM gives Python) but reinstalls deps on
+  every code change — slow.
+- **Efímeros=contenedores, inmutables=persistentes local=imágenes (Session 03):** `docker rm`
+  deletes container only; `docker images` still shows image; new container needs only
+  `docker run`, not `docker build`. Only `docker rmi`/prune deletes image. Registry is for
+  surviving runner death / sharing between machines, not for surviving local `rm`.
+- **3 discos distintos (Session 03):** PC disk (Desktop, survives reboot+rm), runner disk
+  (ephemeral cloud, destroyed after job — hence mandatory `push`), VPS disk (like PC, `pull`
+  once then survives). `docker images` on PC only looks at PC disk.
+- **GitHub repo vs registry (Session 03):** GitHub/GitLab=`git clone/pull` for code text
+  (py/Dockerfile/yml); registry=`docker pull` for built binary layers. Never `git pull` an
+  image, never `docker pull` code. Registry is bridge between machines.
+- **Biblioteca (Session 03):** `pull` once = take book home, stays a month; `run/up` = read
+  same page at home without going back. Only go back for new edition (`pull` again).
+- **Mercado vs cocina Sem pull-then-up (Session 03):** `pull`=traer bolsas del mercado
+  (download only, old keeps running); `up`=cocinar/poner mesa con lo en disco
+  (create+start). Pros do `pull` then `up` to fail fast before stopping old; `up` alone
+  auto-pulls only if missing. Never `build` on server, only `pull+up`; local dev may use
+  `up --build`.
+- **Frescura vs estabilidad (Session 03):** local=`versión conocida buena` (reboot/`restart:
+  always` reuses local, no network); `pull`=cambio consciente de versión. Pin `:v1.2.3`/
+  digest, not blind `:latest`.
+- **Verbos (Session 03):** imágenes se construyen (`build`), contenedores se crean/corren
+  (`run`/`up`). Never say "construir contenedor".
+- **Question style (student feedback 2026-09-10):** always name file+job in Qs
+  (e.g., job `docker` inside `.github/workflows/ci.yml` with `lint/test/docker`), never ask
+  about `docker.yml` alone.
 
 ---
 
@@ -293,6 +338,37 @@ salvo `refuerzo útil ⏰` decidido por el mentor. Todo queda registrado como me
    *"¿Qué es lo que no entiendes?"* antes de avanzar
 6. Al cerrar: registrar **todo lo trabajado** (comandos, decisiones, problemas) como
    material para futuros resúmenes/prácticas
+
+### Depth of Explanations & Full-Flow Review (feedback del estudiante — 2026-09-29)
+
+**Feedback textual del estudiante:** "Siento que me explicas de una manera muy superficial
+los conceptos, no me gusta. Quiero que te adentres un poco más en los temas y que siempre
+repasemos cada uno de estos antes de comenzar. Quiero conocer el proceso y aprenderlo de
+memoria, y que me preguntes de formas que me permitan asegurarme de que estoy aprendiendo."
+
+**Reglas accionables:**
+
+1. **Explicaciones profundas, nunca superficiales.** Para cada concepto: qué es exactamente,
+   para qué sirve, cómo se usa (con ejemplos simples), cómo interviene en el flujo
+   `code → test → build → publish → deploy` y qué pasa si desaparece.
+2. **Repaso obligatorio del flujo completo antes de empezar el trabajo de cada sesión.**
+   Piezas que SIEMPRE deben repasarse (ciclo rotativo, ninguna se salta):
+   - `.github/workflows/ci.yml` y `.gitlab-ci.yml` — objetivo exacto del YAML: qué declara,
+     quién lo ejecuta (runner), triggers, jobs/stages, `needs`.
+   - `.gitignore` vs `.dockerignore` (vs `.gitattributes`) — qué excluye cada uno y por qué.
+   - `Dockerfile` — objetivo, cómo se usa línea por línea, por qué ese orden.
+   - `requirements.txt` — qué contiene, por qué se pinnea con `==`.
+   - `docker-compose.yml` vs comando `docker compose` vs Docker Engine vs Docker Desktop —
+     objetivo de cada uno y cómo se encadenan.
+   - Watchtower — propósito exacto y cómo se une al workflow (y sus límites).
+   - Los 3 registries (Docker Hub, GHCR, GitLab Container Registry) — por qué la misma imagen ×3.
+   - Validaciones: **Ruff, Flake8, Black, Pytest, MyPy, Bandit, pip-audit** — propósito y
+     beneficio de cada una, y por qué corren en CI y no solo en local.
+3. **Cada explicación debe cerrar el circuito completo:** código local → etapas del CI/CD →
+   imagen → registro → `docker pull` en el VPS. Nunca conceptos sueltos.
+4. **Objetivo de memoria:** el estudiante debe poder **presentar el flujo de memoria**. El
+   mentor valida con preguntas que aseguren aprendizaje real (una sola pregunta a la vez,
+   evaluar, espacio para sus dudas, avanzar).
 
 ---
 

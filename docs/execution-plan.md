@@ -32,12 +32,22 @@ stages — it tells you exactly where the project is and what to do next.
 - **Phase 0 (Planning):** ✅ Complete
 - **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
 - **Phase 8 (SSH & Remote Connections):** ✅ Complete — mental model, practice, Part C questions answered
-- **Last completed item:** Stage 08 complete — SSH mental model validated, practice key pair generated/inspected/deleted, 7 Part C questions answered correctly, SSH key strategy decided for Phase 9
-- **Daily recap status:** Session 02 — recap passed ✅ (Blocks A-C reinforced); all SSH concepts validated
-- **Next session target:** Phase 9 — Stage 09: create Oracle Cloud Free Tier account, generate VPS key pair (`id_ed25519_vps`), provision Ubuntu server, connect for the first time
-- **Blockers / open questions:** None recorded
-- **Last session:** 2026-09-08 — Methodology update: spiral repetition v2 (per-topic summary+analogy → check → varied Qs → student Q&A → immediate work transition) + exhaustive flow coverage (YAML, .gitignore/.dockerignore, Bandit/pip-audit, Kubernetes conceptual) — AGENTS.md, session-log template, learning-roadmap, execution-plan updated
-- **Last commit / push:** `db953fa` — `docs(learning): spiral repetition v2` — pushed to GitHub ✅ GitLab ✅ (2026-09-08) — resolves pending from 2026-08-25
+- **Last completed item:** Audit session (2026-09-29): full professional audit + approved
+  improvement plan executed — CI/CD improvements F-02/F-03/F-04/F-06/F-08/F-13 applied,
+  7 quality/security gates green locally (flake8, black, ruff, mypy, bandit, pip-audit, pytest),
+  pytest pin upgraded to 9.0.3 (PYSEC-2026-1845), repo hygiene fixed (nuevo.py removed,
+  `__pycache__` untracked), F-01 master-sync verified identical
+- **Daily recap status:** Session 04 (2026-09-29) — student feedback applied (deep
+  explanations, one concept → one question); Block F (.yml pipelines) deep explanation started,
+  evaluation NOT closed yet — carried to next session
+- **Next session target:** Verify both pipelines green after push (runs 110+ GitHub, new
+  GitLab pipeline), create GitLab CI variables `GHCR_USERNAME`/`GHCR_TOKEN` (student), then
+  Block F evaluation + Phase 9 — Stage 09: Oracle Cloud account
+- **Blockers / open questions:** GitLab CI variables `GHCR_USERNAME` + `GHCR_TOKEN` (GitHub
+  PAT `write:packages`) must be created by the student before the GitLab `docker` job can
+  push to GHCR — otherwise that job fails
+- **Last session:** 2026-09-10 — Session 03 recap-only (Blocks D-E): closed D pending (needs), validated E (Dockerfile/cache, image vs container, Watchtower local-only vs SSH CD + GitOps, 3 disks, Git vs registry, pull-then-up, local vs fresh) — analogies saved to AGENTS.md Sticky Frames + session-log Session 03; Stage 09 work deferred by student
+- **Last commit / push:** audit improvement commits (2026-09-29, SHAs in session-log Session 04) — push pending confirmation of GitLab variables; prior: `db953fa` — `docs(learning): spiral repetition v2` — pushed to GitHub ✅ GitLab ✅ (2026-09-08)
 
 ---
 
@@ -119,15 +129,15 @@ stages — it tells you exactly where the project is and what to do next.
 - [x] Tests written for the core functions (`suma`, `division`, `es_par`)
 - [x] All quality tools pass locally before pushing
 - [x] `.gitignore` / `.gitattributes` — understood (what never goes to Git)
-- [ ] **Bandit** (static security) — to be practiced: `bandit -r .` and CI integration
-- [ ] **pip-audit** (dependency vulnerabilities) — to be practiced and CI integration
-- [ ] **`.dockerignore`** — to be added and explained vs `.gitignore` + YAML syntax mastery
+- [x] **Bandit** (static security) — practiced 2026-09-29: `bandit -r . -x` local + `security` job in both pipelines
+- [x] **pip-audit** (dependency vulnerabilities) — practiced 2026-09-29: `pip-audit -r requirements.txt` local + `security` job in both pipelines (found PYSEC-2026-1845 → pytest pinned to 9.0.3)
+- [x] **`.dockerignore`** — added (2026-09-08) + explained vs `.gitignore` in Block E recaps
 
-**Status:** ✅ COMPLETE (core) — exhaustive extensions (Bandit/pip-audit/.dockerignore/YAML deep) tracked in learning-roadmap and spiral recaps
+**Status:** ✅ COMPLETE — Bandit + pip-audit integrated into both CI pipelines (audit session 2026-09-29)
 
-> ⚠️ Note: Ruff and MyPy were learned and validated locally. The current pipelines
-> (`ci.yml`, `.gitlab-ci.yml`) run Flake8 + Black + Pytest. Adding Ruff/MyPy/Bandit/pip-audit to the CI is
-> a recommended **optional improvement** to record in a future stage. `.dockerignore` and deep YAML are now part of Block A/B recaps.
+> ✅ Note: Both pipelines now run Flake8 + Black + Ruff + MyPy (lint), Pytest (test), and
+> Bandit + pip-audit (security) before the `docker` job — the optional improvement recorded
+> earlier is done. CI mastery (YAML deep) remains part of Block A/B recaps.
 
 ---
 
@@ -158,14 +168,16 @@ stages — it tells you exactly where the project is and what to do next.
 - [x] Understand the difference between CI and CD
 - [x] GitHub Actions workflow: `.github/workflows/ci.yml`
   - [x] Triggers: push on `develop`, pull request on `master`
-  - [x] Job `lint`: Flake8 + Black
+  - [x] Job `lint`: Flake8 + Black + Ruff + MyPy (added 2026-09-29)
   - [x] Job `test`: Pytest
-  - [x] Job `docker`: needs `lint` + `test`, builds and pushes the image
+  - [x] Job `security`: Bandit + pip-audit (added 2026-09-29)
+  - [x] Job `docker`: needs `lint` + `test` + `security`, builds and pushes the image with 8 char commit tag + `latest` to the 3 registries
 - [x] GitLab CI pipeline: `.gitlab-ci.yml`
-  - [x] Stages: `lint`, `test`, `docker`
+  - [x] Stages: `lint`, `test`, `security`, `docker` (security added 2026-09-29)
   - [x] Docker-in-Docker for building
-  - [x] Pushes to Docker Hub
-- [x] Secrets management (DOCKER_USERNAME, DOCKER_TOKEN, GITLAB_TOKEN, etc.)
+  - [x] Pushes to Docker Hub + GHCR + GitLab Registry with `CI_COMMIT_SHORT_SHA` + `latest` (aligned 2026-09-29)
+  - [x] Logins via `--password-stdin` (fixed 2026-09-29, F-03)
+- [x] Secrets management (DOCKER_USERNAME, DOCKER_TOKEN, GITLAB_TOKEN, etc. + GHCR_USERNAME/GHCR_TOKEN in GitLab — pending student, see Blockers)
 - [x] Pipelines run green on both platforms
 
 **Status:** ✅ COMPLETE

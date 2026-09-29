@@ -1,0 +1,13 @@
+EVIDENCE — Docker Hub tag (verified via REST API)
+Date: 2026-09-29
+Source: GET https://hub.docker.com/v2/repositories/erickdev8/mi-app/tags/latest
+
+tag:          latest
+tag_last_pushed: 2026-09-29T14:58:07.231547Z
+digest:       sha256:4a321beee0bec71f549b3eeee139792c4ee40240848a542e415865b3db4f178c
+full_size:    50460196 bytes (~48 MB)
+
+Note: only :latest existed before this session. After the improvements, the same
+image must also appear as an 8 char commit tag (erickdev8/mi-app:<sha8>, same
+length as GitLab CI_COMMIT_SHORT_SHA) plus the same two tags in GHCR and
+GitLab Registry.
