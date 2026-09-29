@@ -1,15 +1,18 @@
 stages:
   - lint
   - test
+  - security
   - docker
 
 lint:
   stage: lint
   image: python:3.11
   script:
-    - pip install flake8 black
+    - pip install flake8 black ruff mypy
     - flake8 .
     - black --check .
+    - ruff check .
+    - mypy .
 
 test:
   stage: test
@@ -17,6 +20,14 @@ test:
   script:
     - pip install -r requirements.txt
     - pytest
+
+security:
+  stage: security
+  image: python:3.11
+  script:
+    - pip install bandit pip-audit
+    - bandit -r . -x "./__pycache__,./test_principal.py"
+    - pip-audit -r requirements.txt
 
 docker:
   stage: docker
@@ -26,10 +37,21 @@ docker:
   variables:
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_TOKEN"
+    - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
-    - docker build -t erickdev8/mi-app:latest .
+    - docker build -t erickdev8/mi-app:$CI_COMMIT_SHORT_SHA -t erickdev8/mi-app:latest .
+    - docker tag erickdev8/mi-app:$CI_COMMIT_SHORT_SHA ghcr.io/ericksuper8000-source/mi-app:$CI_COMMIT_SHORT_SHA
+    - docker tag erickdev8/mi-app:latest ghcr.io/ericksuper8000-source/mi-app:latest
+    - docker tag erickdev8/mi-app:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ericksuper80-group/repo2:$CI_COMMIT_SHORT_SHA
+    - docker tag erickdev8/mi-app:latest registry.gitlab.com/ericksuper80-group/repo2:latest
+    - docker push erickdev8/mi-app:$CI_COMMIT_SHORT_SHA
     - docker push erickdev8/mi-app:latest
+    - docker push ghcr.io/ericksuper8000-source/mi-app:$CI_COMMIT_SHORT_SHA
+    - docker push ghcr.io/ericksuper8000-source/mi-app:latest
+    - docker push registry.gitlab.com/ericksuper80-group/repo2:$CI_COMMIT_SHORT_SHA
+    - docker push registry.gitlab.com/ericksuper80-group/repo2:latest
   only:
     - develop
     - merge_requests

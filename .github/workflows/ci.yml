@@ -21,13 +21,19 @@ jobs:
       - name: Instalar herramientas de lint
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 black
+          pip install flake8 black ruff mypy
 
       - name: Ejecutar flake8
         run: flake8 .
 
       - name: Verificar formato con Black
         run: black --check .
+
+      - name: Ejecutar Ruff
+        run: ruff check .
+
+      - name: Ejecutar MyPy
+        run: mypy .
 
   test:
     runs-on: ubuntu-latest
@@ -47,9 +53,30 @@ jobs:
       - name: Ejecutar tests
         run: pytest
 
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar herramientas de seguridad
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit pip-audit
+
+      - name: Ejecutar Bandit (codigo fuente, tests excluidos)
+        run: bandit -r . -x "./__pycache__,./test_principal.py"
+
+      - name: Ejecutar pip-audit (vulnerabilidades en dependencias)
+        run: pip-audit -r requirements.txt
+
   docker:
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: [lint, test, security]
 
     steps:
       - uses: actions/checkout@v4
@@ -59,24 +86,34 @@ jobs:
 
       - name: Login a GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-        
+
       - name: Login a GitLab Registry
         run: echo "${{ secrets.GITLAB_TOKEN }}" | docker login registry.gitlab.com -u "${{ secrets.GITLAB_USERNAME }}" --password-stdin
 
-      - name: Build Docker image
-        run: docker build -t erickdev8/mi-app:latest .
+      - name: Build Docker image (etiqueta por commit + latest)
+        run: docker build -t erickdev8/mi-app:${GITHUB_SHA:0:8} -t erickdev8/mi-app:latest .
 
       - name: Tag image for GHCR
-        run: docker tag erickdev8/mi-app:latest ghcr.io/ericksuper8000-source/mi-app:latest
-        
+        run: |
+          docker tag erickdev8/mi-app:${GITHUB_SHA:0:8} ghcr.io/ericksuper8000-source/mi-app:${GITHUB_SHA:0:8}
+          docker tag erickdev8/mi-app:latest ghcr.io/ericksuper8000-source/mi-app:latest
+
       - name: Tag image for GitLab Registry
-        run: docker tag erickdev8/mi-app:latest registry.gitlab.com/ericksuper80-group/repo2:latest
+        run: |
+          docker tag erickdev8/mi-app:${GITHUB_SHA:0:8} registry.gitlab.com/ericksuper80-group/repo2:${GITHUB_SHA:0:8}
+          docker tag erickdev8/mi-app:latest registry.gitlab.com/ericksuper80-group/repo2:latest
 
       - name: Push a Docker Hub
-        run: docker push erickdev8/mi-app:latest
-    
+        run: |
+          docker push erickdev8/mi-app:${GITHUB_SHA:0:8}
+          docker push erickdev8/mi-app:latest
+
       - name: Push a GHCR
-        run: docker push ghcr.io/ericksuper8000-source/mi-app:latest
-        
+        run: |
+          docker push ghcr.io/ericksuper8000-source/mi-app:${GITHUB_SHA:0:8}
+          docker push ghcr.io/ericksuper8000-source/mi-app:latest
+
       - name: Push a GitLab Registry
-        run: docker push registry.gitlab.com/ericksuper80-group/repo2:latest
+        run: |
+          docker push registry.gitlab.com/ericksuper80-group/repo2:${GITHUB_SHA:0:8}
+          docker push registry.gitlab.com/ericksuper80-group/repo2:latest
