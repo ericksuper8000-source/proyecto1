@@ -1,4 +1,4 @@
-from Principal import suma, division, es_par
+from Principal import division, es_par, suma
 
 
 def test_suma():

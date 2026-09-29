@@ -65,6 +65,127 @@ session and consults the per-topic question bank to avoid exact duplication.
 
 ---
 
+## 2026-09-29 — Session 04 (Professional audit + approved improvement plan executed)
+
+**Phase / Stage:** Phase 9 — VPS Provisioning · Stage 09 — Pending (audit session, work deferred)
+**Recap status:** BLOCK F evaluation NOT closed — session pivoted to audit after student
+feedback. Carried to next session.
+
+**Daily recap (start of day) — per-topic log:**
+
+> General journey summary given: full CI/CD flow started review (Block F — `.yml` pipelines);
+> student interrupted with feedback: explanations too superficial → methodology reset (now in
+> AGENTS.md: deep explanations, one concept → one question → evaluate → doubts → advance).
+
+| # | Block/Topic | Summary + Analogy given by mentor | Comprehension check | Evaluation Qs (varied, 1 at a time) + Your answers + Verdict | Your Qs for this topic | Topic verdict |
+|---|---|---|---|---|---|---|
+| 1 | Block F — .yml pipelines (deep review, part 1) | Deep explanation of pipeline YAML structure delivered (jobs/steps/needs vs stages), immediately followed by student's methodology feedback — no evaluation round reached today | Feedback given: "explicaciones muy superficiales… hazlo profundo" → mentor reset method + wrote rule to AGENTS.md | None — Block F evaluation pending (restart with varied Qs next session) | Student requested full-flow review before new work → session became the audit (real-world deep review of the whole flow) | ⏳ pending |
+
+**Recap meta:** Topic F started but not evaluated; no exact question consumed today — safe to reuse varied F questions next session.
+**Recap timing:** ~10 min (pivoted to audit by request)
+
+**Work session (today's build — feeds future recaps):**
+- **What we built / did:**
+  1. Full professional audit requested via `C:\Users\XPC\Desktop\Auditoria.txt` (auditor role,
+     7 areas) → report delivered with findings F-01…F-15 and improvement plan 1–7 (approved).
+  2. Pre-verification: fresh `git fetch` of both remotes → **F-01 was a false positive** (audit
+     diffed stale refs): `git diff github/master gitlab/master` = 0 lines, both merges today
+     (`838b945` GitHub, `5d356a0` GitLab), develop identical (`5de8f4b`). No force-push needed.
+     Lesson: always fetch before comparing remotes.
+  3. Local validation of ALL gates with Python 3.11.9 (mirrors CI images): 7/7 green —
+     `flake8=0`, `black --check=0`, `ruff=0`, `mypy=0`, `bandit=0`, `pip-audit=0`,
+     `pytest=4 passed`.
+  4. Fixed what validation found (BEFORE any push):
+     - **ruff I001** unsorted imports in `test_principal.py` → imports reordered.
+     - **pip-audit PYSEC-2026-1845**: pytest 8.2.2 vulnerable (fix 9.0.3) →
+       `requirements.txt` pinned `pytest==9.0.3`.
+     - **bandit B101** (assert in tests, Low) → tests excluded: `bandit -r . -x "./__pycache__,./test_principal.py"`.
+  5. Rewrote `.github/workflows/ci.yml`: lint += ruff + mypy; new `security` job (bandit +
+     pip-audit); `docker` needs `[lint, test, security]`; image tagged `${GITHUB_SHA:0:8}`
+     (8 chars = GitLab `CI_COMMIT_SHORT_SHA`) + `latest`, pushed to all 3 registries.
+  6. Rewrote `.gitlab-ci.yml`: stages `lint/test/security/docker`; same 4 tools as GitHub;
+     logins with `--password-stdin` (F-03); pushes to Docker Hub + GHCR + GitLab Registry
+     with `$CI_COMMIT_SHORT_SHA` + `latest` (F-02 alignment); `only: develop, merge_requests`.
+  7. `docker-compose.yml`: watchtower pinned `containrrr/watchtower:1.7.1` (tag verified via
+     Docker Hub API, same digest as `latest`); app stays `:latest` **deliberately** with
+     comment (Watchtower/ADR-0004 needs it locally; VPS will pin commit tag).
+  8. Repo hygiene: `git rm nuevo.py`, untracked 2 `__pycache__/*.pyc` files.
+  9. Docs synced: environment.md (pytest 9.0.3, nuevo.py removed, toolchain row),
+     execution-plan Current Status + Phase 2/4 checkboxes, evidence files.
+- **Concepts newly learned / deepened:** audit as a real full-flow review; `git fetch` before
+  any cross-remote comparison (stale refs → false findings); why pins must have no known CVEs
+  (pip-audit as CI gate); test files excluded from security scanners (B101 noise);
+  cross-platform tag parity (`${GITHUB_SHA:0:8}` ↔ `CI_COMMIT_SHORT_SHA`); `--password-stdin`
+  (no password in argv/process list); credentials needed by platform boundaries (GitLab→GHCR
+  requires PAT in GitLab CI variables).
+- **Commands / tools used:** `git fetch` + `git diff github/master gitlab/master` — prove F-01
+  false; `py -3.11 -m flake8/black/ruff/mypy/bandit/pip_audit/pytest` — local mirror of CI;
+  Docker Hub API — verify watchtower tag + evidence; GitHub API — verify runs 105–109 green.
+- **Decisions made:** 8-char commit tags on both platforms for identical cross-registry tags;
+  app image kept `:latest` only in local compose (commented, ADR-0004); security job blocks
+  `docker` via `needs` (quality+security before publish); plan 1–7 approved by student.
+- **Errors encountered:** ruff I001 → fixed imports; pip-audit vuln in our own pin → upgraded
+  pytest; bandit B101 in tests → excluded tests (not product code). All three caught locally,
+  none reached CI.
+- **Evidence:** `screenshots/audit-2026-09-29/01-github-actions-runs-2026-09-29.txt`,
+  `02-dockerhub-tags-2026-09-29.txt`, `03-master-sync-verified.txt`,
+  `04-local-validation-2026-09-29.txt`
+
+**Questions still open (for next recap rotation):**
+- Block F evaluation round (varied Qs: needs vs stages, failure mode if docker runs without
+  security, why 8-char tags must match across platforms, --password-stdin rationale).
+- Student question pending from feedback flow: GitHub PAT + GitLab CI variables (next step).
+
+**Next session (target):**
+- **Recap next:** Block F (`.yml` pipelines, evaluation) + Block G failure modes — varied Qs, deep explanations, 1 question at a time
+- **Work next:** Push audit commits (both remotes) → verify run 110+ green on GitHub and new GitLab pipeline green (requires student-created `GHCR_USERNAME`/`GHCR_TOKEN` GitLab variables) → then Phase 9 — Stage 09: Oracle Cloud account
+
+**Question bank update:** Added Qs: F-eval-pending (restart F round), none consumed today — last exact repeat: none
+
+**Commit / push:** audit improvement commits made 2026-09-29 (SHAs listed in next session's
+entry): hygiene, pytest pin, ruff fix, ci.yml+gitlab-ci.yml alignment, compose pin, docs sync.
+Push to GitHub + GitLab pending student confirmation of GitLab CI variables (GHCR) so the new
+GitLab pipeline starts green.
+
+---
+
+## 2026-09-10 — Session 03 (Recap-only Blocks D-E, complete ✅ — no work by student decision)
+
+**Phase / Stage:** Phase 9 — VPS Provisioning · Stage 09 — Pending (recap-only session, work deferred by student)
+
+**Daily recap (start of day) — per-topic log (2 blocks, spiral repetition):**
+
+> General journey summary given: small Python script → quality (Ruff/Flake8/Black/MyPy+Pytest) → Git mirrored GitHub+GitLab → pipelines lint+test+build+push → Docker → same image to 3 registries → Compose+Watchtower local → SSH done (Stage 08 ✅) → now Phase 9 Stage 09 VPS.
+
+| # | Block/Topic | Summary + Analogy given by mentor | Comprehension check | Evaluation Qs (varied, 1 at a time) + Your answers + Verdict | Your Qs for this topic | Topic verdict |
+|---|---|---|---|---|---|---|
+| 1 | Block D — Pipelines | "Pipeline=trabajador automático, runner es quien ejecuta el YAML. YAML=plano, runner=obrero. CI=revisa (lint+test), CD=publica (build+push). GH Actions=jobs+steps+needs, GitLab=stages+jobs+scripts. Secrets en CI, nunca en repo." | ¿Entendido? → First "creo que lo entendi" → Asimilado ✅ | Q1: "Si quitas needs del job docker, ¿qué pasa?" → student rejected as unclear ("¿qué es job docker? ¿docker.yml o ci.yml?") → mentor clarified: job `docker` inside `.github/workflows/ci.yml` (lint/test/docker), rephrased descriptively → A1: "docker section hace login, build, tag x3 hubs, lint valida antes" → ⚠️ partial (missed parallel/failure mode) → explained gap (parallel run, publishes broken) → Q1b rephrased: "Si Pytest falla en division pero igual se publicó, ¿qué le llega al VPS en pull?" → "runner lanza 3 jobs en paralelo, VPS tendría imagen rota" → ✅ correct | "¿qué es job docker? ¿te refieres a docker.yml o yml de github/gitlab? sé más descriptivo" → explained: no docker.yml, job `docker` in `ci.yml` + equivalent in `.gitlab-ci.yml` | ✅ |
+| 2 | Block E — Containers + F/G distinction (student-requested) | First: "Dockerfile=receta, imagen=molde congelado inmutable, contenedor=plato vivo. FROM/WORKDIR/COPY/RUN/CMD order matters for cache. Build context + .dockerignore. Desktop=Engine+Compose+BuildKit. Compose decide, Engine ejecuta." Second angle (mudanza chain, liked): "Dockerfile=plano fábrica, pipeline YML=jefe robot, imagen=caja sellada, registries=3 bodegas, compose.yml=plano sala, compose=decorador, Engine=brazos, Watchtower=vigilante nocturno 30s mini-CD local, Desktop=edificio en PC, VPS flow=clone trae plano → Compose pide → Engine pull desde bodega → crea." + "Watchtower=mini-CD mentira vs CD real=pipeline SSH `pull && up -d`" + "Watchtower tonto (¿hay imagen nueva?) vs GitOps inteligente ArgoCD (¿Git==real? + healthcheck + rollback)" | ¿Entendido? → "explícalo diferente, distingue etapas y archivos (dockerfile, compose.yml, compose, engine, repos, yml general, watchtower, desktop, proceso VPS con GHCR/GitLab/Docker Hub)" → re-explained with mudanza chain → "a ver si entendí... ¿papel real watchtower? ¿no lo cumplen otros?" → explained vigilante vs una sola vez → "¿solo local o también VPS?" → explained local-only by decision, prod risk → "¿nunca servicio CD en VPS? ¿cómo lo hacen expertos?" → explained pipeline SSH push-based + GitOps pull-based → "creo que lo entendí bien" → Asimilado ✅ | Evaluation round for Block E deferred (deep Q&A consumed time cap, student validated via own explanation + targeted Qs). Next: 1-2 varied Qs on E (e.g., layers/cache order, .dockerignore vs .gitignore, Compose vs Engine failure mode) | Q1: "¿papel real watchtower si ya hay plano+compose+engine?" → vigilante vs una vez. Q2: "¿solo local o también en VPS?" → solo local por decisión, prod usa SSH. Q3: "¿nunca servicio CD en VPS? ¿cómo expertos sin watchtower?" → push-based SSH + pull-based GitOps. Q4: "guarda esto en memoria como adicional para resúmenes/prácticas futuras" → saved to AGENTS.md Sticky Frames 2026-09-10 | ✅ (understanding validated, evaluation Qs pending) |
+
+**Recap meta:** Topics repeated intentionally (D pending from Session 01 closed today); exact question never repeated (Q1 rephrased descriptively per student feedback "sé más descriptivo"). All Qs below added to permanent bank. New analogies saved to AGENTS.md Sticky Frames as additional future recap material per student request (mudanza chain, mini-CD mentira vs CD real, tonto vs inteligente, lasaña/caché, efímeros vs inmutables, 3 discos, Git vs registry, biblioteca, mercado vs cocina, frescura vs estabilidad, verbos build/run).
+**Recap timing:** ~60 min — Blocks D,E (over 15 min cap: extended deep-dive requested by student, all doubts resolved, recap-only session)
+
+**Work session (today's build — feeds future recaps):**
+- **What we built / did:** Recap-only by student decision ("No quiero trabajar hoy, solo repaso"). No Stage 09 work started. Closed Blocks D+E validation.
+- **Concepts newly learned / deepened:** `needs` ordering prevents publishing broken images; full chain `Dockerfile → YML pipeline → image → 3 bodegas → compose.yml → compose → Engine → Watchtower local vs CD real SSH → VPS pull flow`; layers/cache order (deps first reuses `pip install`); images immutable persist local vs containers ephemeral (`rm` vs `rmi`); 3 disks (PC survives, runner destroyed → mandatory `push`, VPS like PC); Git repo (code, `git pull`) vs registry (images, `docker pull`); `pull` always contacts registry vs `up/run` uses local if present; pros do `pull` then `up` (fail fast, no downtime); local=`versión conocida buena` vs `pull`=cambio consciente; verbs build image / run container.
+- **Commands / tools used:** None (recap + documentation). Reviewed `.github/workflows/ci.yml` read-only (jobs lint/test/docker: login+build+tag x3+push).
+- **Decisions made:** Added 2026-09-10 Sticky Frames parts 1+2 to AGENTS.md (mudanza + watchtower + cache + persistence + pull/up) — part of this commit. Student asked all of today be reused in future summaries/practices.
+- **Errors encountered:** Q1 phrasing unclear ("Si quitas needs...") → student feedback "sé más descriptivo, ¿docker.yml o ci.yml?" → rephrased with file+job names. Logged as permanent rule in AGENTS.md. Misconceptions corrected: order-inversion-breaks-image → explained cache-only; rm-deletes-image → explained rm vs rmi; pull-checks-local-first → corrected pull always contacts, up checks local; up-then-pull order → corrected pull-then-up.
+- **Evidence:** N/A (recap-only)
+
+**Questions still open (for next recap rotation):**
+- None blocking. D+E validated ✅. Next rotation: Block F (registries auth `--password-stdin`, same image 3 tags, pull on server) + Block C (Git) with varied Qs.
+
+**Next session (target):**
+- **Recap next:** Block F (registries) + Block G (Compose/Watchtower failure modes) — with varied Qs, no exact repeat, reuse mudanza/biblioteca/mercado analogies
+- **Work next:** Phase 9 — Stage 09 Session 1: create Oracle Cloud account, quotas, Always Free vs trial (deferred from today by student decision)
+
+**Question bank update:** Added Qs: D-Q1-needs-removal-unclear, D-Q1b-descriptive-needs (file+job named), D-Q1c-broken-division-to-VPS-pull ✅, E-Q1-cache-order-inverted-Dockerfile (partial → rephrased E-Q1b-print-only-rebuild ✅), E-Q2-rm-deletes-image (❌ → corrected rm vs rmi → E-Q2b-build-or-run ✅), E-deep-watchtower-role, E-deep-local-vs-VPS, E-deep-experts-no-watchtower, E-deep-3-disks-runner-destroyed, E-deep-pull-vs-up-order, E-deep-local-vs-pull-frescura — Last exact repeat: none (all rephrased, never duplicated)
+
+**Commit / push:** `docs(session-log,agents): close Session 03 recap-only D+E + save mudanza/watchtower/cache/pull-up analogies` — memory folder updated 2026-09-10, to be synced to `C:\Repo2` and pushed to GitHub + GitLab next work session
+
+---
+
 ## 2026-08-25 — Session 02 (Stage 08 — SSH mental model + practice + Part C)
 
 **Phase / Stage:** Phase 8 — SSH & Remote Connections · Stage 08 — COMPLETE ✅

@@ -1,0 +1,23 @@
+EVIDENCE — Local validation of all quality/security tools
+Date: 2026-09-29
+Working copy: C:\Repo2
+Interpreter: Python 3.11.9 (py -3.11) — matches CI image python:3.11 / setup-python 3.11
+
+=== flake8 . ===                          exit=0 (no output = no violations)
+=== black --check . ===                   exit=0 — 2 files would be left unchanged
+=== ruff check . ===                      exit=0 — All checks passed!
+=== mypy . ===                            exit=0 — Success: no issues found in 2 source files
+=== bandit -r . -x "./__pycache__,./test_principal.py" ===
+                                          exit=0 — No issues identified
+                                          (Total lines of code: 14; Low/Medium/High: 0/0/0)
+=== pip_audit -r requirements.txt ===     exit=0 — No known vulnerabilities found
+=== pytest -q ===                         exit=0 — 4 passed in 0.02s
+
+Issues found AND fixed by this verification run (before any push):
+1. ruff I001 (unsorted imports) in test_principal.py -> imports reordered, check now 0.
+2. pip-audit PYSEC-2026-1845: pytest 8.2.2 vulnerable, fix version 9.0.3
+   -> requirements.txt pinned to pytest==9.0.3, audit now clean.
+3. bandit B101 (assert) x4 in tests, severity Low, not a product-code issue
+   -> tests excluded in CI via -x (bandit scans Principal.py only).
+
+All 7 gates are green locally = the state pushed in this session.
