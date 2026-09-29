@@ -1,11 +1,13 @@
 services:
   app:
+    # :latest deliberado SOLO en local: Watchtower debe detectar la imagen nueva
+    # para simular CD (ADR-0004). En el VPS (Fase 11) se fija la etiqueta del commit.
     image: erickdev8/mi-app:latest
     container_name: mi_app_container
     restart: always
 
   watchtower:
-    image: containrrr/watchtower:latest
+    image: containrrr/watchtower:1.7.1
     container_name: watchtower
     restart: always
     volumes:
