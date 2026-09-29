@@ -48,7 +48,9 @@ stages — it tells you exactly where the project is and what to do next.
 - **Blockers / open questions:** None. Both pipelines verified green 2026-09-29
   (GitHub runs 110–113 via API; GitLab confirmed by student — repo private, no mentor token)
 - **Last session:** 2026-09-10 — Session 03 recap-only (Blocks D-E): closed D pending (needs), validated E (Dockerfile/cache, image vs container, Watchtower local-only vs SSH CD + GitOps, 3 disks, Git vs registry, pull-then-up, local vs fresh) — analogies saved to AGENTS.md Sticky Frames + session-log Session 03; Stage 09 work deferred by student
-- **Last commit / push:** `a23d1b6` — `docs(adr): ADR-0007 single image publisher, validation-only GitLab, sync Session 04` — pushed to GitHub ✅ GitLab ✅ (2026-09-29, both pipelines green — closes Session 04 audit work; prior: `db953fa` (2026-09-08))
+- **Last commit / push:** Session 04 closed with `1cdcb04`; post-close Git incident fixed
+  same day — `github/master` = `0893f10` (ff), `gitlab/master` = `a6f3a84` (merge), all 6
+  refs content-identical (diff=0); final docs SHA recorded in next session's log entry
 
 ---
 

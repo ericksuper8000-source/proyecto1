@@ -148,6 +148,22 @@ feedback. Carried to next session.
 
 **Question bank update:** Added Qs: F-eval-pending (restart F round), none consumed today — last exact repeat: none
 
+**Post-cierre (mismo día) — incidente Git del estudiante + fix del mentor:**
+- **Qué pasó:** el estudiante hizo dos PRs seguidos en GitHub (#67 → `90a343d`, #68 → `a23d1b6`),
+  un MR en GitLab (`dbfa163`), y sincronizó `master` → `develop` (`0893f10`). Resultado:
+  los dos `master` quedaron **sin** el commit final `1cdcb04` (docs de cierre) — 59 líneas
+  detrás de `develop`. NADA perdido: árboles de ambos `master` idénticos entre sí, sin
+  commits parásitos, sin PRs abiertos, working tree limpio.
+- **Fix aplicado:** `github/master` fast-forward `f173cb1 → 0893f10` (ancestro directo);
+  `gitlab/master` no podía ff (el merge del MR no está en `develop` → divergencia de
+  historial normal en espejos) así que se creó el merge `a6f3a84` con el mismo árbol.
+  Verificación final: `diff` entre los 6 refs = **0 líneas**.
+- **Lección (para el banco):** **una sola PR basta** — la PR sigue la rama en vivo; si
+  empujas más commits a `develop` la PR abierta los incluye sola. No abrir PR #2.
+  `git merge --ff-only` cuando el target es ancestro; merge real cuando no (espejos).
+- **Pendiente:** push a `gitlab/master` dispara el pipeline de GitLab en esa rama
+  (lint/test/security sin `only:`) — estudiante confirma verde.
+
 **Commit / push:** 7 commits on `develop` 2026-09-29:
 `fd6c212` chore(repo) hygiene · `48d5fbd` chore(deps) pytest 9.0.3 · `04c2726` fix(tests)
 ruff I001 · `25a0c8d` ci: jobs/tags/3 registries alignment · `05a5256` fix(compose)
