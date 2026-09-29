@@ -36,16 +36,18 @@ stages — it tells you exactly where the project is and what to do next.
   improvement plan executed — CI/CD improvements F-02/F-03/F-04/F-06/F-08/F-13 applied,
   7 quality/security gates green locally (flake8, black, ruff, mypy, bandit, pip-audit, pytest),
   pytest pin upgraded to 9.0.3 (PYSEC-2026-1845), repo hygiene fixed (nuevo.py removed,
-  `__pycache__` untracked), F-01 master-sync verified identical
+  `__pycache__` untracked), F-01 master-sync verified identical; architecture decision
+  **ADR-0007** — GitHub Actions = single publisher to the 3 registries, GitLab CI =
+  validation-only mirror, Docker Hub = the consumption registry (no PAT required)
 - **Daily recap status:** Session 04 (2026-09-29) — student feedback applied (deep
   explanations, one concept → one question); Block F (.yml pipelines) deep explanation started,
   evaluation NOT closed yet — carried to next session
 - **Next session target:** Verify both pipelines green after push (runs 110+ GitHub, new
   GitLab pipeline), create GitLab CI variables `GHCR_USERNAME`/`GHCR_TOKEN` (student), then
   Block F evaluation + Phase 9 — Stage 09: Oracle Cloud account
-- **Blockers / open questions:** GitLab CI variables `GHCR_USERNAME` + `GHCR_TOKEN` (GitHub
-  PAT `write:packages`) must be created by the student before the GitLab `docker` job can
-  push to GHCR — otherwise that job fails
+- **Blockers / open questions:** None — the GHCR PAT requirement was dropped by ADR-0007
+  (single publisher: GitHub only). Pending verification: student checks the GitLab pipeline
+  is green after push (repo is private; mentor cannot query the GitLab API)
 - **Last session:** 2026-09-10 — Session 03 recap-only (Blocks D-E): closed D pending (needs), validated E (Dockerfile/cache, image vs container, Watchtower local-only vs SSH CD + GitOps, 3 disks, Git vs registry, pull-then-up, local vs fresh) — analogies saved to AGENTS.md Sticky Frames + session-log Session 03; Stage 09 work deferred by student
 - **Last commit / push:** audit improvement commits (2026-09-29, SHAs in session-log Session 04) — push pending confirmation of GitLab variables; prior: `db953fa` — `docs(learning): spiral repetition v2` — pushed to GitHub ✅ GitLab ✅ (2026-09-08)
 
@@ -172,12 +174,10 @@ stages — it tells you exactly where the project is and what to do next.
   - [x] Job `test`: Pytest
   - [x] Job `security`: Bandit + pip-audit (added 2026-09-29)
   - [x] Job `docker`: needs `lint` + `test` + `security`, builds and pushes the image with 8 char commit tag + `latest` to the 3 registries
-- [x] GitLab CI pipeline: `.gitlab-ci.yml`
-  - [x] Stages: `lint`, `test`, `security`, `docker` (security added 2026-09-29)
-  - [x] Docker-in-Docker for building
-  - [x] Pushes to Docker Hub + GHCR + GitLab Registry with `CI_COMMIT_SHORT_SHA` + `latest` (aligned 2026-09-29)
-  - [x] Logins via `--password-stdin` (fixed 2026-09-29, F-03)
-- [x] Secrets management (DOCKER_USERNAME, DOCKER_TOKEN, GITLAB_TOKEN, etc. + GHCR_USERNAME/GHCR_TOKEN in GitLab — pending student, see Blockers)
+- [x] GitLab CI pipeline: `.gitlab-ci.yml` — **validation-only since 2026-09-29 (ADR-0007)**
+  - [x] Stages: `lint`, `test`, `security` (ruff/mypy + security job added 2026-09-29)
+  - [x] No publish job: GitLab is the storage mirror; the single publisher is GitHub Actions
+- [x] Secrets management (DOCKER_USERNAME, DOCKER_TOKEN, GITLAB_TOKEN, GITHUB_TOKEN — no cross-platform PAT needed after ADR-0007)
 - [x] Pipelines run green on both platforms
 
 **Status:** ✅ COMPLETE
