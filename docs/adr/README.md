@@ -34,6 +34,7 @@ Do **not** write an ADR for routine tasks ("installed a text editor").
 | 0004 | Accepted | [Docker Compose early + Watchtower for CD simulation](0004-docker-compose-early-and-watchtower.md) |
 | 0005 | Accepted | [Zero-cost cloud strategy](0005-zero-cost-cloud-strategy.md) |
 | 0006 | Accepted | [English public documentation](0006-english-documentation.md) |
+| 0007 | Accepted | [Single image publisher (GitHub Actions), validation-only GitLab CI](0007-single-image-publisher.md) |
 
 ## Naming & workflow
 

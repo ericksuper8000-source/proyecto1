@@ -103,9 +103,10 @@ feedback. Carried to next session.
   5. Rewrote `.github/workflows/ci.yml`: lint += ruff + mypy; new `security` job (bandit +
      pip-audit); `docker` needs `[lint, test, security]`; image tagged `${GITHUB_SHA:0:8}`
      (8 chars = GitLab `CI_COMMIT_SHORT_SHA`) + `latest`, pushed to all 3 registries.
-  6. Rewrote `.gitlab-ci.yml`: stages `lint/test/security/docker`; same 4 tools as GitHub;
-     logins with `--password-stdin` (F-03); pushes to Docker Hub + GHCR + GitLab Registry
-     with `$CI_COMMIT_SHORT_SHA` + `latest` (F-02 alignment); `only: develop, merge_requests`.
+  6. `.gitlab-ci.yml`: stages `lint/test/security` (flake8+black+ruff+mypy, pytest, bandit +
+     pip-audit) — validation only. Initial alignment also pushed to the 3 registries with
+     `--password-stdin` (F-03), then **re-scoped by student decision → ADR-0007**: GitLab
+     is storage + validation, GitHub Actions is the single publisher (commit `17892b8`).
   7. `docker-compose.yml`: watchtower pinned `containrrr/watchtower:1.7.1` (tag verified via
      Docker Hub API, same digest as `latest`); app stays `:latest` **deliberately** with
      comment (Watchtower/ADR-0004 needs it locally; VPS will pin commit tag).
@@ -123,7 +124,12 @@ feedback. Carried to next session.
   Docker Hub API — verify watchtower tag + evidence; GitHub API — verify runs 105–109 green.
 - **Decisions made:** 8-char commit tags on both platforms for identical cross-registry tags;
   app image kept `:latest` only in local compose (commented, ADR-0004); security job blocks
-  `docker` via `needs` (quality+security before publish); plan 1–7 approved by student.
+  `docker` via `needs` (quality+security before publish); plan 1–7 approved by student;
+  **ADR-0007** (student architecture clarification): build once → GitHub pushes to the 3
+  registries, GitLab = validation-only storage mirror, **Docker Hub = the consumption
+  registry** (compose/VPS pull), GHCR + GitLab Registry = archives/redundancy → no PAT /
+  no GHCR variables needed; one concept taught: platform boundary (`GITHUB_TOKEN` only
+  exists inside GitHub) → credentials flow follows ownership.
 - **Errors encountered:** ruff I001 → fixed imports; pip-audit vuln in our own pin → upgraded
   pytest; bandit B101 in tests → excluded tests (not product code). All three caught locally,
   none reached CI.
@@ -142,10 +148,13 @@ feedback. Carried to next session.
 
 **Question bank update:** Added Qs: F-eval-pending (restart F round), none consumed today — last exact repeat: none
 
-**Commit / push:** audit improvement commits made 2026-09-29 (SHAs listed in next session's
-entry): hygiene, pytest pin, ruff fix, ci.yml+gitlab-ci.yml alignment, compose pin, docs sync.
-Push to GitHub + GitLab pending student confirmation of GitLab CI variables (GHCR) so the new
-GitLab pipeline starts green.
+**Commit / push:** 7 commits on `develop` 2026-09-29:
+`fd6c212` chore(repo) hygiene · `48d5fbd` chore(deps) pytest 9.0.3 · `04c2726` fix(tests)
+ruff I001 · `25a0c8d` ci: jobs/tags/3 registries alignment · `05a5256` fix(compose)
+watchtower pin · `90a343d` docs(audit) Session 04 · `17892b8` ci(gitlab) validation-only
+(ADR-0007) · plus this docs/ADR-0007 sync commit.
+Pushed to GitHub → run 110 success (4 jobs green), Docker Hub shows `90a343d1` + `latest`.
+Push to GitLab pending final verification (student checks pipeline — repo private).
 
 ---
 

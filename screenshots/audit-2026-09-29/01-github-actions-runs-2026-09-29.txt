@@ -10,6 +10,6 @@ run_number | workflow       | status    | conclusion | branch
 106        | CI Pipeline    | completed | success    | develop
 105        | CI Pipeline    | completed | success    | develop
 
-Note: run 109 is the most recent pipeline BEFORE the audit improvements of this
-session (its ci.yml is the old one). Runs 110+ (after the improvements) are the
-verification target pending push.
+Note: runs 105-109 were the last pipelines BEFORE the audit improvements (old ci.yml).
+UPDATE same day: run 110 (after improvements, commits fd6c212..90a343d) = completed/success
+with 4 jobs (lint, test, security, docker) all green — verified via the same API endpoint.
