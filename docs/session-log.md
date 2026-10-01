@@ -65,6 +65,107 @@ session and consults the per-topic question bank to avoid exact duplication.
 
 ---
 
+## 2026-10-01 — Session 05 (Recap-only — Block D pipelines validated ✅, debt closed)
+
+**Phase / Stage:** Phase 9 — VPS Provisioning · Stage 09 — Pending (recap-only session; Stage 09
+still has **zero** checkboxes marked)
+
+**Daily recap (start of day) — per-topic log (1 block, spiral repetition):**
+
+> General journey summary given: script Python → 7 puertas de calidad/seguridad → Git
+> espejado GitHub+GitLab → pipelines (GitHub fabrica y publica, GitLab solo valida) →
+> Dockerfile con capas ordenadas → la misma imagen en 3 registries → Compose + Watchtower
+> como ensayo local de CD → SSH validado (Stage 08 ✅) → hoy se cierra la deuda de Block D
+> y después Phase 9 Stage 09.
+
+| # | Block/Topic | Summary + Analogy given by mentor | Comprehension check | Evaluation Qs (varied, 1 at a time) + Your answers + Verdict | Your Qs for this topic | Topic verdict |
+|---|---|---|---|---|---|---|
+| 1 | **Block D — Pipelines** (`.github/workflows/ci.yml` job `docker` + `.gitlab-ci.yml`) | "El pipeline es el jefe robot que obedece una lista: la lista es el YAML (el papel), el runner es el obrero que la ejecuta. Un espacio mal puesto **tumba la lista** y no se contrata a nadie. En `ci.yml`: `lint`/`test`/`security` son cuadrillas en paralelo y `docker` solo entra si los 3 pasan (`needs` = freno). Cada trabajo va en fila: clonar → Python 3.11 → instalar → correr. En `.gitlab-ci.yml`: turnos, y un turno no arranca hasta que el anterior termina; nadie fabrica (ADR-0007)." + identidad de etiquetas: "el SHA es el **número de serie pintado en la caja**; `latest` es el **letrero de la repisa**, y cada almacén tiene el suyo" | "¿Lo entendiste o necesitas que lo explique diferente?" → "sí entendí continuemos" → Asimilado ✅ | **Q1:** "¿Por qué en `ci.yml` los 3 corren en paralelo y en `.gitlab-ci.yml` en serie? ¿Qué se pierde en cada lado?" → "prácticamente ambos hacen casi lo mismo pero con gramáticas diferentes, ambos evalúan en paralelo... GitLab solo valida y cuando la imagen es creada en GitHub la recibe y guarda en GitLab Registry" → ❌ **dos errores**: (a) GitLab NO corre en paralelo — los turnos son secuenciales por diseño; (b) GitLab NO recibe la imagen — no hay transferencia entre plataformas, son 3 `docker push` dentro del job `docker` de `ci.yml` → gap explicado (GH = paralelo por defecto + dependencia explícita; GL = secuencial por defecto + paralelo dentro del turno; y el coste/beneficio de cada uno) → **Q1b** rephrased (reloj): "si cada turno tarda 40s, ¿cuánto tarda el pipeline y por qué?" → "120 segundos, ya que no corren en paralelo, corren uno detrás del otro" → ✅ correcto | — | ✅ |
+| | | | | **Q2:** "¿Por qué 8 caracteres del commit y no `v1` o la fecha? ¿Por qué el mismo texto en las 3 etiquetas?" → "eso no me lo explicaste en tu resumen" → ⚠️ **fallo del mentor** (dado por supuesto en vez de explicado) → explicación completa (identidad de contenido; `latest` es nombre móvil; `v1` es manual y miente; SHA inmutable + `git show`/`git checkout` para reproducir el bug; 8 = convención de `git log` y de `CI_COMMIT_SHORT_SHA`; conmutar de registro con una línea; **deriva silenciosa**) → **Q2b** rephrased (escenario Docker Hub → GHCR con `latest` distintos): "¿qué versión entra, qué descubres al comparar con lo que probaste, y por qué ningún pipeline se puso rojo?" → "no sé, explícame esto bien fácil y corto" → analogía de las **dos cajas selladas** (mismo aspecto, distinto número de serie; cada bodega con su propio letrero) + por qué nada falla (la mentira está en los nombres, no en los sistemas) → **Q2c** rephrased: "si el servidor pide `mi-app:1a2b3c4d` en vez de `:latest`, ¿qué te garantiza?" → "garantiza que el código corre en producción exactamente igual al código que probé" → ✅ correcto + matiz del mentor (son los **mismos bytes**, no "el mismo código" aproximado; cubre **dos** regresiones: la versión equivocada y la versión que ya no existe = **punto de retorno**; conecta con `restart: always` + Watchtower: el `latest` también puede hacer mentir al ensayo local) | — | ✅ |
+
+**Recap meta:** Tema D repetido a propósito — hoy se cerró **la deuda de evaluación que Session 04 dejó abierta**. Sin duplicación literal: no se repitió ni la pregunta de quitar `needs` ni la de "Pytest falla pero igual se publicó" (ambas consumidas en Session 03). Ángulos nuevos: (a) semántica paralelo-vs-serie entre plataformas, (b) identidad de etiqueta y deriva silenciosa.
+> **⚠️ Corrección de nombres (regla permanente):** Session 04 registró "Block F — .yml pipelines", pero el mapa canónico de `AGENTS.md` asigna **Block D = Pipelines** y **Block F = Registries**. Hoy se usaron los nombres canónicos. **Block F (Registries) sigue sin evaluarse** — es el bloque de la próxima sesión.
+> **⚠️ Registro de evaluación:** hoy respondiste en 2–3 palabras (Q1, Q2, Q2c). En futuras rondas el mentor pide explícitamente la mitad de "qué pasa si" antes de aceptar ✅.
+
+**Recap timing:** ~20 min — 1 bloque (Block D), explicación profunda por el feedback del 2026-09-29. Sin trabajo de etapa (el estudiante cerró el día tras validar el tema: "no tengo preguntas, pero quiero terminar aquí por hoy").
+
+**Work session (today's build — feeds future recaps):**
+- **What we built / did:** nada de código. Sesión de repaso puro.
+- **Concepts newly learned / deepened:** semántica de ordenamiento por plataforma (GitHub DAG con `needs` explícito vs GitLab turnos secuenciales); coste en tiempo de reloj de los turnos secuenciales; identidad de imagen por SHA vs `latest` móvil; **deriva silenciosa entre registries** (nada falla, todo verde, tres software distintos bajo el mismo nombre); SHA como punto de retorno y como garantía de "mismos bytes"; por qué el rojo del pipeline es la alarma que evita la deriva.
+- **Commands / tools used:** ninguno.
+- **Decisions made:** regla recordada — **`:latest` solo local; en el VPS siempre el SHA** (consistente con el comentario ya existente en `docker-compose.yml` y con ADR-0004/ADR-0007). Se agregaron 2 analogías nuevas a las Sticky Frames de `AGENTS.md` para futures recap.
+- **Errors encountered:** ninguno técnico. Dos errores de comprensión detectados y corregidos (paralelismo en GitLab; "GitLab recibe la imagen") + un fallo del mentor (explicación dada por supuesta en el resumen).
+- **Evidence:** N/A (recap-only).
+
+**Questions still open (for next recap rotation):**
+- **Block F — Registries** (canónico): *nunca evaluado*. Ángulos no preguntados todavía: verbos `tag`/`push`/`pull` sobre la misma imagen; `--password-stdin` (por qué el secreto no va en la línea de comandos); token vs contraseña; qué es un registry cuando el disco del runner muere.
+- **Refuerzo (débil hoy):** semántica paralelo-vs-serie entre las dos plataformas; identidad de etiqueta / deriva `latest` vs SHA.
+
+**Next session (target):**
+- **Recap next:** **Block F (Registries)** — 1 bloque, preguntas variadas, reutilizando las analogías "bodegas / caja sellada / número de serie vs letrero".
+- **Work next:** Phase 9 — Stage 09 **Session 1: cuenta Oracle Cloud (Always Free), cuotas, Always Free vs créditos de prueba**. Stage 09 sigue con 0 checkboxes marcados.
+- **Housekeeping pendiente:** decidir si se descartan las variables `GHCR_USERNAME`/`GHCR_TOKEN` de GitLab CI — ADR-0007 las volvió innecesarias y la "Next session target" de `execution-plan.md` todavía las menciona.
+
+**Question bank update:** Added Qs: D-Q1-parallel-vs-serial-platforms (❌ → corregido → **D-Q1b-wall-clock-timing** ✅), D-Q2-why-8char-commit-tag (⚠️ no explicado → explicación completa → **D-Q2b-silent-drift-hub-to-ghcr** ❌ → analogía dos cajas → **D-Q2c-sha-guarantee** ✅), D-Q3-block-letter-naming-correction. Last exact repeat: none.
+
+**Post-cierre (2026-10-01) — auditoría del estado real del repo `C:\Repo2` (findings):**
+> El estudiante dijo que el commit/push ya estaba hecho. **El mentor NO había hecho ningún
+> commit ni push en la sesión** — solo edité 3 archivos markdown en la carpeta de memoria. Se
+> auditó el repo en lugar de asumir, y aparecieron 4 hallazgos.
+- **H1 — Los 7 commits de hoy (2026-10-01) no están documentados.** Tocan **solo `nuevo.py`**:
+  `eb0c9ca` (add) → `99a1434` → `0968c30` → `ffe257c` → `0618ba0` → `c533b6e` → `dc41430`
+  (format). No son progreso del proyecto y no tienen entrada en este log. Además sus mensajes
+  (`feature3 commit 0` … `feature4 commit 1`) violan la convención de *conventional commits*
+  del `AGENTS.md` → defecto de portafolio.
+- **H2 — `nuevo.py`: NO era una regresión — decisión del estudiante (cerrado).** La Session 04 lo
+  borró por higiene (`fd6c212`) y hoy volvió a entrar (`eb0c9ca` + 6 commits). El mentor lo
+ Catalogado como regresión y recomendó borrarlo + `.gitignore`. **El estudiante decide lo contrario: es un
+  archivo de práctica deliberado y se queda en el repo.** Verificado que el impacto es nulo: el
+  `Dockerfile` hace `COPY Principal.py .`, así que **nunca entra en la imagen ni llega a producción**.
+  Trade-off real y aceptado: pasa por las 7 puertas de CI en cada push (de ahí el commit
+  `dc41430 fix: format nuevo.py to pass linting`). Corrección de perspectiva del mentor: el
+  defecto nunca fue el archivo, fue que estaba **sin documentar y por accidente**. → regla
+  reescrita en `AGENTS.md` (Repo Hygiene #1): la regla es *documentar*, no *ignorar*.
+- **H3 — Estado de refs (VERIFICADO con `git fetch` real a los dos remotos):**
+  `develop` = `dc41430` = `github/develop` = `gitlab/develop` ✅ · `master` = `f51df86` =
+  `github/master` ✅ · `gitlab/master` = **`2ce2b11`** ✅. **Las 6 refs tienen contenido idéntico**
+  (`git diff` = 0 en todos los pares) y `develop` es ancestro de todas. **Nada está
+  desincronizado.**
+  > **Los 68 commits de merge que "sobran" en `gitlab/master` son divergencia normal de espejo**:
+  > GitLab crea un merge cada vez que subes `master` allí. Dos espejos pueden tener **historiales
+  > distintos con contenido idéntico**. La única verificación válida es `git diff` entre refs = 0,
+  > nunca "¿los SHA se ven iguales?".
+  > **SSH a GitLab funciona:** `id_ed25519_gitlab` + el bloque `Host gitlab.com` de `~/.ssh/config`
+  > → `Welcome to GitLab, @ericksuper80!`. Una llave por puerta, como en Stage 08.
+- **H4 — Pipelines: RESUELTO.** El estudiante confirma que **todo está verde** (pruebas +
+  lint + security) en `dc41430`, después del commit que formatea `nuevo.py`. Los 6 commits
+  anteriores de esa serie pueden conservar runs rojos en el historial — irrelevante para
+  producción (lo que despliega es HEAD) pero visible para quien lea la lista de runs como
+  entrevistador.
+- **⚠️ FALSO POSITIVO DEL MENTOR — 2ª vez, misma causa que el hallazgo F-01 de la Session 04.**
+  Primero afirmé que el historial de la Session 04 faltaba del repo: **falso**, venía de mirar solo
+  `git log -5` (sí están `1cdcb04`, `90a343d`, `17892b8`, `25a0c8d`…). Después afirmé que
+  `gitlab/master` estaba stale y sin verificar, y culpé a la llave del estudiante: **también falso**,
+  el remoto estaba en `2ce2b11` desde el principio. Causa raíz del segundo: el propio
+  `GIT_SSH_COMMAND='ssh -o BatchMode=yes'` del mentor bloqueó el `fetch` —la confirmación de
+  `AddKeysToAgent` requiere interacción, así que murió el diálogo y quedó un `publickey` falso— y
+  luego el ref de seguimiento viejo se tomó como si fuera el remoto.
+  **Reglas permanentes:** (a) *un remoto no se conoce hasta hacer `fetch`; un remote-tracking ref es
+  la memoria de Git sobre el remoto, no el remoto*; (b) *nunca escribir el estado de un remoto en la
+  documentación a partir de un ref de seguimiento*; (c) *no añadir `BatchMode` a un `fetch` de
+  diagnóstico*, porque impide distinguir "llave rota" de "falta confirmación". → añadidas a
+  `AGENTS.md` (Repo Hygiene #3 y #4).
+- **Pendiente para el estudiante:** copiar esta memoria a `C:\Repo2\docs/`, decidir el destino de
+  `nuevo.py` (borrar + `.gitignore` = recomendado), commitar con mensaje convencional, y push a
+  GitHub **y** GitLab.
+
+**Commit / push:** memoria actualizada 2026-10-01 (este log, `execution-plan.md`, `environment.md`,
+`AGENTS.md`). **Nada commiteado ni pusheado por el agente.** Último commit que toca
+`docs/session-log.md` en `C:\Repo2` = `371303a` (2026-09-29). Pendiente: sync + commit + push a
+GitHub y GitLab (lo hace el estudiante).
+
+---
+
 ## 2026-09-29 — Session 04 (Professional audit + approved improvement plan executed)
 
 **Phase / Stage:** Phase 9 — VPS Provisioning · Stage 09 — Pending (audit session, work deferred)

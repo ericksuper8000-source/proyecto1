@@ -26,14 +26,18 @@ Any AI agent joining this project **must** execute the following steps in order 
 responding to anything**:
 
 1. Read this file (`AGENTS.md`).
-2. Read [`docs/execution-plan.md`](docs/execution-plan.md) — pay special attention to the
+2. Read [`docs/delivery-story.md`](docs/delivery-story.md) — the interactive living
+   delivery story (v1.0+). It must be told at the start of every session, before the
+   general summary, and grown with each newly validated concept. Never skip it, never
+   contaminate it with unvalidated tech.
+3. Read [`docs/execution-plan.md`](docs/execution-plan.md) — pay special attention to the
    **Current Status** section and the checkboxes of the active phase.
-3. Read the most recent entry in [`docs/session-log.md`](docs/session-log.md).
-4. Read the current stage document under `docs/stages/` (the one named in the Current Status).
-5. Only then respond.
+4. Read the most recent entry in [`docs/session-log.md`](docs/session-log.md).
+5. Read the current stage document under `docs/stages/` (the one named in the Current Status).
+6. Only then respond.
 
-These four reads give the agent instant recall of: **what the project is**, **what is
-done**, **what is next**, and **what happened in the last session**. If the agent has no
+These five reads give the agent instant recall of: **the story**, **what the project is**,
+**what is done**, **what is next**, and **what happened in the last session**. If the agent has no
 file access, the student will paste these sections; the same protocol applies.
 
 At the **end** of the session, the agent must ensure the state files are updated (see
@@ -269,6 +273,28 @@ The student asked to keep these mental models present in the summaries. Reuse th
 - **Question style (student feedback 2026-09-10):** always name file+job in Qs
   (e.g., job `docker` inside `.github/workflows/ci.yml` with `lint/test/docker`), never ask
   about `docker.yml` alone.
+- **Cada almacén tiene su propio letrero (added 2026-10-01 Session 05 — student asked to keep):**
+  the 8-char commit SHA = **serial number painted on the box** (content identity, travels with the
+  image); `:latest` = **the sign on the shelf** ("whatever arrived last", a moving name that
+  carries no information about content). Changing registry = changing warehouse, not product:
+  with the same tag you deploy the same bytes from any of the 3 registries. **Silent drift:**
+  if the `latest` of each registry differs, **nothing fails** — pushes succeed, pipelines are
+  green, and you are running software you never tested under the same name. That's why the failed
+  `push` must turn the pipeline red (ADR-0007): a red pipeline is the alarm; green pipelines that
+  hide drift are worse. Practical rule: **`:latest` only locally** (Watchtower/ADR-0004 needs it),
+  **the VPS pins the SHA** — this also gives you a rollback point and keeps the local rehearsal
+  honest alongside `restart: always`.
+- **Paralelo vs serie por plataforma (added 2026-10-01 Session 05):** GitHub Actions = jobs
+  independent **by default** + explicit `needs` (fast, but forget a `needs` and the job starts
+  without waiting → you publish broken). GitLab CI = **stages sequential by default** (the classic
+  compile→test→package→deploy gates), jobs **in the same stage run in parallel**, parallelism
+  outside the stage is opt-in via `needs`. With 40s per stage, GitLab's sequential `lint→test→
+  security` ≈ 120s of clock where GitHub's fan-out ≈ 40s. Each platform fails in the opposite
+  direction: GitHub without `needs` publishes broken (silent, dangerous); GitLab without a
+  dependency just waits too long (safe, slow).
+- **Bloques canónicos (corrección 2026-10-01):** the *General Recap Map* above is the authority
+  for block letters — **D = Pipelines, F = Registries**. Session 04 logged "Block F — .yml
+  pipelines" by mistake; do not repeat that slip. Always name the block per the map.
 
 ---
 
@@ -326,18 +352,19 @@ salvo `refuerzo útil ⏰` decidido por el mentor. Todo queda registrado como me
 
 ### Session Flow Preference — v2
 
-1. Primero: **resumen general del viaje** (2–3 min, siempre)
-2. Segundo: **repaso por tema** (1–2 bloques) → por cada bloque: resumen+analogía →
+1. Primero: **historia completa (`docs/delivery-story.md`, siempre primero, nunca se salta)**
+2. Segundo: **resumen general del viaje** (2–3 min, siempre)
+3. Tercero: **repaso por tema** (1–2 bloques) → por cada bloque: resumen+analogía →
    check ¿entendido/otra explicación? → si asimilado, evaluación 1 pregunta a la vez →
    espacio para tus preguntas → gate del tema
-3. Tercero: si el recap del día se valida, **transición inmediata** a la sesión de trabajo
+4. Cuarto: si el recap del día se valida, **transición inmediata** a la sesión de trabajo
    del día (sin pausa)
-4. Cuarto: durante el trabajo, explicación del tema nuevo (si aplica) con el mismo
+5. Quinto: durante el trabajo, explicación del tema nuevo (si aplica) con el mismo
    micro-ciclo (resumen → check → validación)
-5. Siempre terminar cada tema con *"¿Tienes preguntas tú?"* y cada sesión con
+6. Siempre terminar cada tema con *"¿Tienes preguntas tú?"* y cada sesión con
    *"¿Qué es lo que no entiendes?"* antes de avanzar
-6. Al cerrar: registrar **todo lo trabajado** (comandos, decisiones, problemas) como
-   material para futuros resúmenes/prácticas
+7. Al cerrar: registrar **todo lo trabajado** (comandos, decisiones, problemas) como
+   material para futuros resúmenes/prácticas + hacer crecer la historia si hubo concepto validado
 
 ### Depth of Explanations & Full-Flow Review (feedback del estudiante — 2026-09-29)
 
@@ -526,6 +553,37 @@ When multiple approaches exist, prioritize:
 - **Code lives in the real repo** (`C:\Repo2`, mirrored to GitHub and GitLab). This
   folder (`CICD - Project`) is the **memory/planning folder** and must stay in sync with
   the real repository.
+
+### Repo Hygiene Rules (added 2026-10-01 after the Session 05 audit)
+
+1. **Scratch/practice files: the rule is _documented_, not _ignored_.** (Revised 2026-10-01.) The
+   original rule — "scratch files must be in `.gitignore`" — came from `nuevo.py` being deleted on
+   2026-09-29 (`fd6c212`) and silently re-added on 2026-10-01. The real defect was never the file:
+   it was the file's **undocumented, accidental** status. **Student decision (2026-10-01):**
+   `nuevo.py` is a **deliberate local practice file** and stays in the repo. Accepted because its
+   impact is genuinely nil: the `Dockerfile` runs `COPY Principal.py .`, so it never enters the
+   image and never reaches production. Accept the trade-off, log it, stop re-litigating it.
+   If a practice file ever *did* affect production, the rule would change again.
+2. **Conventional commits are mandatory, no exceptions.** Messages like `feature3 commit 0` or
+   `feature4 commit 1` are portfolio defects — they destroy the history an interviewer reads.
+   Use `<type>(<scope>): <subject>`. (Keeping `nuevo.py` is the student's call; keeping *these*
+   messages is not — 7 of them landed on 2026-10-01.)
+3. **Verify the repo before writing its state into the docs.** Run a real `git fetch` on **every**
+   remote, then inspect the **full** log (not just `git log -5`) plus `git for-each-ref` and
+   `git merge-base --is-ancestor`. Two false positives came from skipping this: a "missing
+   Session 04 history" claim derived from `git log -5`, and a "`gitlab/master` is stale" claim
+   derived from an un-fetched tracking ref (it was 7 commits behind in the docs, 0 in reality).
+4. **A remote-tracking ref is Git's memory of the remote, not the remote.** `refs/remotes/*` only
+   update on `fetch`/`push`. Two mirrors legitimately have **different history with identical
+   content** (GitLab creates a merge each time `master` is pushed there — 68 of them by now), so
+   the only valid parity check is `git diff` between refs returning empty, never "do the SHAs match".
+   If a remote genuinely cannot be read, record it as *unverified* — and then keep trying before
+   publishing the claim: `gitlab/*` was declared unverified on 2026-10-01 purely because the
+   mentor's own `GIT_SSH_COMMAND='ssh -o BatchMode=yes'` suppressed the `AddKeysToAgent` prompt.
+   **Never put `BatchMode` on a diagnostic fetch** — it makes "key broken" and "needs a prompt"
+   look identical.
+5. **Every day's repo activity must have a session-log entry.** 7 commits existed on 2026-10-01
+   with no log entry; the memory folder and the real repo had drifted apart.
 
 ---
 
