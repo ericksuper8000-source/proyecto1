@@ -155,9 +155,15 @@ still has **zero** checkboxes marked)
   documentación a partir de un ref de seguimiento*; (c) *no añadir `BatchMode` a un `fetch` de
   diagnóstico*, porque impide distinguir "llave rota" de "falta confirmación". → añadidas a
   `AGENTS.md` (Repo Hygiene #3 y #4).
-- **Pendiente para el estudiante:** copiar esta memoria a `C:\Repo2\docs/`, decidir el destino de
-  `nuevo.py` (borrar + `.gitignore` = recomendado), commitar con mensaje convencional, y push a
-  GitHub **y** GitLab.
+- **Sync + commit + push (por instrucción del estudiante):** Copiados los archivos de memoria a
+  `C:\Repo2/docs/` (incluido `docs/delivery-story.md` no rastreado). Commit `0b15177`:
+  `docs(session-05): close Block D recap, repo audit + student decision on nuevo.py, sync delivery-story v1.0`
+  (5 archivos: +343/−35). Push a `github/develop` ✅ y a `gitlab/develop` ✅. Los master remotos ya
+  contenían `develop` (fusionado por el estudiante a `github/master`=`1dc240a`, `gitlab/master`=`74102e8`).
+  `master` local actualizado por FF desde `github/master` sin reescribir historia. Verificación con
+  `fetch` real: todas las refs con contenido idéntico (`git diff develop <cualquiera master/*>` = 0) y
+  `develop` ancestro de todos los master. La divergencia de historia en `gitlab/master` (68 merges)
+  es normal para espejos con push a master por ambos lados. Working tree limpio en `develop`.
 
 **Commit / push:** memoria actualizada 2026-10-01 (este log, `execution-plan.md`, `environment.md`,
 `AGENTS.md`). **Nada commiteado ni pusheado por el agente.** Último commit que toca

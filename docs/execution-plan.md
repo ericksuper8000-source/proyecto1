@@ -94,10 +94,17 @@ stages — it tells you exactly where the project is and what to do next.
   2 misunderstandings corrected (GitLab stages are sequential; GitLab does not receive the image)
   + 1 mentor lapse (tag identity was assumed instead of explained, then taught in depth). New
   Sticky Frames added to AGENTS.md. No stage work — student closed the day
-- **Last commit / push:** the 7 commits of 2026-10-01 (`eb0c9ca` … `dc41430`) are on **both**
-  remotes (`develop`) and both `master` branches contain them. Last docs commit in `C:\Repo2` is
-  `371303a` (2026-09-29). **Session 05 memory updates are synced into `C:\Repo2\` but NOT yet
-  committed** — pending: `git add AGENTS.md docs/` + conventional commit + push to both remotes.
+- **Last commit / push:** Session 05 memory changes committed as `0b15177` — `docs(session-05):
+  close Block D recap, repo audit + student decision on nuevo.py, sync delivery-story v1.0`
+  (5 files: +343/−35, including `docs/delivery-story.md` as a new file). Pushed to **GitHub
+  develop** and **GitLab develop** (`0b15177..0b15177`). **All remotes verified with a real
+  `git fetch`:** `develop`/`github/develop`/`gitlab/develop` = `0b15177`; `master`/`github/master`
+  = `1dc240a` (FF from `f51df86` after the student's merge of develop→master on GitHub/GitLab);
+  `gitlab/master` = `74102e8`. **Content parity:** `git diff develop <any master/*>` = 0 (all
+  content-identical) and `develop` is an ancestor of every `master/*` (all in sync). Local
+  `master` was FF-updated to `github/master` (no history rewrite), and the working tree was left
+  clean on `develop`. The 68 merge commits on `gitlab/master` are the normal mirror divergence
+  (different history, identical content).
 
 ---
 
