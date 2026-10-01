@@ -32,25 +32,72 @@ stages — it tells you exactly where the project is and what to do next.
 - **Phase 0 (Planning):** ✅ Complete
 - **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
 - **Phase 8 (SSH & Remote Connections):** ✅ Complete — mental model, practice, Part C questions answered
-- **Last completed item:** Audit session (2026-09-29): full professional audit + approved
-  improvement plan executed — CI/CD improvements F-02/F-03/F-04/F-06/F-08/F-13 applied,
-  7 quality/security gates green locally (flake8, black, ruff, mypy, bandit, pip-audit, pytest),
-  pytest pin upgraded to 9.0.3 (PYSEC-2026-1845), repo hygiene fixed (nuevo.py removed,
-  `__pycache__` untracked), F-01 master-sync verified identical; architecture decision
-  **ADR-0007** — GitHub Actions = single publisher to the 3 registries, GitLab CI =
-  validation-only mirror, Docker Hub = the consumption registry (no PAT required)
-- **Daily recap status:** Session 04 (2026-09-29) — student feedback applied (deep
-  explanations, one concept → one question); Block F (.yml pipelines) deep explanation started,
-  evaluation NOT closed yet — carried to next session
-- **Next session target:** Verify both pipelines green after push (runs 110+ GitHub, new
-  GitLab pipeline), create GitLab CI variables `GHCR_USERNAME`/`GHCR_TOKEN` (student), then
-  Block F evaluation + Phase 9 — Stage 09: Oracle Cloud account
-- **Blockers / open questions:** None. Both pipelines verified green 2026-09-29
-  (GitHub runs 110–113 via API; GitLab confirmed by student — repo private, no mentor token)
-- **Last session:** 2026-09-10 — Session 03 recap-only (Blocks D-E): closed D pending (needs), validated E (Dockerfile/cache, image vs container, Watchtower local-only vs SSH CD + GitOps, 3 disks, Git vs registry, pull-then-up, local vs fresh) — analogies saved to AGENTS.md Sticky Frames + session-log Session 03; Stage 09 work deferred by student
-- **Last commit / push:** Session 04 closed with `1cdcb04`; post-close Git incident fixed
-  same day — `github/master` = `0893f10` (ff), `gitlab/master` = `a6f3a84` (merge), all 6
-  refs content-identical (diff=0); final docs SHA recorded in next session's log entry
+- **Last completed item:** Session 05 (2026-10-01, recap-only) — **Block D (Pipelines) evaluated
+  and validated ✅**, closing the evaluation debt left open by Session 04. New concepts captured:
+  parallelism (GitHub `needs` DAG) vs serialization (GitLab `stages`), image identity by 8-char
+  commit SHA vs moving `:latest`, and **silent drift** between the three registries (nothing turns
+  red when tags diverge). Rule reaffirmed: **`:latest` only locally; the VPS pins the SHA.**
+- **Daily recap status:** Session 05 (2026-10-01) — Block D ✅ (needs-vs-stages semantics,
+  8-char tag identity, `--password-stdin` **still untouched**). **Block F (Registries) has never
+  been evaluated** — it is the next block in the rotation.
+- **Next session target:** **Repo hygiene debt FIRST (15 min, before Stage 09)** — resolve the
+  `nuevo.py` regression + add it to `.gitignore` + confirm today's pipeline runs → then recap
+  **Block F (Registries)** with varied questions → then Phase 9 — Stage 09 **Session 1: Oracle
+  Cloud account, Always Free quotas, Always Free vs trial credits**. Stage 09 still has **zero**
+  checkboxes marked.
+- **✅ Repo state VERIFIED 2026-10-01** (real `git fetch` to both remotes, no `BatchMode`):
+
+  | Ref | SHA | Status |
+  |---|---|---|
+  | `develop` | `dc41430` | = `github/develop` = `gitlab/develop` ✅ |
+  | `master` | `f51df86` | merge PR #79, contains `develop` ✅, content identical |
+  | `github/master` | `f51df86` | ✅ |
+  | `gitlab/master` | `2ce2b11` | ✅ contains `develop` — **this was wrongly reported stale earlier today** |
+
+  **All 6 refs are content-identical** (`git diff` = 0 for every pair) and `develop` is an ancestor
+  of all of them. Nothing is out of sync. GitLab SSH works: `id_ed25519_gitlab` + `~/.ssh/config`
+  Host block → `Welcome to GitLab, @ericksuper80!`.
+  > **The 68 extra merge commits in `gitlab/master` are normal mirror divergence** — GitLab creates
+  > a merge every time `master` is pushed there. Two mirrors can have **different history with
+  > identical content**. The only correct check is `git diff` between refs = 0, never "do the SHAs
+  > look the same".
+- **⚠️ Repeat false positive (2nd occurrence — read the rule before trusting any remote claim):**
+  this file previously reported `gitlab/master = 36aaf77` as **stale/unverified**. That was wrong:
+  the remote was at `2ce2b11` all along. Cause: the mentor's own `GIT_SSH_COMMAND='ssh -o
+  BatchMode=yes'` blocked the fetch and produced a fake `publickey` error, then the stale
+  remote-tracking ref was treated as fact. **Session 04 had the identical mistake (finding F-01).**
+  Rule: *a remote is unknown until you `git fetch` it, and a remote-tracking ref is Git's memory of
+  the remote, not the remote.* Never write a remote's state into the docs from a tracking ref alone.
+- **⚠️ Undocumented work found in the repo (2026-10-01):** 7 commits dated today touch **only
+  `nuevo.py`** (`eb0c9ca` add → `99a1434` → `0968c30` → `ffe257c` → `0618ba0` → `c533b6e` →
+  `dc41430` format fix). They are **not project progress** and have **no session-log entry**.
+  Their messages also break the conventional-commit convention (`feature3 commit 0`,
+  `feature4 commit 1`, …) → portfolio defect.
+- **✅ `nuevo.py` — resolved by student decision (2026-10-01):** it is a **deliberate local
+  practice file** and **stays in the repo** (`develop` + `master`). Impact verified as nil: the
+  `Dockerfile` runs `COPY Principal.py .`, so it never enters the image. Trade-off accepted: it
+  does pass through the 7 CI gates on every push (hence `dc41430 fix: format nuevo.py to pass
+  linting`), but it cannot affect the deployed app. Logged as a decision, not an accident — see
+  `AGENTS.md` Repo Hygiene Rules #1.
+- **✅ Pipeline state at HEAD `dc41430` (2026-10-01):** the student reports **all jobs green**
+  (unit tests + lint + security) after the `dc41430` formatting commit. The 6 earlier commits of
+  that `nuevo.py` series may still show red runs in the history — irrelevant operationally (HEAD is
+  what ships) but visible to an interviewer reading the run list.
+- **Housekeeping:** decide whether the `GHCR_USERNAME`/`GHCR_TOKEN` GitLab CI variables are
+  dropped — ADR-0007 removed the need for a cross-platform PAT (an older block of this file
+  still mentions them as a next step).
+- **Blockers / open questions:** none technical. Pipelines green at `dc41430` (confirmed by the
+  student: tests + lint + security). **Pending:** memory docs are synced into `C:\Repo2\docs/` but
+  **still uncommitted**, and `docs/delivery-story.md` is a new untracked file in the repo.
+- **Last session:** 2026-10-01 — Session 05 recap-only (Block D): closed the pending pipelines
+  evaluation with new angles (platform parallelism semantics, tag identity + registry drift);
+  2 misunderstandings corrected (GitLab stages are sequential; GitLab does not receive the image)
+  + 1 mentor lapse (tag identity was assumed instead of explained, then taught in depth). New
+  Sticky Frames added to AGENTS.md. No stage work — student closed the day
+- **Last commit / push:** the 7 commits of 2026-10-01 (`eb0c9ca` … `dc41430`) are on **both**
+  remotes (`develop`) and both `master` branches contain them. Last docs commit in `C:\Repo2` is
+  `371303a` (2026-09-29). **Session 05 memory updates are synced into `C:\Repo2\` but NOT yet
+  committed** — pending: `git add AGENTS.md docs/` + conventional commit + push to both remotes.
 
 ---
 
