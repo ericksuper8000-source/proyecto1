@@ -3,7 +3,7 @@
 > Turning a small Python application into a fully automated, containerized, multi-registry, production-deployed software delivery pipeline — stage by stage, publicly documented from day one.
 
 **Type:** Practical learning project + professional portfolio
-**Duration:** ~6 months total (2 sessions/week); ~3 months remain
+**Duration:** ~5–7 weeks remain (5 sessions/week, ~2 h each)
 **Language:** English (public documentation)
 
 ---
@@ -35,8 +35,9 @@ Then, stage by stage, the story unfolds:
 Every step is documented with evidence, screenshots, and the reasoning behind each
 decision. This is not a tutorial; it is a complete engineering journey.
 
-Every session begins with a **recap mini-session**: the student explains back what was
-learned, one question at a time, so understanding is real — not memorized.
+Every session begins with a **concept-by-concept review**: one concept at a time, with an
+example, an analogy, its connection to previous concepts, and a space for questions before
+advancing, so understanding is real — not memorized.
 
 ---
 
@@ -117,16 +118,18 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 - **Single source of truth:** [`docs/execution-plan.md`](docs/execution-plan.md) stores
   the current phase, the current stage, and every checkbox. It is updated at the end of
   every session.
-- **Daily recap ritual:** every day starts with a recap mini-session — the AI summarizes
-  the journey simply and validates understanding with one question at a time before any
-  progress (see [`AGENTS.md`](AGENTS.md)).
+- **Daily session v4:** review 3–5 concepts (one at a time, with canonical explanation,
+  analogy, connection, questions, and verification), then one practical objective, then
+  documentation. Standard day: 2 h; hard maximum: 2.5 h; 5 days/week plus a short weekly
+  consolidation (see [`AGENTS.md`](AGENTS.md)).
 - **AI-friendly:** Any AI agent that joins the project follows the bootstrap protocol in
   [`AGENTS.md`](AGENTS.md), which guarantees instant recall of what exists, what is done,
   and what is next.
-- **Definition of Done:** a stage is finished only when it is understood, documented,
-  evidenced, committed, and pushed to **both** GitHub and GitLab.
-- **Mirrored repositories:** the project lives in `C:\Repo2` and is pushed to GitHub and
-  GitLab in parallel.
+- **Definition of Done:** a session is finished only when it is understood, documented,
+  evidenced, and the memory folder is synchronized with `C:\Repo2`.
+- **Mirrored repositories:** the project lives in `C:\Repo2` and is mirrored to GitHub and
+  GitLab. Commit/push only when the student explicitly asks; the current preference is
+  sync-only.
 - **Zero cost:** the whole project runs on free-tier services (see Cost Policy).
 
 ---
