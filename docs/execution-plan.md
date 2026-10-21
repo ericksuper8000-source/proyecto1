@@ -13,12 +13,12 @@
 This is the **single source of truth** for project status. It does not contain theory or
 stages — it tells you exactly where the project is and what to do next.
 
-- **Every day starts with the recap mini-session** (see `AGENTS.md` — Daily Recap &
-  Validation), then reads the **Current Status** block below.
-- **Every session ends** by updating the **Current Status** block and ticking every
-  checkbox completed during that session.
-- A phase or stage is only marked complete when it is **understood, documented,
-  evidenced, committed, and pushed** (see Definition of Done in `AGENTS.md`).
+- **Every day starts with the v4 review block** (3–5 concepts, see `AGENTS.md` — Daily Work
+  Session v4), then reads the **Current Status** block below.
+- **Every session ends** by updating the **Current Status** block, ticking completed
+  checkboxes, and syncing the memory folder with `C:\Repo2`.
+- A phase or stage is only marked complete when it is **understood, documented, evidenced,
+  and synchronized** (see Definition of Done in `AGENTS.md`). Commit/push only on request.
 - Any AI agent joining the project reads this file first (see `AGENTS.md`).
 
 ---
@@ -32,79 +32,60 @@ stages — it tells you exactly where the project is and what to do next.
 - **Phase 0 (Planning):** ✅ Complete
 - **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
 - **Phase 8 (SSH & Remote Connections):** ✅ Complete — mental model, practice, Part C questions answered
-- **Last completed item:** Session 05 (2026-10-01, recap-only) — **Block D (Pipelines) evaluated
-  and validated ✅**, closing the evaluation debt left open by Session 04. New concepts captured:
-  parallelism (GitHub `needs` DAG) vs serialization (GitLab `stages`), image identity by 8-char
-  commit SHA vs moving `:latest`, and **silent drift** between the three registries (nothing turns
-  red when tags diverge). Rule reaffirmed: **`:latest` only locally; the VPS pins the SHA.**
-- **Daily recap status:** Session 05 (2026-10-01) — Block D ✅ (needs-vs-stages semantics,
-  8-char tag identity, `--password-stdin` **still untouched**). **Block F (Registries) has never
-  been evaluated** — it is the next block in the rotation.
-- **Next session target:** **Repo hygiene debt FIRST (15 min, before Stage 09)** — resolve the
-  `nuevo.py` regression + add it to `.gitignore` + confirm today's pipeline runs → then recap
-  **Block F (Registries)** with varied questions → then Phase 9 — Stage 09 **Session 1: Oracle
-  Cloud account, Always Free quotas, Always Free vs trial credits**. Stage 09 still has **zero**
-  checkboxes marked.
-- **✅ Repo state VERIFIED 2026-10-01** (real `git fetch` to both remotes, no `BatchMode`):
+- **Last completed item:** Session 07 (2026-10-21, documentation only) — the **v4 daily
+  session model** was defined and written into `AGENTS.md`, the session instructions and
+  this plan: 2 h standard / 2.5 h max / 45–60 min minimum, 5 days/week, review 3–5 concepts
+  (cap 40 min) + one practical objective + documentation, weekly consolidation. It supersedes
+  the daily 18/18 review; that full pass remains the one-time baseline from Session 06.
+  Concepts 1–18 validated/accepted ✅: **Código fuente**, **Dependencias
+  (`requirements.txt`)**, **Tests (`test_principal.py` + pytest)**, the **Calidad y
+  seguridad gate (7 reviewers)**, **Ruff**, **Flake8**, **Black**, **MyPy**, **Bandit**,
+  **pip-audit**, **Git/`.gitignore`**, **YAML/pipelines**, **push flow**,
+  **Docker/Dockerfile**, **`.dockerignore`**, **registries**, **Compose/Watchtower** and
+  **SSH/VPS**. Student's permanent insight: **the pipeline is born from the application**
+  (code → stack → dependencies/tests/build → pipeline), documented in `AGENTS.md` +
+  `delivery-story.md` v2.8. The canonical explanations for Concepts 2–18 are recorded in
+  `AGENTS.md` and `docs/session-log.md`; reuse them in future reviews.
+- **Daily session model:** **v4**. Concepts validated/accepted: **18 of 18** (Código
+  fuente, Dependencias, Tests, Calidad y seguridad, Ruff, Flake8, Black, MyPy, Bandit,
+  pip-audit, Git/`.gitignore`, YAML/pipelines, push flow, Docker/Dockerfile, `.dockerignore`,
+  registries, Compose/Watchtower, SSH/VPS). **The review list is complete.** Next: **Block F
+  formal evaluation** (registries), then Stage 09.
+- **Next session target:** Block F formal evaluation → Stage 09 Session 1 (Oracle Cloud
+  account, Always Free quotas, third key `id_ed25519_vps`, `~/.ssh/config` alias `mi-vps`).
+  Stage 09 still has **zero** checkboxes marked.
+- **✅ Repo state VERIFIED 2026-10-21** (real `git fetch` to both remotes):
 
   | Ref | SHA | Status |
   |---|---|---|
-  | `develop` | `dc41430` | = `github/develop` = `gitlab/develop` ✅ |
-  | `master` | `f51df86` | merge PR #79, contains `develop` ✅, content identical |
-  | `github/master` | `f51df86` | ✅ |
-  | `gitlab/master` | `2ce2b11` | ✅ contains `develop` — **this was wrongly reported stale earlier today** |
+  | `develop` | `fe37aa7` | = `github/develop` = `gitlab/develop` ✅ |
+  | `github/master` | `2fd2de9` | contains `fe37aa7` ✅, content identical |
+  | `gitlab/master` | `8cce10c` | contains `fe37aa7` ✅, content identical |
+  | `master` (local) | `1dc240a` | behind remotes; content identical ✅ |
 
-  **All 6 refs are content-identical** (`git diff` = 0 for every pair) and `develop` is an ancestor
-  of all of them. Nothing is out of sync. GitLab SSH works: `id_ed25519_gitlab` + `~/.ssh/config`
-  Host block → `Welcome to GitLab, @ericksuper80!`.
-  > **The 68 extra merge commits in `gitlab/master` are normal mirror divergence** — GitLab creates
-  > a merge every time `master` is pushed there. Two mirrors can have **different history with
-  > identical content**. The only correct check is `git diff` between refs = 0, never "do the SHAs
-  > look the same".
-- **⚠️ Repeat false positive (2nd occurrence — read the rule before trusting any remote claim):**
-  this file previously reported `gitlab/master = 36aaf77` as **stale/unverified**. That was wrong:
-  the remote was at `2ce2b11` all along. Cause: the mentor's own `GIT_SSH_COMMAND='ssh -o
-  BatchMode=yes'` blocked the fetch and produced a fake `publickey` error, then the stale
-  remote-tracking ref was treated as fact. **Session 04 had the identical mistake (finding F-01).**
-  Rule: *a remote is unknown until you `git fetch` it, and a remote-tracking ref is Git's memory of
-  the remote, not the remote.* Never write a remote's state into the docs from a tracking ref alone.
-- **⚠️ Undocumented work found in the repo (2026-10-01):** 7 commits dated today touch **only
-  `nuevo.py`** (`eb0c9ca` add → `99a1434` → `0968c30` → `ffe257c` → `0618ba0` → `c533b6e` →
-  `dc41430` format fix). They are **not project progress** and have **no session-log entry**.
-  Their messages also break the conventional-commit convention (`feature3 commit 0`,
-  `feature4 commit 1`, …) → portfolio defect.
-- **✅ `nuevo.py` — resolved by student decision (2026-10-01):** it is a **deliberate local
-  practice file** and **stays in the repo** (`develop` + `master`). Impact verified as nil: the
-  `Dockerfile` runs `COPY Principal.py .`, so it never enters the image. Trade-off accepted: it
-  does pass through the 7 CI gates on every push (hence `dc41430 fix: format nuevo.py to pass
-  linting`), but it cannot affect the deployed app. Logged as a decision, not an accident — see
+  **All refs are content-identical** (`git diff` = 0 for every pair); `develop` is an ancestor
+  of both remote `master` refs. The feature6/feature7 commits are merged into `develop` and
+  pushed to both remotes; the local `feature6` branch is gone. At verification time the
+  working tree was clean; since then the docs were synced and remain uncommitted.
+  > **Remote rule (permanent):** a remote is unknown until you `git fetch` it; a remote-tracking
+  > ref is Git's memory of the remote, not the remote. Never write a remote's state into the docs
+  > from a tracking ref alone. GitLab's extra merge commits are normal mirror divergence: the only
+  > valid parity check is `git diff` = 0, never "do the SHAs match".
+- **✅ `nuevo.py` — resolved by student decision (2026-10-01):** deliberate local practice file,
+  stays in the repo; `Dockerfile` uses `COPY Principal.py .`, so it never enters the image. See
   `AGENTS.md` Repo Hygiene Rules #1.
-- **✅ Pipeline state at HEAD `dc41430` (2026-10-01):** the student reports **all jobs green**
-  (unit tests + lint + security) after the `dc41430` formatting commit. The 6 earlier commits of
-  that `nuevo.py` series may still show red runs in the history — irrelevant operationally (HEAD is
-  what ships) but visible to an interviewer reading the run list.
 - **Housekeeping:** decide whether the `GHCR_USERNAME`/`GHCR_TOKEN` GitLab CI variables are
-  dropped — ADR-0007 removed the need for a cross-platform PAT (an older block of this file
-  still mentions them as a next step).
-- **Blockers / open questions:** none technical. Pipelines green at `dc41430` (confirmed by the
-  student: tests + lint + security). **Pending:** memory docs are synced into `C:\Repo2\docs/` but
-  **still uncommitted**, and `docs/delivery-story.md` is a new untracked file in the repo.
-- **Last session:** 2026-10-01 — Session 05 recap-only (Block D): closed the pending pipelines
-  evaluation with new angles (platform parallelism semantics, tag identity + registry drift);
-  2 misunderstandings corrected (GitLab stages are sequential; GitLab does not receive the image)
-  + 1 mentor lapse (tag identity was assumed instead of explained, then taught in depth). New
-  Sticky Frames added to AGENTS.md. No stage work — student closed the day
-- **Last commit / push:** Session 05 memory changes committed as `0b15177` — `docs(session-05):
-  close Block D recap, repo audit + student decision on nuevo.py, sync delivery-story v1.0`
-  (5 files: +343/−35, including `docs/delivery-story.md` as a new file). Pushed to **GitHub
-  develop** and **GitLab develop** (`0b15177..0b15177`). **All remotes verified with a real
-  `git fetch`:** `develop`/`github/develop`/`gitlab/develop` = `0b15177`; `master`/`github/master`
-  = `1dc240a` (FF from `f51df86` after the student's merge of develop→master on GitHub/GitLab);
-  `gitlab/master` = `74102e8`. **Content parity:** `git diff develop <any master/*>` = 0 (all
-  content-identical) and `develop` is an ancestor of every `master/*` (all in sync). Local
-  `master` was FF-updated to `github/master` (no history rewrite), and the working tree was left
-  clean on `develop`. The 68 merge commits on `gitlab/master` are the normal mirror divergence
-  (different history, identical content).
+  dropped — ADR-0007 removed the need for a cross-platform PAT. Also: memory-folder
+  `requirements.txt` still says `pytest==8.2.2` while the real repo uses `9.0.3`.
+- **Blockers / open questions:** none technical. **Pending:** these memory updates are
+  **synced to the `C:\Repo2` working tree but not committed/pushed** (student chose sync-only;
+  commit/push requires explicit instruction). Pending decision: Block F evaluation first, or
+  begin Stage 09 directly.
+- **Last session:** 2026-10-21 — Session 07 documentation-only: v4 daily session model defined.
+  No concepts reviewed, no stage work.
+- **Last commit / push:** none from this session (sync-only). Last documented push: Session 05 memory
+  commit `0b15177` (+ later docs commit `7b6643e`), then the student's feature6/feature7
+  commits on `develop` (`fe37aa7`), merged and pushed to both remotes.
 
 ---
 
@@ -444,7 +425,7 @@ stages — it tells you exactly where the project is and what to do next.
 
 ---
 
-## Timeline (2 sessions/week, 1.5–2 h each)
+## Timeline (5 sessions/week, ~2 h each + weekly consolidation)
 
 | Phase | When | Sessions |
 |---|---|---|
@@ -457,67 +438,65 @@ stages — it tells you exactly where the project is and what to do next.
 | 6 Registries | ✅ prior work | — |
 | 7 Orchestration & CD Sim | ✅ prior work | — |
 | 8 SSH & Remote Access | Weeks 1–2 | 1–2 |
-| 9 VPS Provisioning | Weeks 2–3 | 2–3 |
-| 10 Linux Administration | Weeks 3–5 | 6–8 |
-| 11 Deployment to Server | Weeks 5–6 | 2–3 |
-| 12 Production Hardening | Weeks 6–9 | 6–8 |
-| 13 FastAPI Full Stack | Weeks 9–12 | 4–6 |
-| 14 Portfolio & Interview | Weeks 12–13 | 2–3 |
+| 9 VPS Provisioning | Week 1 | 2–3 |
+| 10 Linux Administration | Weeks 1–2 | 6–8 |
+| 11 Deployment to Server | Week 2 | 2–3 |
+| 12 Production Hardening | Weeks 2–4 | 6–8 |
+| 13 FastAPI Full Stack | Weeks 4–6 | 4–6 |
+| 14 Portfolio & Interview | Weeks 6–7 | 2–3 |
 
-> Total remaining ≈ 25–35 sessions ≈ 3 months. Cadence may be adjusted — understanding
-> is the only fixed requirement.
+> Total remaining ~ 25–35 sessions ~ 5–7 weeks at 5 sessions/week. Cadence may be adjusted;
+> understanding is the only fixed requirement. Do not compress by skipping review or
+> documentation.
 
 ---
 
-## Session Workflow — v2 (Spiral Repetition + Feedback Loop)
+## Session Workflow — v4 (Review + Practice + Documentation)
 
-**Daily recap mini-session v2 (before anything else, every day, ~15 min cap):**
+**Standard day: 2 hours. Heavy infrastructure day: 2.5 hours maximum. Five days/week,
+plus one 45–60 minute weekly consolidation.**
 
-1. The mentor gives the **general journey summary** (2–3 min, always).
-2. For **each of the 1–2 blocks of the day** (rotating, cyclical A→H then loop), execute the
-   per-topic micro-cycle (`AGENTS.md`):
-   - **Specific summary + analogy** for that topic (what it is, why it exists, how it
-     intervenes in `CICD.txt` flow, failure mode)
-   - **Comprehension check:** *"¿Lo entendiste o necesitas otra explicación?"* → if needed,
-     re-explain differently; if asimilado, proceed
-   - **Varied evaluation:** exactly **one question at a time**, topic repeats but exact
-     question never repeats unless `refuerzo útil ⏰`
-   - **Student Q&A slot:** *"¿Tienes preguntas tú sobre este tema?"* → log Q&A
-   - **Topic gate:** ✅ next topic / ⚠️ reinforce with different question next session
-3. The recap is **general and cyclical** — covers **complete delivery flow + every tool/file
-   in CICD.txt** (Blocks A–H), always with intentional topic repetition for retention after
-   a full A→H cycle loops to A with varied Qs.
-4. **When the day's practice is judged complete** (1–2 topics validated), **immediately
-   transition to the work session** — no gap.
-5. Result recorded **per-topic** in `session-log.md` (table: summary/analogy, check,
-   Qs+answers+verdict, your Qs, verdict) + `Recap meta` (timing, bank update). This log is
-   permanent memory and feeds future recaps.
+| Block | Standard | Heavy |
+|---|---|---|
+| Open + objective | 5 min | 5 min |
+| Interactive review | 30 min (3–5 concepts, cap 40) | 35 min |
+| Practical work | 70 min | 90 min |
+| Documentation + close | 15 min | 20 min |
 
-**Start of the progress session (10 min):**
+**Block 1 — interactive review (3–5 concepts):**
 
-1. Read **Current Status** above.
-2. Read the last entry of `session-log.md` (per-topic table + work log).
-3. Read the current stage document.
-4. Tell the mentor what you remember from the previous session.
+1. **No general journey summary.** Start with the first concept in the queue.
+2. Queue priority: fragile yesterday → new yesterday → today's dependencies → one older
+   concept from the rotation map.
+3. For **each concept**, use the v3 cycle (`AGENTS.md`):
+   - canonical explanation + concrete example + analogy
+   - explicit connection to previous concepts
+   - *"¿Todo claro o necesitas otra explicación? ¿Preguntas?"* → wait
+   - one verification question (purpose + connection + failure mode); evaluate as
+     **solid / partial / fragile**
+   - partial → reinforce the gap and rephrase; fragile → re-teach with another analogy,
+     add to tomorrow's queue
+4. **Hard cap 40 minutes.** If a concept remains fragile, reduce today's practical scope;
+   do not let review consume the whole session.
+5. Log each concept in `session-log.md` (explanation, connection, question, answer, verdict).
 
-**During the session:**
+**Block 2 — practical work (one objective):**
 
-5. Work the stage checklist. The mentor guides with questions (why-first, 1 at a time).
-   New concepts are taught with the same micro-cycle (summary+analogy → check → evaluation).
+6. Choose **one** unchecked item from the active stage and state the objective, why, expected
+   evidence and safe stopping point (5 min).
+7. The student executes; the mentor guides with questions/hints. No full solutions.
+8. If blocked >10–15 min: hint; if still blocked: document and close at a safe point.
+9. Evidence: command + output, screenshot, or diff. No evidence = not done.
 
-**End of session (20 min):**
+**Block 3 — documentation & close:**
 
-6. Fill the stage report section in the stage document.
-7. Save screenshots/evidence in `screenshots/stage-NN/`.
-8. Append an entry to `session-log.md` with **per-topic recap table + work session log**
-   (what was built, decisions, commands with why, errors/hypotheses/resolutions — this
-   becomes future recap material).
-9. Tick completed checkboxes in this file and update **Current Status** + confirm question
-   bank updated (no exact duplicate unless refuerzo útil).
-10. Write an ADR if a meaningful decision was made.
-11. Sync this folder with `C:\Repo2`, commit with a conventional message, push to
-     **both** GitHub and GitLab.
-12. Confirm the next session's target (next blocks in rotation + next work checkbox).
+10. Fill the stage report and save evidence in `screenshots/stage-NN/`.
+11. Append a session-log entry with: concepts reviewed + verdicts, what was done, what was
+    learned, what was confusing, commands/decisions, and tomorrow's review queue (3–5).
+12. Tick checkboxes, update **Current Status**, write an ADR if a real decision was made.
+13. Sync memory folder ↔ `C:\Repo2`. **Commit/push only if the student explicitly asks.**
+14. Close with one thing the student can explain and one doubt; unresolved items go first
+    tomorrow. Define the exact next objective.
 
 ---
 

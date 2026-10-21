@@ -4,20 +4,18 @@
 **Objective:** Document the local environment where the project lives, so every stage can
 assume a verified baseline instead of unknown state.
 
-**Last verified:** 2026-10-01 — repo state audited with a **real `git fetch` to both remotes**:
-`develop` = `dc41430` = `github/develop` = `gitlab/develop`; `master` = `f51df86` (PR #69 merge,
-contains `develop`) = `github/master`; `gitlab/master` = `2ce2b11`. **All 6 refs are
-content-identical** (`git diff` = 0 for every pair) and `develop` is an ancestor of all of them.
+**Last verified:** 2026-10-21 — repo state audited with a **real `git fetch` to both remotes**:
+`develop` = `fe37aa7` = `github/develop` = `gitlab/develop`; `github/master` = `2fd2de9`;
+`gitlab/master` = `8cce10c`; **all refs content-identical** (`git diff` = 0 for every pair) and
+`develop` is an ancestor of both remote `master` refs. The feature6/feature7 commits are merged
+into `develop` and pushed to both remotes; local `feature6` branch is gone; working tree clean.
+Local `master` = `1dc240a` (behind remotes, content identical).
 ✅ SSH to GitLab works: `id_ed25519_gitlab` + the `Host gitlab.com` block in `~/.ssh/config`
-→ `Welcome to GitLab, @ericksuper80!`. An earlier entry in this file called `gitlab/master`
-"stale/unverifiable" — **that was wrong**; it came from an un-fetched tracking ref.
-⚠️ **Corrections to the 2026-09-29 entry:** (1) `nuevo.py` was removed then
-(`fd6c212`) but was **re-added on 2026-10-01** (`eb0c9ca` + 6 commits touching only that file) — by
-**student decision it is a deliberate local practice file and stays in the repo** (verified nil
-impact: the `Dockerfile` runs `COPY Principal.py .`, so it never enters the image); (2) 7 commits
-dated 2026-10-01 exist with **no session-log entry** and with messages that violate the
-conventional-commit convention. See `session-log.md` Session 05 (post-close audit).
-✅ Pipelines **green at `dc41430`** (2026-10-01, confirmed by the student: tests + lint + security).
+→ `Welcome to GitLab, @ericksuper80!`.
+⚠️ Memory-folder `requirements.txt` still says `pytest==8.2.2`; the real repo uses `9.0.3`.
+Pipeline status at `fe37aa7` was not independently verified in this session.
+✅ `nuevo.py` remains a **deliberate local practice file** (student decision 2026-10-01); the
+`Dockerfile` runs `COPY Principal.py .`, so it never enters the image.
 
 ---
 

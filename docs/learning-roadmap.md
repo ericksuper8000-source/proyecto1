@@ -39,11 +39,47 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 ## Phase 2 — Code Quality & Automated Testing (incl. exhaustive flow tools)
 
 - [ ] I can explain the responsibility of each tool: Ruff, Flake8, Black, MyPy, Pytest, **Bandit (security)**, **pip-audit (supply chain)**.
+- [ ] I can explain what Ruff detects, what it does not, and how it differs from Flake8,
+  MyPy, Bandit and Black.
+- [ ] I can explain what Flake8 checks, how it differs from Ruff and Black, and why it
+  reports but does not rewrite.
+- [ ] I can explain what Black changes, why CI runs `--check` instead of rewriting, and why
+  it is a formatter rather than a linter.
+- [ ] I can explain what MyPy checks, why type hints are not enforced at runtime, and why
+  this project's lack of annotations limits MyPy's real coverage.
+- [ ] I can explain what Bandit scans, why tests are excluded from it, and why a code
+  security scanner does not replace dependency auditing or testing.
+- [ ] I can explain what pip-audit checks, why it includes transitive dependencies, and why
+  a requirements file is not a lock file or a security guarantee.
+- [ ] I can explain what `.gitignore` does to untracked vs already-tracked files and why it
+  is not a security barrier for secrets already committed.
+- [ ] I can read a CI YAML file and explain its triggers, jobs, steps, `needs`/stages and
+  why some jobs run in parallel while others wait.
+- [ ] I can distinguish commit from push, explain which remote/branch triggers CI, and
+  describe why local validation is only a rehearsal.
+- [ ] I can explain the difference between a Dockerfile, an image and a container, and why
+  layer order and `.dockerignore` matter.
+- [ ] I can distinguish `.gitignore` from `.dockerignore` and explain why filtering the build
+  context improves speed and reduces secret exposure.
+- [ ] I can explain what a registry stores, why the same image goes to three registries, and
+  why the commit tag is safer than `latest` for deployment.
+- [ ] I can explain what Compose and Watchtower each do, and why `latest` is only a local CD
+  simulation while the VPS pins a commit tag.
+- [ ] I can explain what a VPS is, how SSH reaches it on port 22, why the first host-key
+  warning appears, and why the private key never travels.
+- [ ] I can explain why the quality/security gate has multiple reviewers, what question each
+  answers, and how a failure blocks Docker/publish.
 - [ ] I can explain why Black runs as `--check` in CI instead of modifying files.
 - [ ] I can explain what a unit test is and what makes a good test.
+- [ ] I can explain why tests are written by behavior/risk rather than one per file, and the
+  difference between unit, integration and end-to-end tests.
+- [ ] I can explain why coverage alone is not proof of quality.
 - [ ] I can justify why a professional pipeline never ships broken code.
 - [ ] I can explain **what Bandit scans** (hardcoded secrets, injection) and why it runs in CI.
 - [ ] I can explain **what pip-audit checks** vs Bandit, and how both protect the flow.
+- [ ] I can explain what `requirements.txt` is and is not (packages vs Python version),
+  runtime vs dev dependencies, pinning/lock files, and how it affects CI, Docker, security
+  and reproducibility.
 - [ ] I can explain **`.gitignore` vs `.dockerignore` vs `.gitattributes`** — what each excludes, why `.venv/__pycache__/*.pem/.env` must not go to Git nor to image, and what breaks if they do.
 - [ ] I can explain **YAML** as a language (maps, lists, indentation, why a missing space breaks the pipeline) and why the runner reads it.
 
@@ -60,6 +96,7 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ## Phase 4 — CI/CD Pipelines (incl. YAML & secrets)
 
+- [ ] I can explain why the pipeline is designed around the application's stack (code → stack → dependencies/tests/build → pipeline), not before it.
 - [ ] I can explain the difference between CI and CD with a real example.
 - [ ] I can explain every element of the GitHub Actions workflow (triggers, jobs, steps, needs).
 - [ ] I can explain the equivalent concepts in GitLab CI (stages, jobs, scripts).
