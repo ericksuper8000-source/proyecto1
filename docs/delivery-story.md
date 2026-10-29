@@ -347,4 +347,9 @@ Reglas: orden exacta con máquina exacta; el lector ordena y el ejecutor ejecuta
 - **v2.8 (2026-10-21):** Concept 18 — SSH/VPS validated. Added canonical explanation: VPS vs
   container, SSH client/server/port 22, host-key warning, key pairs, per-door keys, VPS pulls
   images, and the remote-house/padlock analogy. The v3 review list is complete.
-- **Next:** Append Phase 9 when validated (VPS Oracle, first SSH connection).
+- **v2.9 (2026-10-29):** Audit session (route v2) — no new concept validated; the *route*
+  changed. The project now follows ADR-0008…0014 and the reordered phases 9–15
+  (Terraform → FastAPI+MySQL → Ansible → Deploy → Hardening → Observability → Portfolio).
+  The delivery story for Phases 9–15 will be appended here **only when each stage is
+  validated**, following the existing rule (never contaminate the story with
+  unvalidated tech).

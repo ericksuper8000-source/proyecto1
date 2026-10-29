@@ -4,18 +4,16 @@
 **Objective:** Document the local environment where the project lives, so every stage can
 assume a verified baseline instead of unknown state.
 
-**Last verified:** 2026-10-21 — repo state audited with a **real `git fetch` to both remotes**:
-`develop` = `fe37aa7` = `github/develop` = `gitlab/develop`; `github/master` = `2fd2de9`;
-`gitlab/master` = `8cce10c`; **all refs content-identical** (`git diff` = 0 for every pair) and
-`develop` is an ancestor of both remote `master` refs. The feature6/feature7 commits are merged
-into `develop` and pushed to both remotes; local `feature6` branch is gone; working tree clean.
-Local `master` = `1dc240a` (behind remotes, content identical).
-✅ SSH to GitLab works: `id_ed25519_gitlab` + the `Host gitlab.com` block in `~/.ssh/config`
-→ `Welcome to GitLab, @ericksuper80!`.
-⚠️ Memory-folder `requirements.txt` still says `pytest==8.2.2`; the real repo uses `9.0.3`.
-Pipeline status at `fe37aa7` was not independently verified in this session.
-✅ `nuevo.py` remains a **deliberate local practice file** (student decision 2026-10-01); the
-`Dockerfile` runs `COPY Principal.py .`, so it never enters the image.
+**Last verified:** 2026-10-29 (audit session, documentation-only) — docs updated to
+route v2 (ADR-0008…0014) and synced between this folder and `C:\Repo2`. **No commit/push
+was made** (sync-only rule).
+✅ Drift fixed this day: memory `requirements.txt` now matches the repo
+(`pytest==9.0.3`); `.dockerignore` normalized to the repo version.
+✅ Repo state at `C:\Repo2`: HEAD `86ca138` on `develop`; working tree was clean at audit
+start (it now contains the route-v2 doc sync, **uncommitted**).
+⚠️ `nuevo.py` stays until Phase 15, where ADR-0014 removes it from the public repo.
+⚠️ The GitLab repo is currently **private** — ADR-0014 pending decision (make public and
+curated, or stop calling it a public mirror).
 
 ---
 
@@ -35,6 +33,10 @@ Pipeline status at `fe37aa7` was not independently verified in this session.
 | Python 3.11 quality toolchain | flake8, black, ruff, mypy, bandit, pip-audit, pytest 9.0.3 (mirrors the CI jobs) |
 | Docker Desktop | Docker Engine + Compose + BuildKit on Windows |
 | Git Bash | Git CLI and command convenience |
+| Terraform CLI (planned, Phase 9) | Provision the VPS from code — free (ADR-0009) |
+| Ansible (planned, Phase 11) | Reproducible server bootstrap — free (ADR-0009) |
+| Docker Buildx + QEMU (planned, Phase 10) | Multi-arch images amd64+arm64 — free (ADR-0010) |
+| Trivy / gitleaks / pre-commit (planned, Phase 10) | Image CVE scan / secret scan / local gate — free (ADR-0013) |
 
 > Verify with: `git --version`, `python --version`, `docker --version`,
 > `docker compose version`.
@@ -80,6 +82,10 @@ Remotes: `github` (https://github.com/ericksuper8000-source/proyecto1.git) and
 | GHCR | `ghcr.io/ericksuper8000-source/mi-app` | Registry 2 |
 | GitLab Container Registry | `registry.gitlab.com/ericksuper80-group/repo2` | Registry 3 |
 | Oracle Cloud (planned) | Free Tier (Phase 9) | VPS |
+| MySQL 8 (planned) | official image, multi-arch (ADR-0012) | Database |
+| DuckDNS / sslip.io / nip.io (planned) | free hostname (ADR-0005) | HTTPS in Phase 13 |
+| Telegram Bot API (planned) | free alert channel (ADR-0011) | Alerts in Phase 14 |
+| Cloudflare R2 / Google Drive (planned) | free off-site backup target (ADR-0005) | Backups in Phase 13 |
 
 ## Sync Rule
 

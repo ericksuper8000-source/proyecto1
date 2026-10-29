@@ -27,65 +27,36 @@ stages — it tells you exactly where the project is and what to do next.
 
 > **This block is updated at the end of every session.**
 
-- **Current phase:** Phase 9 — VPS Provisioning (Oracle Cloud Always Free)
-- **Current stage / task:** Stage 09 — Create Oracle Cloud account + provision VPS
-- **Phase 0 (Planning):** ✅ Complete
-- **Phases 1–7 (Code → Quality → VCS → CI/CD → Docker → Registries → Compose):** ✅ Complete
-- **Phase 8 (SSH & Remote Connections):** ✅ Complete — mental model, practice, Part C questions answered
-- **Last completed item:** Session 07 (2026-10-21, documentation only) — the **v4 daily
-  session model** was defined and written into `AGENTS.md`, the session instructions and
-  this plan: 2 h standard / 2.5 h max / 45–60 min minimum, 5 days/week, review 3–5 concepts
-  (cap 40 min) + one practical objective + documentation, weekly consolidation. It supersedes
-  the daily 18/18 review; that full pass remains the one-time baseline from Session 06.
-  Concepts 1–18 validated/accepted ✅: **Código fuente**, **Dependencias
-  (`requirements.txt`)**, **Tests (`test_principal.py` + pytest)**, the **Calidad y
-  seguridad gate (7 reviewers)**, **Ruff**, **Flake8**, **Black**, **MyPy**, **Bandit**,
-  **pip-audit**, **Git/`.gitignore`**, **YAML/pipelines**, **push flow**,
-  **Docker/Dockerfile**, **`.dockerignore`**, **registries**, **Compose/Watchtower** and
-  **SSH/VPS**. Student's permanent insight: **the pipeline is born from the application**
-  (code → stack → dependencies/tests/build → pipeline), documented in `AGENTS.md` +
-  `delivery-story.md` v2.8. The canonical explanations for Concepts 2–18 are recorded in
-  `AGENTS.md` and `docs/session-log.md`; reuse them in future reviews.
-- **Daily session model:** **v4**. Concepts validated/accepted: **18 of 18** (Código
-  fuente, Dependencias, Tests, Calidad y seguridad, Ruff, Flake8, Black, MyPy, Bandit,
-  pip-audit, Git/`.gitignore`, YAML/pipelines, push flow, Docker/Dockerfile, `.dockerignore`,
-  registries, Compose/Watchtower, SSH/VPS). **The review list is complete.** Next: **Block F
-  formal evaluation** (registries), then Stage 09.
-- **Next session target:** Block F formal evaluation → Stage 09 Session 1 (Oracle Cloud
-  account, Always Free quotas, third key `id_ed25519_vps`, `~/.ssh/config` alias `mi-vps`).
-  Stage 09 still has **zero** checkboxes marked.
-- **✅ Repo state VERIFIED 2026-10-21** (real `git fetch` to both remotes):
-
-  | Ref | SHA | Status |
-  |---|---|---|
-  | `develop` | `fe37aa7` | = `github/develop` = `gitlab/develop` ✅ |
-  | `github/master` | `2fd2de9` | contains `fe37aa7` ✅, content identical |
-  | `gitlab/master` | `8cce10c` | contains `fe37aa7` ✅, content identical |
-  | `master` (local) | `1dc240a` | behind remotes; content identical ✅ |
-
-  **All refs are content-identical** (`git diff` = 0 for every pair); `develop` is an ancestor
-  of both remote `master` refs. The feature6/feature7 commits are merged into `develop` and
-  pushed to both remotes; the local `feature6` branch is gone. At verification time the
-  working tree was clean; since then the docs were synced and remain uncommitted.
-  > **Remote rule (permanent):** a remote is unknown until you `git fetch` it; a remote-tracking
-  > ref is Git's memory of the remote, not the remote. Never write a remote's state into the docs
-  > from a tracking ref alone. GitLab's extra merge commits are normal mirror divergence: the only
-  > valid parity check is `git diff` = 0, never "do the SHAs match".
-- **✅ `nuevo.py` — resolved by student decision (2026-10-01):** deliberate local practice file,
-  stays in the repo; `Dockerfile` uses `COPY Principal.py .`, so it never enters the image. See
-  `AGENTS.md` Repo Hygiene Rules #1.
-- **Housekeeping:** decide whether the `GHCR_USERNAME`/`GHCR_TOKEN` GitLab CI variables are
-  dropped — ADR-0007 removed the need for a cross-platform PAT. Also: memory-folder
-  `requirements.txt` still says `pytest==8.2.2` while the real repo uses `9.0.3`.
-- **Blockers / open questions:** none technical. **Pending:** these memory updates are
-  **synced to the `C:\Repo2` working tree but not committed/pushed** (student chose sync-only;
-  commit/push requires explicit instruction). Pending decision: Block F evaluation first, or
-  begin Stage 09 directly.
-- **Last session:** 2026-10-21 — Session 07 documentation-only: v4 daily session model defined.
-  No concepts reviewed, no stage work.
-- **Last commit / push:** none from this session (sync-only). Last documented push: Session 05 memory
-  commit `0b15177` (+ later docs commit `7b6643e`), then the student's feature6/feature7
-  commits on `develop` (`fe37aa7`), merged and pushed to both remotes.
+- **Route:** **v2** (2026-10-29 audit) — phases 9–14 reordered and extended to 9–15 per
+  ADR-0008 … ADR-0014 (see `docs/adr/README.md`). Phases 0–8 are unchanged.
+- **Current phase:** Phase 9 — VPS Provisioning with **Terraform + cloud-init** (was:
+  manual Oracle console clicks) — ADR-0009, `docs/stages/stage-09-vps-provisioning.md`.
+- **Current stage / task:** Stage 09 — **Session 0** (provider decision gate + install
+  Terraform). Stage 09 still has **zero** checkboxes marked.
+- **Last completed item:** Session 07 (2026-10-21, documentation only). No sessions were
+  held between 2026-10-21 and 2026-10-29.
+- **Audit 2026-10-29 (technical rival review):** full review of `C:\Repo2` (HEAD
+  `86ca138`) and this memory folder. Verdict: **4.5/10** as a junior portfolio today;
+  **8.5/10** when the revised route is completed. Findings C1–C12 are embedded in this
+  plan, in ADR-0008…0014 and in the Priority Action List below. **Documentation-only
+  session:** no code was changed; no commit/push was made (sync-only rule).
+- **Pending student decisions (resolve and record in `session-log.md`):**
+  1. **VPS provider** — Oracle Cloud Always Free (card required for verification, no
+     charge) vs an already-owned Hetzner VPS (no incremental cost). Zero-cost rule
+     (ADR-0005) unchanged. Gate: Stage 09 Session 0 (ADR-0009).
+  2. **MySQL 8** confirmed as the database (ADR-0012) — student to validate.
+  3. **GitLab mirror** — make public with curation (ADR-0014) or stop calling it a
+     public mirror (today it is private).
+  4. **Secret scopes/rotation** — Docker Hub PAT, GitLab token, deploy key (ADR-0013).
+- **Drift fixed this day:** memory `requirements.txt` now matches the repo
+  (`pytest==9.0.3`); `.dockerignore` normalized to the repo version. Memory folder and
+  `C:\Repo2` docs are in sync again (2026-10-29).
+- **Blockers / open questions:** none technical. Next session: read ADR-0009, decide the
+  provider, then start Stage 09 Session 0 (Terraform install + first `plan`).
+- **Last session:** 2026-10-29 — Audit session (route v2, documentation only).
+- **Repo state reference:** last verified push remains `86ca138` on `develop`
+  (2026-10-21) to both remotes. The docs changed on 2026-10-29 are synced to `C:\Repo2`
+  but **not yet committed** — commit/push only when the student asks.
 
 ---
 
@@ -93,17 +64,19 @@ stages — it tells you exactly where the project is and what to do next.
 
 | Item | State |
 |---|---|
-| Project | ☒ In progress |
-| Plan | ☒ Defined |
-| Zero-cost policy | ☒ Active (ADR-0005) |
-| Version control | ☒ Active (GitHub + GitLab mirrored) |
-| Application | ☒ Basic Python app + tests |
-| Code quality | ☒ Active (Ruff, Flake8, Black, MyPy, Pytest) |
-| CI/CD | ☒ Active (GitHub Actions + GitLab CI) |
-| Docker | ☒ Active (images, compose, 3 registries) |
-| CD simulation | ☒ Active (Watchtower) |
+| Project | ☒ In progress (route v2) |
+| Plan | ☒ Defined (execution-plan v2 + ADR-0001…0014) |
+| Zero-cost policy | ☒ Active (ADR-0005; free stack in ADR-0009/0011) |
+| Version control | ☒ Active (GitHub + GitLab mirrored; GitLab private until ADR-0014 decision) |
+| Application | ☒ Basic Python app + tests (FastAPI + MySQL in Phase 10, ADR-0008) |
+| Code quality | ☒ Active (Ruff, Flake8, Black, MyPy, Pytest; pyproject + pinned dev-tools in Phase 10) |
+| CI/CD | ☒ Active (CI/CD v2 rules in ADR-0013; PR gating + smoke test in Phase 10) |
+| Docker | ☒ Active (images, compose, 3 registries; multi-arch in Phase 10, ADR-0010) |
+| CD simulation | ☒ Active (Watchtower, local only) |
 | SSH | ✅ Complete (Phase 8) |
-| VPS | 🔄 Next (Phase 9) |
+| VPS + IaC | 🔄 Next (Phase 9 — Terraform + cloud-init) |
+| Observability | ⬜ Planned (Phase 14 — ADR-0011) |
+| Backups | ⬜ Planned (Phase 13) |
 
 ---
 
@@ -272,7 +245,7 @@ stages — it tells you exactly where the project is and what to do next.
 - [x] Run the stack with `docker compose up`
 - [x] Watchtower detects a new image and recreates the container (CD simulation)
 - [x] Understand container lifecycle and restart policies
-- [x] Understand why persistence will matter in Phase 12
+- [x] Understand why persistence will matter in Phase 13 (volumes for the DB)
 - [x] Understand exhaustive flow `build → image → registry → compose → engine → watchtower` and failure modes
 - [ ] **Kubernetes (conceptual)** — understand what it solves when Compose is not enough (multi-host, scheduler) — reference only, no install (see AGENTS.md Technology Introduction Rule)
 
@@ -301,151 +274,239 @@ stages — it tells you exactly where the project is and what to do next.
 
 ---
 
-## Phase 9 — VPS Provisioning (Oracle Cloud Always Free)
+## Phase 9 — VPS Provisioning with Terraform + cloud-init (route v2)
 
-**Objective:** Create the first real server, deliberately — understanding each choice.
+**Objective:** Create the first real server **from code** — reproducible, reviewable,
+versionable. Manual console clicks are replaced by `terraform plan/apply` (ADR-0009).
 
-**Estimated duration:** 2–3 sessions
+**Estimated duration:** 3–4 sessions
 
 **Stage document:** [`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)
 
-**SSH key strategy (decided in Stage 08):** Create a **third separate key pair** (`id_ed25519_vps`) following the existing pattern of separate keys for GitHub and GitLab. See [`docs/stages/stage-08-ssh-remote-connection.md`](docs/stages/stage-08-ssh-remote-connection.md#ssh-key-strategy-for-phase-9-students-decision) for details.
+**Provider decision gate (Session 0, ADR-0009 + ADR-0005):**
+- **Default:** Oracle Cloud Always Free (A1.Flex ARM, free forever). ⚠️ Oracle asks for a
+  credit card for identity verification — **no charge**, but a card is required.
+- **If a Hetzner VPS is already owned:** prefer it (no incremental cost, simpler
+  Terraform provider). Record the decision in the session log.
 
-- [ ] Create the Oracle Cloud account (free tier only — see ADR-0005)
-- [ ] Understand quotas and how to avoid costs
-- [ ] Create the VPS (instance)
-  - [ ] Choose Ubuntu
-  - [ ] Understand what an instance really is
-  - [ ] Understand the shape/resources (ARM vs x86) and their limits
-- [ ] Generate VPS key pair: `ssh-keygen -t ed25519 -C "vps-oracle@project"` → save to `~/.ssh/id_ed25519_vps`
-- [ ] Add public key to Oracle Cloud console
-- [ ] Add VPS entry to `~/.ssh/config`
-- [ ] Connect for the first time with `ssh mi-vps`
-- [ ] Basic first-contact: whoami, OS version, resources
+**SSH key strategy (decided in Stage 08):** third separate key pair `id_ed25519_vps`.
+
+- [ ] **Session 0 — decision gate:** read ADR-0009/0005; choose provider; install
+      Terraform CLI; understand provider / state / resources / plan / apply / destroy
+- [ ] **Session 1 — account & quotas:** create the cloud account (Always Free); verify
+      what is free vs trial credits; configure a **budget alert** (free to set); record
+      the live free-tier limits
+- [ ] Generate VPS key pair `id_ed25519_vps`; add to `~/.ssh/config` as `mi-vps`
+- [ ] **Session 2 — `infra/` module:** provider config, network (VCN/subnet, ingress
+      22/80/443), instance (Ubuntu LTS, ARM A1 or x86 per provider), **cloud-init**
+      (user, SSH key, disable password auth, unattended-upgrades), output public IP
+- [ ] `terraform plan` → `terraform apply` → server Running
+- [ ] **Session 3 — first contact (read-only):** `ssh mi-vps` → whoami, os-release,
+      `free -h`, `nproc`, `df -h`, `ip a`; host-key prompt understood (Stage 08)
+- [ ] Reproducibility drill: `terraform destroy` + `terraform apply` again (or a second
+      workspace) to prove the server is code
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
 
 ---
 
-## Phase 10 — Linux Server Administration
+## Phase 10 — FastAPI + MySQL Evolution (moved BEFORE deployment — ADR-0008)
 
-**Objective:** Administer the VPS like a professional. Nothing is copy-paste.
+**Objective:** Turn the app into a real HTTP service with a database and a `/health`
+endpoint **before** any deployment work, so the server phases are built once, on the
+final architecture.
 
-**Estimated duration:** ~6–8 sessions
+**Estimated duration:** 5–7 sessions
 
-- [ ] First contact with the Linux CLI on the server
-- [ ] Update/upgrade the system (understand what `apt` does)
-- [ ] Users, groups, permissions (why they exist)
-- [ ] Filesystem layout and navigation (FHS)
-- [ ] Package management (apt) — install and justify tools
-- [ ] Firewall (UFW) — only the needed ports open
-- [ ] SSH hardening (keys only, no root login, no password login)
-- [ ] Install Docker Engine (understand what is installed)
-- [ ] Install Docker Compose plugin (understand the difference)
+**Stage document:** [`docs/stages/stage-10-fastapi-mysql-evolution.md`](docs/stages/stage-10-fastapi-mysql-evolution.md)
+
+- [ ] FastAPI app: `GET /health` (JSON), `GET /api/suma` moving the core functions;
+      uvicorn server; `EXPOSE 8000`
+- [ ] API tests with `TestClient` (httpx) + existing unit tests; coverage gate
+      (pytest-cov, ≥ 80 % app code)
+- [ ] MySQL 8 service in `docker-compose.yml` (local dev), named volume, internal port
+      only (ADR-0012)
+- [ ] Env-based config: `.env.example` committed, `.env` ignored
+- [ ] `requirements.txt` (runtime) split from `requirements-dev.txt` (pinned tools)
+- [ ] `pyproject.toml`: Black line-length 88; Flake8 max-line-length 88 + ignore
+      E203/W503; Ruff rules; MyPy config + type hints (ADR-0013)
+- [ ] **CI/CD v2 (ADR-0013):** docker job only on push/tags; container smoke test
+      (`docker run` + curl `/health`); pip cache; `permissions:`; `concurrency`;
+      `timeout-minutes`; Dependabot; Trivy scan; gitleaks + pre-commit locally
+- [ ] **Multi-arch build** with buildx/QEMU: `linux/amd64,linux/arm64` (ADR-0010)
+- [ ] Dockerfile v2: non-root `USER`, `HEALTHCHECK`, pinned base digest
+- [ ] Pipeline green end-to-end with the new stack; tags pushed to the 3 registries
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
 
 ---
 
-## Phase 11 — Deployment to the Server
+## Phase 11 — Linux Server Administration + Ansible (route v2)
 
-**Objective:** The pipeline delivers. First real deployment.
+**Objective:** Administer the VPS like a professional — with a **reproducible
+bootstrap**: everything done manually first, then encoded once in an idempotent Ansible
+playbook (ADR-0009).
+
+**Estimated duration:** 5–7 sessions
+
+**Stage document:** [`docs/stages/stage-11-linux-admin-ansible.md`](docs/stages/stage-11-linux-admin-ansible.md)
+
+- [ ] First contact with the Linux CLI on the server (done in Phase 9, read-only)
+- [ ] Update/upgrade the system; understand what `apt` does
+- [ ] Users, groups, permissions (why they exist); filesystem tour (FHS: /etc, /var, /home)
+- [ ] Firewall (UFW): only 22/80/443 open; fail2ban basics
+- [ ] SSH hardening: keys only, no root login, no password login
+- [ ] Install Docker Engine (official apt repo, not snap) + Compose plugin
+- [ ] `ansible/` playbook (`site.yml`) that reproduces **all** the above from a fresh
+      server; run it twice to prove idempotency
+- [ ] Evidence: playbook run output + before/after server state
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 12 — Deployment: immutable tag, CD over SSH, rollback
+
+**Objective:** The pipeline delivers to the server — with a verified artifact, a
+post-deploy healthcheck, and a proven way back (ADR-0013).
 
 **Estimated duration:** 2–3 sessions
 
-- [ ] `git clone` the project on the server
-- [ ] Understand why we clone the compose file and not build on the server
-- [ ] Configure environment variables on the server (`.env`)
-- [ ] `docker compose up -d` — first run
-- [ ] Watch the server pull the image from the registry and create containers
-- [ ] Verify the application responds (curl)
-- [ ] Restart behavior: reboot the server, app comes back (restart policies)
-- [ ] Optional: CD job in the pipeline that SSHes and redeploys on push
+**Stage document:** [`docs/stages/stage-12-deployment-cd-rollback.md`](docs/stages/stage-12-deployment-cd-rollback.md)
+
+- [ ] Server clones the repo for the **compose file only** (never builds on the server)
+- [ ] `.env` on the server (chmod 600); secrets never in Git
+- [ ] Deploy with the **immutable SHA tag** (never `:latest` in prod); compose pins the tag
+- [ ] CD job: SSH deploy with a **scoped deploy key** (read-only, limited to repo),
+      `docker compose pull && up -d`, then curl `/health`; only from `develop`/tags
+- [ ] **Rollback runbook + one practiced drill:** redeploy the previous tag, verify
+      `/health`, record time to recover
+- [ ] Reboot drill: server restarts → app + db come back (`restart: always`)
+- [ ] curl the public IP → `/health` responds (HTTPS arrives in Phase 13)
+- [ ] Evidence: deploy log, healthcheck output, rollback timings
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
 
 ---
 
-## Phase 12 — Production Hardening & Observability
+## Phase 13 — Production Hardening: Nginx, HTTPS, persistence, backups
 
-**Objective:** Move from "it runs" to "it runs like production".
+**Objective:** Move from "it runs" to "it runs like production" — on the **final** app
+(ADR-0008).
 
-**Estimated duration:** ~6–8 sessions
+**Estimated duration:** 5–7 sessions
 
-- [ ] Nginx reverse proxy (understand why the app is not exposed directly)
-- [ ] HTTPS with Let's Encrypt (why HTTPS is non-negotiable)
-- [ ] Environment variables and secrets management
-- [ ] Persistence: named volumes, bind mounts (understand ephemerality)
-- [ ] Logs: container logs, Nginx logs, log rotation
-- [ ] Backups: strategy + **test a restore**
-- [ ] Monitoring: health checks, simple monitoring (e.g., Uptime Kuma or equivalent)
-- [ ] Split pipeline into CI + CD (deploy on push with rollback basics)
+**Stage document:** [`docs/stages/stage-13-hardening-https-backups.md`](docs/stages/stage-13-hardening-https-backups.md)
+
+- [ ] Nginx (or Caddy) reverse proxy: app bound to 127.0.0.1:8000; only 80/443 exposed
+- [ ] Domain: **free** hostname via DuckDNS / sslip.io / nip.io (zero-cost rule) +
+      Let's Encrypt certificate with auto-renewal; verify rating
+- [ ] Persistence: named volumes for MySQL; container log rotation limits
+      (`json-file` max-size/max-file)
+- [ ] Secrets: `.env` chmod 600; document token scopes + rotation (ADR-0013)
+- [ ] Backups: daily `mysqldump` (container/cron) + off-site copy to a **free** target
+      (Cloudflare R2 free 10 GB / Google Drive 15 GB via rclone); **restore drill with
+      evidence**
+- [ ] Watchtower stays a local CD simulation only; production redeploys are
+      pipeline-driven (ADR-0013)
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
 
 ---
 
-## Phase 13 — FastAPI Full Stack & Evolving the App
+## Phase 14 — Observability & Alerting (ADR-0011)
 
-**Objective:** Turn the toy app into a real service with a database — the kind of app a DevOps engineer actually deploys.
+**Objective:** Prove the system is watched: metrics, dashboards, and a real alert that
+reaches the student's phone.
 
-**Estimated duration:** ~4–6 sessions
+**Estimated duration:** 4–5 sessions
 
-- [ ] Integrate FastAPI into the repository
-- [ ] Add a health endpoint (for monitoring)
-- [ ] PostgreSQL service (why the DB is separate, why it persists)
-- [ ] Compose grows: app + database (+ optional Redis)
-- [ ] Migrations and initialization
-- [ ] Environment-based configuration (dev vs prod)
-- [ ] Full pipeline: build → test → push → deploy the evolved app
+**Stage document:** [`docs/stages/stage-14-observability-alerting.md`](docs/stages/stage-14-observability-alerting.md)
+
+- [ ] Uptime Kuma: checks on `/health` every 60 s; public status page
+- [ ] cAdvisor + Prometheus + Alertmanager (containers, ARM images verified per ADR-0010)
+- [ ] Grafana dashboards (node + containers) — versioned in `monitoring/`
+- [ ] Alerts → **Telegram bot** (free API): app down, disk > 80 %, CPU > 90 %,
+      container restart loop
+- [ ] **Alert drill:** stop the app → alert arrives on the phone → evidence logged
+- [ ] Log strategy documented (where to look for what); Loki deferred (ADR-0011)
+- [ ] Dashboard + alert screenshots as portfolio evidence
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
 
 ---
 
-## Phase 14 — Final Portfolio & Interview Defense
+## Phase 15 — Portfolio & Interview (ADR-0014)
 
-**Objective:** Turn the work into a story you can defend in an interview.
+**Objective:** Turn the work into a public, curated, demo-able story a stranger can
+understand in 5 minutes — and that the student can defend.
 
 **Estimated duration:** 2–3 sessions
 
-- [ ] Final architecture diagram (user → Nginx → app → DB)
-- [ ] Final README polish
-- [ ] Walk through the repository as an interviewer would
-- [ ] Rehearse "why" for every major decision (use the ADRs)
-- [ ] Prepare answers for the most common DevOps Junior questions
-- [ ] Record the final portfolio review
+**Stage document:** [`docs/stages/stage-15-portfolio-packaging.md`](docs/stages/stage-15-portfolio-packaging.md)
+
+- [ ] **Public README v2:** one-liner, mermaid architecture diagram, stack, quickstart,
+      operations (deploy/rollback/backup/monitoring), demo link, CI badges
+- [ ] `LICENSE` (MIT), `CHANGELOG.md`, git tags + GitHub Releases (semantic versions)
+- [ ] **Curation (ADR-0014):** move internal AI docs out of the public repo; remove
+      `nuevo.py`; rename repo to `ci-cd-pipeline-labs`; resolve the GitLab public/private
+      decision
+- [ ] Real evidence: screenshots/GIF/video (pipeline green, registries, `terraform
+      plan`, HTTPS, dashboards, alert received, restore drill)
+- [ ] Final architecture diagram + 5-minute walkthrough video
+- [ ] Interview rehearsal: every ADR question + learning-roadmap competencies
+- [ ] Optional stretch: k3s mini-lab (conceptual only per spec)
+- [ ] Final portfolio review with the mentor (rival pass)
 
 **Status:** ⬜ Pending
 
 ---
 
-## Timeline (5 sessions/week, ~2 h each + weekly consolidation)
+## Priority Action List (audit 2026-10-29)
 
-| Phase | When | Sessions |
+The audit's 15 actions, mapped to their phase. Each closes one documented finding
+(C1–C12) and has an acceptance criterion.
+
+| # | Action | Phase | Acceptance criterion |
+|---|---|---|---|
+| 1 | Multi-arch builds (buildx amd64+arm64) | 10 | `docker manifest inspect` shows both platforms (C1) |
+| 2 | Gate docker job to push/tags; `:latest` only from releases | 10 | A PR publishes nothing (C2) |
+| 3 | `pyproject.toml` with Black/Flake8/Ruff/MyPy coherent (88) | 10 | All four green with the same config (C4) |
+| 4 | `requirements-dev.txt` pinned + pip-audit | 10 | Reproducible CI; fails on new CVE (C5) |
+| 5 | FastAPI + `/health` + API tests + smoke test job | 10 | CI runs the image and curls 200 (C3, C9) |
+| 6 | Terraform + cloud-init for the VPS | 9 | `terraform apply` creates the server from zero |
+| 7 | Ansible playbook (idempotent bootstrap) | 11 | Two consecutive runs change nothing |
+| 8 | CD over SSH: immutable tag + healthcheck + rollback | 12 | Rollback to previous tag in < 1 min, drilled |
+| 9 | Nginx + free domain + HTTPS (auto-renew) | 13 | `curl https://…` valid certificate |
+| 10 | Backups + restore drill | 13 | DB restored on a clean environment, evidenced |
+| 11 | Observability + Telegram alert drill | 14 | Killing the app triggers a phone alert |
+| 12 | Trivy + Dependabot + gitleaks + pre-commit | 10 | PR with CVE/secret fails (C11) |
+| 13 | Public README v2 + diagram + demo + LICENSE + tags | 15 | A stranger runs the project in 5 min (C6) |
+| 14 | Curation: internal docs out of public repo; remove `nuevo.py`; rename repo | 15 | Public repo reads like a product (C8, C12) |
+| 15 | Secrets scopes/rotation documented; memory↔repo drift closed | 10/12 | Repo is the single source of truth (C7, C11) |
+
+---
+
+## Timeline (route v2 — 5 sessions/week, ~2 h each + weekly consolidation)
+
+| Phase | Topic (route v2) | Sessions |
 |---|---|---|
-| 0 Planning | 2026-08 (week 0) | 1 |
-| 1 Application Dev | ✅ prior work | — |
-| 2 Code Quality | ✅ prior work | — |
-| 3 Version Control | ✅ prior work | — |
-| 4 CI/CD Pipelines | ✅ prior work | — |
-| 5 Containerization | ✅ prior work | — |
-| 6 Registries | ✅ prior work | — |
-| 7 Orchestration & CD Sim | ✅ prior work | — |
-| 8 SSH & Remote Access | Weeks 1–2 | 1–2 |
-| 9 VPS Provisioning | Week 1 | 2–3 |
-| 10 Linux Administration | Weeks 1–2 | 6–8 |
-| 11 Deployment to Server | Week 2 | 2–3 |
-| 12 Production Hardening | Weeks 2–4 | 6–8 |
-| 13 FastAPI Full Stack | Weeks 4–6 | 4–6 |
-| 14 Portfolio & Interview | Weeks 6–7 | 2–3 |
+| 0–8 | Planning → SSH (completed) | ✅ prior work |
+| 9 | VPS Provisioning with Terraform + cloud-init | 3–4 |
+| 10 | FastAPI + MySQL evolution + CI/CD v2 | 5–7 |
+| 11 | Linux administration + Ansible | 5–7 |
+| 12 | Deployment: immutable tag, CD, rollback | 2–3 |
+| 13 | Hardening: Nginx, HTTPS, backups | 5–7 |
+| 14 | Observability & alerting | 4–5 |
+| 15 | Portfolio & interview | 2–3 |
 
-> Total remaining ~ 25–35 sessions ~ 5–7 weeks at 5 sessions/week. Cadence may be adjusted;
+> Total remaining ~ 26–36 sessions ~ 6–8 weeks at 5 sessions/week. Cadence may be adjusted;
 > understanding is the only fixed requirement. Do not compress by skipping review or
 > documentation.
 

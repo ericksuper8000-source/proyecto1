@@ -3,7 +3,7 @@
 > Turning a small Python application into a fully automated, containerized, multi-registry, production-deployed software delivery pipeline — stage by stage, publicly documented from day one.
 
 **Type:** Practical learning project + professional portfolio
-**Duration:** ~5–7 weeks remain (5 sessions/week, ~2 h each)
+**Duration:** ~6–8 weeks remain (route v2, 5 sessions/week, ~2 h each)
 **Language:** English (public documentation)
 
 ---
@@ -27,10 +27,19 @@ Then, stage by stage, the story unfolds:
 6. The same image is published to **three registries** — Docker Hub, GHCR, and GitLab
    Container Registry (Phase 6).
 7. **Docker Compose + Watchtower** simulate continuous deployment locally (Phase 7).
-8. Next: understanding **SSH**, then provisioning a **free VPS**, and finally deploying
-   the application to a real server with production practices (Phases 8–12).
-9. The application evolves into a **FastAPI service** with a database (Phase 13).
-10. The repository ends as a documented, interview-ready portfolio (Phase 14).
+8. Next: the application evolves into a **FastAPI service with MySQL 8 and a
+   `/health` endpoint** — *before* deployment, so the server phases are built once
+   (Phase 10, ADR-0008).
+9. The first real server is provisioned **from code** with **Terraform + cloud-init**
+   and configured with **Ansible** (Phases 9 & 11, ADR-0009), on a **zero-cost** VPS.
+10. The pipeline deploys with an **immutable tag over SSH**, with healthcheck and a
+    practiced **rollback** (Phase 12).
+11. The server is **hardened**: Nginx, HTTPS with a free hostname, persistence,
+    backups with a tested restore (Phase 13).
+12. The system is **observed**: Uptime Kuma, Prometheus, Grafana, and a real
+    Telegram alert that reaches the phone (Phase 14, ADR-0011).
+13. The repository ends as a curated, demo-able, interview-ready portfolio
+    (Phase 15, ADR-0014).
 
 Every step is documented with evidence, screenshots, and the reasoning behind each
 decision. This is not a tutorial; it is a complete engineering journey.
@@ -90,6 +99,9 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 
 ## Phase Map
 
+> **Route v2 (2026-10-29 audit):** phases 9–15 reordered and extended per
+> ADR-0008…0014 — see `docs/execution-plan.md` and the Priority Action List.
+
 | Phase | Topic | Status |
 |---|---|---|
 | 0 | Planning & Documentation Architecture | ✅ Complete |
@@ -101,12 +113,13 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 | 6 | Registries & Image Publishing | ✅ Complete |
 | 7 | Orchestration & CD Simulation | ✅ Complete |
 | 8 | SSH & Remote Connections | ✅ Complete |
-| 9 | VPS Provisioning (Oracle Cloud Always Free) | 🔄 Current |
-| 10 | Linux Server Administration | ⬜ Pending |
-| 11 | Deployment to the Server | ⬜ Pending |
-| 12 | Production Hardening & Observability | ⬜ Pending |
-| 13 | FastAPI Full Stack & Evolving the App | ⬜ Pending |
-| 14 | Final Portfolio & Interview Defense | ⬜ Pending |
+| 9 | VPS Provisioning with Terraform + cloud-init | 🔄 Current |
+| 10 | FastAPI + MySQL Evolution + CI/CD v2 | ⬜ Pending |
+| 11 | Linux Administration + Ansible | ⬜ Pending |
+| 12 | Deployment: immutable tag, CD, rollback | ⬜ Pending |
+| 13 | Hardening: Nginx, HTTPS, backups | ⬜ Pending |
+| 14 | Observability & Alerting | ⬜ Pending |
+| 15 | Portfolio & Interview Packaging | ⬜ Pending |
 
 > **Live status:** see [`docs/execution-plan.md`](docs/execution-plan.md) — the single
 > source of truth for what is done and what is next.
@@ -136,9 +149,9 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 
 ## First Steps
 
-1. Read [`docs/execution-plan.md`](docs/execution-plan.md) → **Current Status** (Phase 9 — VPS Provisioning, Stage 08 ✅ complete).
-2. Start **Stage 09 — VPS Provisioning** ([`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)) — Stage 08 is complete and validated.
-3. Continue through the remaining phases with the mentor.
+1. Read [`docs/execution-plan.md`](docs/execution-plan.md) → **Current Status** (Phase 9 — VPS Provisioning with Terraform, route v2).
+2. Read [`docs/adr/0009-iac-terraform-ansible.md`](docs/adr/0009-iac-terraform-ansible.md) → provider decision gate.
+3. Start **Stage 09 — Session 0** ([`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)).
 
 ---
 

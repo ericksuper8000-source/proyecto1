@@ -82,6 +82,9 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
   and reproducibility.
 - [ ] I can explain **`.gitignore` vs `.dockerignore` vs `.gitattributes`** — what each excludes, why `.venv/__pycache__/*.pem/.env` must not go to Git nor to image, and what breaks if they do.
 - [ ] I can explain **YAML** as a language (maps, lists, indentation, why a missing space breaks the pipeline) and why the runner reads it.
+- [ ] I can explain what **Trivy, Dependabot, gitleaks and pre-commit** each protect, and where each runs (image, dependencies, git history, local commits).
+- [ ] I can explain **multi-arch images** (amd64 vs arm64), why buildx + QEMU are needed, and what `exec format error` means.
+- [ ] I can explain why CI pins tool versions (`requirements-dev.txt`) and why an unpinned `pip install` is a time bomb.
 
 ---
 
@@ -133,7 +136,7 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 - [ ] I can read a `docker-compose.yml` and explain every field we use.
 - [ ] I can explain what Watchtower does and how it simulates CD.
 - [ ] I can explain why containers are ephemeral and what `restart: always` does.
-- [ ] I can explain why persistence will matter in production (Phase 12).
+- [ ] I can explain why persistence will matter in production (Phase 13).
 - [ ] I can explain **how each piece intervenes in the flow**: `docker build → image → registry → compose (decides) → engine (executes, pulls, creates) → Watchtower (recreates)` — and what breaks if one link disappears.
 - [ ] I can explain **Kubernetes conceptually**: what problem it solves when Compose is not enough (multi-host, scheduler, declarative state), how it compares to `docker compose up`, and why we do not install it (out of scope, reference only).
 
@@ -149,62 +152,84 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 9 — VPS Provisioning
+## Phase 9 — VPS Provisioning with Terraform + cloud-init
 
 - [ ] I can explain the difference between a local computer and a cloud VPS.
-- [ ] I can explain what an instance is and why Ubuntu was chosen.
-- [ ] I can explain the free-tier limits of the chosen provider and how to avoid costs (ADR-0005).
-- [ ] I can connect to the VPS over SSH and verify the basics.
+- [ ] I can explain what Terraform is for, what a provider/state/resource are, and what
+  `plan`, `apply` and `destroy` each do.
+- [ ] I can explain what cloud-init does at first boot and why the SSH key goes there.
+- [ ] I can explain the free-tier limits of the chosen provider and how to avoid costs
+  (ADR-0005/0009), including what a budget alert is.
+- [ ] I can recreate the server from zero with `terraform apply` and connect over SSH.
 
 ---
 
-## Phase 10 — Linux Server Administration
+## Phase 10 — FastAPI + MySQL Evolution
+
+- [ ] I can explain why the app evolves to FastAPI **before** deployment (ADR-0008).
+- [ ] I can write `GET /health` and explain why monitoring, Nginx and CD all need it.
+- [ ] I can explain why the database is a separate service with its own volume.
+- [ ] I can explain `requirements.txt` vs `requirements-dev.txt` and why CI pins versions.
+- [ ] I can explain what `pyproject.toml` configures and why Black (88) and Flake8 (79)
+  must be harmonized.
+- [ ] I can explain multi-arch builds and verify a manifest covers both platforms.
+- [ ] I can explain what a container smoke test proves that `docker build` does not.
+
+---
+
+## Phase 11 — Linux Server Administration + Ansible
 
 - [ ] I can update/upgrade the system and explain what `apt` does.
 - [ ] I can create users, groups, and permissions and explain why they exist.
 - [ ] I can navigate the filesystem and explain the purpose of `/etc`, `/var`, `/home`.
-- [ ] I can configure a firewall so only the needed ports are open.
+- [ ] I can configure a firewall so only the needed ports are open, plus fail2ban basics.
 - [ ] I can explain SSH hardening measures and apply them.
 - [ ] I can install Docker Engine and the Compose plugin and explain what each installs.
+- [ ] I can explain idempotency and prove it: two consecutive Ansible runs change nothing.
 
 ---
 
-## Phase 11 — Deployment to the Server
+## Phase 12 — Deployment, CD & Rollback
 
-- [ ] I can explain why we clone the project (compose file) instead of building on the server.
-- [ ] I can run `docker compose up -d` and explain what the server does (pull → create → start).
-- [ ] I can verify the application responds with `curl`.
-- [ ] I can explain how the application comes back after a reboot.
-- [ ] I can explain (if implemented) how a CD job deploys on push.
+- [ ] I can explain why the server clones the compose file instead of building images.
+- [ ] I can explain why production uses the immutable SHA tag and never `:latest`.
+- [ ] I can explain how the CD job deploys over SSH (scoped deploy key) and why it
+  checks `/health` after deploying.
+- [ ] I can explain the rollback strategy and demonstrate it (previous tag).
+- [ ] I can explain how the app + database come back after a server reboot.
 
 ---
 
-## Phase 12 — Production Hardening & Observability
+## Phase 13 — Production Hardening
 
-- [ ] I can explain why Nginx sits in front of the application.
-- [ ] I can explain why HTTPS is non-negotiable and how certificates are obtained.
+- [ ] I can explain why Nginx (or Caddy) sits in front of the application.
+- [ ] I can explain why HTTPS is non-negotiable, how certificates are obtained with a
+  free hostname (DuckDNS/sslip.io/nip.io), and how auto-renewal works.
 - [ ] I can explain volumes vs bind mounts and why the database needs persistence.
-- [ ] I can read container and Nginx logs to diagnose a failure.
-- [ ] I can explain the backup strategy and demonstrate a restore.
-- [ ] I can describe a basic rollback strategy and why it matters.
+- [ ] I can read container and Nginx logs to diagnose a failure, and why log rotation
+  limits exist.
+- [ ] I can explain the backup strategy (mysqldump + off-site free target) and
+  **demonstrate a restore**.
 
 ---
 
-## Phase 13 — FastAPI Full Stack
+## Phase 14 — Observability & Alerting
 
-- [ ] I can explain why the database is a separate service.
-- [ ] I can explain what a health check is and why monitoring needs one.
-- [ ] I can explain how environment variables make dev/prod configuration possible.
-- [ ] I can run the full stack and the full pipeline for the evolved app.
+- [ ] I can explain what Uptime Kuma, cAdvisor, Prometheus, Alertmanager and Grafana
+  each do, and how they differ (uptime vs metrics vs dashboards vs alerts).
+- [ ] I can explain how an alert flows from a failing `/health` to my Telegram.
+- [ ] I can demonstrate the alert drill: stop the app → alert arrives.
+- [ ] I can read a Grafana dashboard and say what each panel tells me.
 
 ---
 
-## Phase 14 — Final Project & Portfolio
+## Phase 15 — Portfolio & Interview
 
 - [ ] I can explain the final architecture end to end (user → Nginx → app → DB).
-- [ ] I can walk an interviewer through the repository, phase by phase.
-- [ ] I can justify every major decision using the ADRs.
+- [ ] I can walk an interviewer through the repository, phase by phase, in 5 minutes.
+- [ ] I can justify every major decision using the ADRs (0001–0014).
 - [ ] I can answer "Why did you do it this way?" for each component.
+- [ ] I can show a live demo: deploy, rollback, alert, restore.
 
 ---
 
@@ -221,9 +246,10 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 | 6 Registries | ✅ | ✅ | prior work |
 | 7 Orchestration & CD Sim | ✅ | ✅ | prior work |
 | 8 SSH & Remote Access | ✅ | ✅ | 2026-08-25 |
-| 9 VPS Provisioning | ⬜ | ⬜ | |
-| 10 Linux Administration | ⬜ | ⬜ | |
-| 11 Deployment to Server | ⬜ | ⬜ | |
-| 12 Production Hardening | ⬜ | ⬜ | |
-| 13 FastAPI Full Stack | ⬜ | ⬜ | |
-| 14 Portfolio & Interview | ⬜ | ⬜ | |
+| 9 VPS + Terraform | ⬜ | ⬜ | |
+| 10 FastAPI + MySQL | ⬜ | ⬜ | |
+| 11 Linux + Ansible | ⬜ | ⬜ | |
+| 12 Deployment & CD | ⬜ | ⬜ | |
+| 13 Hardening & Backups | ⬜ | ⬜ | |
+| 14 Observability | ⬜ | ⬜ | |
+| 15 Portfolio & Interview | ⬜ | ⬜ | |
