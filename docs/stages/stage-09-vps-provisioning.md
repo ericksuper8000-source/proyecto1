@@ -1,114 +1,106 @@
-# Stage 09 — VPS Provisioning (Oracle Cloud Always Free)
+# Stage 09 — VPS Provisioning with Terraform + cloud-init
 
-> **Phase:** Phase 9 — VPS Provisioning
-> **Estimated duration:** 2–3 sessions
+> **Phase:** Phase 9 — VPS Provisioning (route v2)
+> **Estimated duration:** 3–4 sessions
 > **Status:** ⬜ Pending
-> **Prerequisites:** Stage 08 complete (SSH mental model validated). This is the first
-> stage with **real, billable-or-free infrastructure** — the zero-cost rule applies
-> (ADR-0005).
+> **Prerequisites:** Stage 08 complete (SSH mental model). ADR-0009 (IaC), ADR-0005
+> (zero cost), ADR-0010 (multi-arch consequence).
+> **Changed by audit 2026-10-29:** the server is now created **from code** — no manual
+> console provisioning.
 
 ---
 
 ## Objective
 
-Provision the **first real server**: an Ubuntu instance on Oracle Cloud **Always Free**
-(no cost), connect to it over SSH, and verify it responds — while understanding each
-choice we make (why Oracle, why Ubuntu, what an "instance" really is, what the free-tier
-limits are).
+Provision the **first real server with Terraform + cloud-init** — reproducible,
+reviewable, free — and connect over SSH, understanding every choice (provider, shape,
+ARM vs x86, state, plan/apply).
 
 ## Scenario (real world)
 
-The company just gave you a cloud account and said: *"spin up the server we will deploy
-to."* You must choose the provider, the OS, the size, the network, and the access method —
-and you must do it **without generating a surprise bill**. This stage is where the
-delivery pipeline finally gets a home.
+The company gave you a cloud account and said: *"create the server we will deploy to —
+and do it in a way anyone on the team can review and recreate."* Clicking through a
+console is not an answer: the server must exist as code in Git.
 
 ## Concepts (why first)
 
-- **Cloud vs local.** Your Docker Desktop runs containers on your own PC. A VPS is a
-  virtual machine living in someone else's datacenter, reachable over the internet,
-  always on.
-- **Why Oracle Cloud Free Tier.** $0 is a hard requirement (ADR-0005). Oracle's "Always
-  Free" tier offers permanent VMs with usable resources. Free tiers from other providers
-  are time-bounded or resource-thin. **Re-verify availability at this stage** — free tiers
-  change.
-- **What an "instance" is.** Oracle provisions a VM inside their hypervisor. You choose
-  the *shape* (CPU/RAM/disk) within the Always Free limits (e.g., 4 OCPU ARM / 24 GB RAM
-  total, 200 GB block storage — exact limits are re-verified at this stage).
-- **Why Ubuntu.** Ubuntu is a Debian-based Linux distribution, hugely common in the
-  industry, with LTS releases and huge community support. Our Docker images already use
-  Debian-style bases, so the mental model transfers.
-- **The SSH key is the door.** Oracle generates a **key pair** for the instance. You keep
-  the private key (`.pem`/`.key`), Oracle keeps the public part inside the instance. This
-  is Stage 08 in action.
-- **First contact is read-only.** Log in and observe: who are you? what OS? what
-  resources? **Do not change anything yet.**
+- **Infrastructure as Code.** The server is a set of versioned files (`infra/`). Anyone
+  can see what exists, and recreate it with one command. The console becomes read-only.
+- **Terraform:** provider (talks to the cloud API), resources (VM, network, firewall),
+  state (remembers what it created), `plan` (shows changes), `apply` (makes them),
+  `destroy` (removes everything).
+- **cloud-init:** the industry-standard first-boot hook built into Ubuntu images. It
+  creates the user, installs the SSH public key, disables password login, and enables
+  unattended upgrades — before you ever log in.
+- **Why Oracle Always Free (ADR-0005/0009):** permanent free VMs (ARM A1.Flex: up to
+  4 OCPU / 24 GB RAM, 200 GB storage — re-verify live). ⚠️ Oracle requires a credit card
+  for **identity verification only**; nothing is charged if we stay inside Always Free.
+  **If a Hetzner VPS is already owned, prefer it** (no incremental cost, simpler
+  provider) — this is a Session 0 decision gate.
+- **ARM vs x86:** the free shape with real resources (A1.Flex) is **ARM64**. Our images
+  must be multi-arch (ADR-0010) or the server cannot run them (`exec format error`).
+- **The budget alert:** Oracle lets you configure a $0 threshold alert for free. It is
+  the guarantee that "nothing generates a bill" is watched, not just hoped for.
 
 ## Pre-flight
 
 - [ ] Stage 08 validated (you can explain SSH).
-- [ ] You have an email for a new Oracle Cloud account.
+- [ ] ADR-0009 read. Provider decision made (Oracle vs owned Hetzner) and logged.
+- [ ] A credit card available for Oracle identity verification (no charge) — or the
+      Hetzner path chosen.
+- [ ] Terraform CLI installed locally (free).
 - [ ] You understand the zero-cost rule: **nothing that can generate a bill** (ADR-0005).
-- [ ] You know your GitHub/GitLab identities (not needed here, but good context).
-
-> ⚠️ **Rule for this stage:** stay strictly inside the **Always Free** tier. If a screen
-> shows a price, stop and ask the mentor. Nothing gets created outside the free limits.
-
----
 
 ## Checklist
 
+### Session 0 — Decision gate & Terraform
+
+- [ ] Read ADR-0009 + ADR-0005; decide the provider; record the decision + reason
+- [ ] Install Terraform CLI; verify `terraform -version`
+- [ ] Explain: provider / state / resource / plan / apply / destroy (mentor check)
+
 ### Session 1 — Account & quotas
 
-- [ ] Create the Oracle Cloud account (Always Free / Free Tier option)
-- [ ] Complete identity verification as Oracle requests it
-- [ ] Understand the difference between "Always Free" resources and "trial" credits
-- [ ] Explore the free-tier limits in the console and note them in the Report
-- [ ] Write down what would generate cost (so we can avoid it)
+- [ ] Create the cloud account (Oracle Always Free — or log into owned Hetzner)
+- [ ] Understand "Always Free" vs trial credits; record the live limits
+- [ ] Configure a **budget alert** (Oracle: $0 threshold; Hetzner: project spending
+      limit if available) — evidence screenshot
 
-### Session 2 — Provision the instance
+### Session 2 — The `infra/` module
 
-- [ ] Create the instance (Compute → Instances → Create)
-- [ ] Choose the **Always Free** eligible shape (record CPU/RAM)
-- [ ] Choose **Ubuntu** as the image
-- [ ] Generate (or upload) the SSH key pair and **download/save the private key securely**
-- [ ] Review network settings: default VCN, public IP, SSH (port 22) ingress
-- [ ] Launch and wait for "Running"
-- [ ] Note the public IP address in the Report
+- [ ] `infra/main.tf`: provider configuration
+- [ ] Network: VCN/subnet (Oracle) or network/firewall rules (Hetzner): ingress 22/80/443
+- [ ] Instance: Ubuntu LTS; shape per provider (A1.Flex ARM on Oracle)
+- [ ] **cloud-init** user-data: `ubuntu` user, `id_ed25519_vps.pub`, disable password
+      auth, unattended-upgrades, SSH key only
+- [ ] Outputs: public IP
+- [ ] `terraform plan` (review what will be created) → `terraform apply`
+- [ ] Server shows Running; note the public IP
 
-### Session 3 — First connection
+### Session 3 — First contact (read-only) + reproducibility drill
 
-- [ ] Fix the private key permissions (Linux/macOS: `chmod 600 key.pem`; Windows:
-      ensure the key is not world-readable — ask the mentor for the Git Bash/Windows way)
-- [ ] Connect: `ssh -i ~/.ssh/<key.pem> ubuntu@<ip>`
-- [ ] Verify the host key prompt appears on **first** connection (Stage 08!)
-- [ ] Observe (read-only):
-  - [ ] `whoami` / `id` — who are you on this machine?
-  - [ ] `cat /etc/os-release` — which Ubuntu version?
-  - [ ] `free -h`, `nproc`, `df -h` — what resources does the free tier give you?
-  - [ ] `ip a` — what is the machine's identity on the network?
-- [ ] Exit cleanly (`exit`) and reconnect once to confirm stability
+- [ ] `ssh mi-vps` works (alias in `~/.ssh/config`)
+- [ ] Observe: `whoami`, `cat /etc/os-release`, `free -h`, `nproc`, `df -h`, `ip a`
+- [ ] Reproducibility drill: `terraform destroy` → `terraform apply` (server is code)
+- [ ] Verify `unattended-upgrades` is active (cloud-init did its job)
 
 ### Close-out
 
 - [ ] Answer the Mentor Questions in the Report
-- [ ] Save evidence (screenshots) in `screenshots/stage-09/`
-- [ ] Write an ADR if we changed anything about the provider/OS decision
-- [ ] Session log entry appended
-- [ ] Execution plan Phase 9 checkboxes + Current Status updated
-- [ ] Memory folder synced to `C:\Repo2`, committed and pushed to GitHub + GitLab
+- [ ] Evidence in `screenshots/stage-09/` (plan/apply output, budget alert, ssh login)
+- [ ] Session log entry; execution-plan Phase 9 checkboxes + Current Status updated
+- [ ] Memory folder synced to `C:\Repo2`
 
 ---
 
 ## Mentor Questions
 
-1. Why did we choose Oracle Cloud Free Tier over the alternatives?
-2. What is an instance, really? What is the "shape" and why does it matter?
-3. Why Ubuntu instead of another distribution?
-4. Where does the private key live, and why must it never be shared or committed?
-5. What does the "authenticity of host can't be established" warning mean now?
-6. What resources does the free tier give you (from `free -h`, `nproc`, `df -h`)?
-7. How can we guarantee this server never generates a bill?
+1. Why Terraform instead of clicking the console?
+2. What does `terraform state` remember, and why is it stored?
+3. What does cloud-init do before you ever log in?
+4. Why did we choose this provider under the zero-cost rule? What would generate a bill?
+5. Why does the ARM shape force multi-arch images (ADR-0010)?
+6. What proves that our server is "code" and not a manual artifact?
 
 ---
 
@@ -118,19 +110,16 @@ delivery pipeline finally gets a home.
 
 ### How it works / why
 
-(Your answers to the Mentor Questions.)
-
 ### Commands I used
 
 | Command | Why I used it |
 |---|---|
-| `ssh -i ~/.ssh/<key.pem> ubuntu@<ip>` | First connection to the instance |
-| `cat /etc/os-release` | Verify the OS version |
-| `free -h` | Check available RAM |
-| `nproc` | Check CPU count |
-| `df -h` | Check disk |
-| `ip a` | Inspect network identity |
-| … | … |
+| `terraform init` | Download the provider plugin |
+| `terraform plan` | Preview changes before applying |
+| `terraform apply` | Create the real infrastructure |
+| `terraform destroy` | Prove the server is disposable code |
+| `ssh mi-vps` | First real connection (Stage 08 in action) |
+| `free -h` / `nproc` / `df -h` | Observe the free-tier resources |
 
 ### Problems encountered
 
@@ -140,17 +129,17 @@ delivery pipeline finally gets a home.
 
 ### Lessons learned / self-explanation
 
-> Write 5–10 sentences explaining what a VPS is now that you have one, and why "first
-> contact read-only" matters.
+> 5–10 sentences: what a VPS is now that you have one *created from code*, and why the
+> reproducibility drill matters.
 
 ### Evidence
 
-- [ ] Screenshots saved in `screenshots/stage-09/` (e.g., `01-instance-created.png`, `02-ssh-first-connect.png`, `03-os-resources.png`)
-- [ ] Only Always Free resources created (verify: nothing outside free tier)
-- [ ] Private key stored securely, **not** committed anywhere
-- [ ] Session log entry appended
-- [ ] Execution plan updated
-- [ ] Memory folder synced to `C:\Repo2`, committed and pushed to GitHub + GitLab
+- [ ] `terraform plan/apply/destroy` outputs saved
+- [ ] Budget alert configured (screenshot)
+- [ ] SSH first connection screenshot
+- [ ] Private key stored securely, **not** committed
+- [ ] Session log + execution plan updated
+- [ ] Memory folder synced to `C:\Repo2`
 
-> 🚀 **Next:** Stage 10 — Linux Server Administration: update/upgrade, users, permissions,
-> firewall, SSH hardening, and installing Docker Engine + Compose on the VPS.
+> 🚀 **Next:** Stage 10 — FastAPI + MySQL Evolution (the app becomes a real service
+> *before* any deployment work — ADR-0008).

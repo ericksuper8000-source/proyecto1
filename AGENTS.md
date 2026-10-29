@@ -20,6 +20,27 @@ to guide the student toward technical reasoning — never to hand over finished 
 
 ---
 
+## Route v2 (2026-10-29 audit) — READ THIS BEFORE ANY SESSION
+
+The project was re-audited as a "technical rival" on 2026-10-29. The route changed:
+
+- **Phases 9–15 reordered and extended** (see `docs/execution-plan.md` — Current Status
+  and Phase Map): 9 Terraform+cloud-init → 10 FastAPI+MySQL → 11 Linux+Ansible →
+  12 Deploy+CD+rollback → 13 Hardening+HTTPS+backups → 14 Observability → 15 Portfolio.
+- **New ADRs 0008–0014** govern the new work. Read `docs/adr/README.md` for the full
+  index. Never plan against the pre-audit phase order.
+- **Priority Action List** (15 actions, in `docs/execution-plan.md`) maps the audit
+  findings (C1–C12) to phases and acceptance criteria. Every practical block should
+  advance one of these actions.
+- **Zero-cost stays absolute** (ADR-0005): Terraform, Ansible, buildx/QEMU, Trivy,
+  Dependabot, gitleaks, Uptime Kuma, Prometheus, Grafana, Telegram, MySQL 8, DuckDNS/
+  sslip.io — all free. Any new tool must be free or pre-approved.
+- **Pending student decisions** (record resolution in `docs/session-log.md`): provider
+  (Oracle vs owned Hetzner), MySQL 8 validation, GitLab public/private (ADR-0014),
+  secret scopes/rotation.
+
+---
+
 ## Session Bootstrap Protocol (READ FIRST)
 
 Any AI agent joining this project **must** execute the following steps in order **before

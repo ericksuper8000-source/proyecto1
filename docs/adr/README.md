@@ -35,6 +35,13 @@ Do **not** write an ADR for routine tasks ("installed a text editor").
 | 0005 | Accepted | [Zero-cost cloud strategy](0005-zero-cost-cloud-strategy.md) |
 | 0006 | Accepted | [English public documentation](0006-english-documentation.md) |
 | 0007 | Accepted | [Single image publisher (GitHub Actions), validation-only GitLab CI](0007-single-image-publisher.md) |
+| 0008 | Accepted | [FastAPI + database BEFORE deployment (phase reordering)](0008-fastapi-before-deployment.md) |
+| 0009 | Accepted | [Infrastructure as Code: Terraform + cloud-init, Ansible for bootstrap](0009-iac-terraform-ansible.md) |
+| 0010 | Accepted | [Multi-architecture images (amd64 + arm64)](0010-multi-arch-images.md) |
+| 0011 | Accepted | [Observability & alerting stack (zero-cost, self-hosted)](0011-observability-alerting.md) |
+| 0012 | Accepted | [Database: MySQL 8](0012-database-mysql8.md) |
+| 0013 | Accepted | [CI/CD v2: hardening, release strategy, supply-chain checks](0013-cicd-v2-hardening-release.md) |
+| 0014 | Accepted | [Public repository curation (portfolio presentation)](0014-public-repo-curation.md) |
 
 ## Naming & workflow
 

@@ -11,10 +11,17 @@
 | Stage | Title | Phase | Status |
 |---|---|---|---|
 | 08 | [SSH & Remote Connections](stage-08-ssh-remote-connection.md) | 8 | ✅ Complete (2026-08-25) |
-| 09 | [VPS Provisioning](stage-09-vps-provisioning.md) | 9 | ⬜ Pending — Current |
+| 09 | [VPS Provisioning with Terraform + cloud-init](stage-09-vps-provisioning.md) | 9 | ⬜ Pending — Current (route v2) |
+| 10 | [FastAPI + MySQL Evolution](stage-10-fastapi-mysql-evolution.md) | 10 | ⬜ Pending (route v2) |
+| 11 | [Linux Administration + Ansible](stage-11-linux-admin-ansible.md) | 11 | ⬜ Pending (route v2) |
+| 12 | [Deployment: immutable tag, CD, rollback](stage-12-deployment-cd-rollback.md) | 12 | ⬜ Pending (route v2) |
+| 13 | [Hardening: Nginx, HTTPS, backups](stage-13-hardening-https-backups.md) | 13 | ⬜ Pending (route v2) |
+| 14 | [Observability & Alerting](stage-14-observability-alerting.md) | 14 | ⬜ Pending (route v2) |
+| 15 | [Portfolio & Interview Packaging](stage-15-portfolio-packaging.md) | 15 | ⬜ Pending (route v2) |
 
-> More stages are created progressively — each one is written in detail only when we reach
-> its phase (see `docs/execution-plan.md` for the full roadmap).
+> **Route v2 (2026-10-29 audit):** stages 09–15 were reordered and redefined by the
+> audit (ADR-0008…0014). Each stage document exists in detail **now** so the route is
+> always clear; they are refined when each stage is reached.
 
 ---
 

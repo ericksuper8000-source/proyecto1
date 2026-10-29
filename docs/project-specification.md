@@ -27,9 +27,11 @@ Everything is built publicly as professional evidence of learning.
 ## 2. Main Objective
 
 Build, step by step, a real software delivery pipeline that starts as a small Python
-application and evolves into a containerized application that is automatically tested,
-built, published to three registries, and deployed to a free VPS — documented end to end
-with good engineering practices.
+application and evolves into a **FastAPI + MySQL service** that is automatically tested,
+built (multi-arch), published to three registries, and deployed to a free VPS
+**provisioned with Terraform and configured with Ansible** — then hardened (Nginx,
+HTTPS, backups) and **observed** (monitoring, dashboards, alerts) — all documented end
+to end with good engineering practices.
 
 The student must understand each component **before** automating it.
 
@@ -39,22 +41,31 @@ The student must understand each component **before** automating it.
 
 Included:
 
-- Python application development (and later FastAPI)
-- Code quality: Ruff, Flake8, Black, MyPy
-- Automated testing with Pytest
-- Git, GitHub, and GitLab (mirrored repositories)
-- CI/CD with GitHub Actions and GitLab CI
-- Docker, Docker images, and Docker Compose
+- Python application development (and **FastAPI**, moved before deployment — ADR-0008)
+- Code quality: Ruff, Flake8, Black, MyPy (harmonized in `pyproject.toml`, ADR-0013)
+- Automated testing with Pytest (unit + API tests + coverage)
+- Supply-chain checks: Bandit, pip-audit, Trivy, Dependabot, gitleaks, pre-commit
+- Git, GitHub, and GitLab (mirrored repositories; public curation per ADR-0014)
+- CI/CD with GitHub Actions and GitLab CI (CI/CD v2 rules, ADR-0013)
+- Docker, multi-arch images (amd64+arm64, ADR-0010), and Docker Compose
 - Container registries: Docker Hub, GHCR, GitLab Container Registry
-- Continuous Deployment simulation (Watchtower)
+- Continuous Deployment simulation (Watchtower, local only)
 - SSH and remote administration
-- VPS provisioning (Oracle Cloud Always Free) and Linux administration
-- Production practices: Nginx, HTTPS, environment variables, volumes, logs, backups, monitoring
+- **Infrastructure as Code: Terraform + cloud-init (ADR-0009)**
+- **Configuration management: Ansible bootstrap playbook (ADR-0009)**
+- VPS provisioning (Oracle Always Free or owned Hetzner) and Linux administration
+- **Database: MySQL 8 (ADR-0012)**
+- Production practices: Nginx, HTTPS (free domain), environment variables, volumes,
+  logs, backups + restore drill
+- **Observability: Uptime Kuma, cAdvisor, Prometheus, Grafana, Telegram alerts (ADR-0011)**
+- Deployment with immutable tags, CD over SSH, and rollback (ADR-0013)
+- Public portfolio packaging: README v2, demo, LICENSE, releases (ADR-0014)
 
 Explicitly out of scope:
 
 - Large-enterprise infrastructure, high availability, complex clusters
-- Kubernetes (only referenced, never a goal)
+- Kubernetes (only referenced conceptually, never a goal)
+- Paid services of any kind (zero-cost rule, ADR-0005)
 
 ---
 
@@ -101,15 +112,15 @@ The project already completed Phases 1–7 (application, quality, version contro
 containerization, registries, orchestration/CD simulation). See
 [`execution-plan.md`](execution-plan.md) for the verified state of each phase.
 
-What remains to be built from here:
+What remains to be built from here (route v2, 2026-10-29):
 
-- SSH understanding and real remote connections
-- A free VPS (Oracle Cloud Always Free)
-- Linux administration on the server
-- Docker Engine + Compose on the server
-- Deployment through the pipeline (`git clone` → `docker compose up`)
-- Production hardening, Nginx, HTTPS, persistence, logs, backups, monitoring
-- FastAPI full-stack evolution
+- A VPS provisioned **from code** (Terraform + cloud-init)
+- The FastAPI + MySQL 8 evolution of the application (before deployment)
+- Linux administration + Ansible bootstrap
+- Deployment through the pipeline (immutable tag → CD over SSH → healthcheck → rollback)
+- Production hardening: Nginx, HTTPS, persistence, logs, backups + restore drill
+- Observability: Uptime Kuma, metrics, dashboards, Telegram alerts
+- Public portfolio packaging: README v2, demo, LICENSE, releases
 
 ---
 
@@ -124,10 +135,16 @@ Current infrastructure:
 - Repositories on GitHub (`proyecto1`) and GitLab (`repo2`), mirrored
 - Three container registries (Docker Hub, GHCR, GitLab Container Registry)
 
-Future infrastructure:
+Future infrastructure (all free — ADR-0005):
 
-- Free VPS (e.g., Oracle Cloud Always Free or an equivalent available at that time)
-- Nginx, Let's Encrypt, and optional database/monitoring services
+- Free VPS (Oracle Cloud Always Free, or an owned Hetzner server) provisioned with
+  Terraform + cloud-init
+- Ansible for server bootstrap
+- MySQL 8 as the database service
+- Nginx + Let's Encrypt with a free hostname (DuckDNS / sslip.io / nip.io)
+- Monitoring stack: Uptime Kuma, cAdvisor, Prometheus, Grafana, Alertmanager
+- Telegram bot API for alerts
+- Free off-site backup target (Cloudflare R2 free 10 GB / Google Drive 15 GB)
 
 ### Zero-cost principle
 
@@ -162,7 +179,7 @@ Knowledge is built in layers, and each layer depends on full understanding of th
 previous one:
 
 ```
-Developer / Code
+Developer / Code (FastAPI + MySQL)
   ↓
 Version Control (Git)
   ↓
@@ -170,17 +187,21 @@ Quality & Testing
   ↓
 CI/CD Pipeline (GitHub Actions + GitLab CI)
   ↓
-Docker Images
+Multi-arch Docker Images
   ↓
 Registries
   ↓
 SSH / Remote Access
   ↓
-VPS (Linux)
+VPS via Terraform + cloud-init (IaC)
   ↓
-Deployment (Docker Engine + Compose)
+Bootstrap via Ansible
+  ↓
+Deployment (immutable tag, CD, rollback)
   ↓
 Production Hardening (Nginx, HTTPS, Volumes, Logs, Backups)
+  ↓
+Observability (Uptime Kuma, Prometheus, Grafana, Alerts)
 ```
 
 ---
@@ -197,13 +218,14 @@ Production Hardening (Nginx, HTTPS, Volumes, Logs, Backups)
 | 5 | Containerization | Dockerfile, build, images | ✅ |
 | 6 | Registries | Docker Hub, GHCR, GitLab Registry | ✅ |
 | 7 | Orchestration & CD Sim | Docker Compose + Watchtower | ✅ |
-| 8 | SSH & Remote Access | Understand and use SSH | ✅ Complete (2026-08-25) |
-| 9 | VPS Provisioning | Oracle Cloud Always Free, Ubuntu | 🔄 Current |
-| 10 | Linux Administration | Users, permissions, filesystem, packages, firewall | ⬜ |
-| 11 | Deployment to Server | Docker Engine, Compose, git clone, compose up | ⬜ |
-| 12 | Production Hardening | Nginx, HTTPS, env, volumes, logs, backups, monitoring | ⬜ |
-| 13 | FastAPI Full Stack | FastAPI, PostgreSQL, health checks | ⬜ |
-| 14 | Portfolio & Interview | Architecture docs, interview defense | ⬜ |
+| 8 | SSH & Remote Access | Understand and use SSH | ✅ |
+| 9 | VPS Provisioning (IaC) | Terraform + cloud-init, Oracle Free/Hetzner | 🔄 Current |
+| 10 | FastAPI + MySQL Evolution | Real service + DB + CI/CD v2 + multi-arch | ⬜ |
+| 11 | Linux Admin + Ansible | Users, firewall, Docker, idempotent playbook | ⬜ |
+| 12 | Deployment | Immutable tag, CD over SSH, rollback | ⬜ |
+| 13 | Production Hardening | Nginx, HTTPS, persistence, backups + restore | ⬜ |
+| 14 | Observability & Alerting | Uptime Kuma, metrics, Grafana, Telegram alerts | ⬜ |
+| 15 | Portfolio & Interview | Public README v2, demo, LICENSE, curation | ⬜ |
 
 > Detailed checklists and current status: [`execution-plan.md`](execution-plan.md)
 
@@ -213,14 +235,18 @@ Production Hardening (Nginx, HTTPS, Volumes, Logs, Backups)
 
 By the end of the project, the student can:
 
-- Explain the full delivery lifecycle: code → test → build → publish → deploy
+- Explain the full delivery lifecycle: code → test → build → publish → deploy → observe
 - Write and justify CI/CD pipelines on GitHub Actions and GitLab CI
-- Build, publish, and pull Docker images across multiple registries
-- Operate Docker Compose stacks
+- Build, publish, and pull multi-arch Docker images across multiple registries
+- Operate Docker Compose stacks (app + database)
+- Provision a server from code with Terraform + cloud-init
+- Bootstrap a server idempotently with Ansible
 - Connect to and administer a Linux VPS over SSH
-- Deploy an application to a server and keep it running
+- Deploy an application with an immutable tag, healthcheck, and rollback
+- Harden a server: reverse proxy, HTTPS, firewall, backups with tested restore
+- Monitor the system and receive real alerts
 - Diagnose pipeline and server failures
-- Explain every technical decision made
+- Present and defend the project with a public demo and the ADRs
 
 ---
 
@@ -262,11 +288,14 @@ technical implementation.
 The project is successful when there is evidence that the student can:
 
 - Operate a software delivery pipeline with judgment
-- Justify every pipeline and infrastructure decision
+- Justify every pipeline and infrastructure decision (ADRs)
+- Provision infrastructure from code (Terraform) and configure it reproducibly (Ansible)
 - Diagnose problems in CI/CD and on a live server
 - Document professionally
-- Deploy a containerized application to a free VPS through CI/CD
-- Defend the whole project in a technical interview
+- Deploy a containerized application to a free VPS through CI/CD, with rollback
+- Restore a database from backup (practiced drill)
+- Receive a real alert when the system fails
+- Present a curated public repository with a live demo
 
 The result must constitute a portfolio that shows the full evolution of learning and lets
 an interviewer understand the technical level reached.

@@ -79,6 +79,47 @@ the canonical concept explanations; Session 07 for the v4 process definition.
 
 ---
 
+## 2026-10-29 — Audit session (technical rival review — route v2, documentation only)
+
+**Phase / Stage:** All — full audit of `C:\Repo2` (HEAD `86ca138`) and the memory folder.
+No code changed, no commit/push (sync-only rule).
+
+**What happened:**
+- Full technical audit as "rival técnico" (critical review, not mentor mode). Verdict:
+  **4.5/10** as a junior portfolio today; **8.5/10** when route v2 is completed.
+- Findings C1–C12 recorded (multi-arch ARM blocker, PR publishing `:latest`, toy app
+  deployed too late, Flake8/Black conflict, unpinned CI tools, public README not ready,
+  memory↔repo drift, docs contradicting code, no smoke test, CI hygiene, security gaps,
+  noise files).
+- **Route v2 defined** (this is the core of the session):
+  - Phases reordered: 9 Terraform+cloud-init → 10 FastAPI+MySQL → 11 Linux+Ansible →
+    12 Deploy+CD+rollback → 13 Hardening+HTTPS+backups → 14 Observability → 15 Portfolio.
+  - New ADRs **0008–0014** (reorder, IaC, multi-arch, observability, MySQL 8, CI/CD v2,
+    public curation).
+  - Priority Action List (15 actions) added to `execution-plan.md`.
+- **Drift fixed:** memory `requirements.txt` → `pytest==9.0.3` (matches repo);
+  `.dockerignore` normalized; memory and `C:\Repo2` docs synced (uncommitted).
+
+**Decisions taken by the mentor (student validates next session):**
+1. Provider: Oracle Always Free by default (card for verification, no charge); owned
+   Hetzner preferred if it exists (ADR-0009).
+2. Database: MySQL 8 (ADR-0012) — replaces the old PostgreSQL references.
+3. GitLab mirror: currently private; make public curated or drop the "public mirror"
+   claim (ADR-0014).
+4. CI/CD v2 rules: PR gating, pinned tools, smoke test, Trivy/Dependabot/gitleaks,
+   immutable tags + rollback (ADR-0013).
+
+**Pending for next session:**
+- Read ADR-0009 → provider decision → Stage 09 Session 0 (install Terraform, first
+  `plan`).
+- Student validates MySQL 8 and the GitLab decision.
+
+**Question bank update:** none (no concept review this session).
+
+**Commit / push:** none (documentation-only; sync to `C:\Repo2` done, uncommitted).
+
+---
+
 ## 2026-10-21 — Session 07 (Process definition — daily session model v4)
 
 **Phase / Stage:** Phase 9 — VPS Provisioning · Stage 09 — Pending (documentation only)
@@ -107,7 +148,9 @@ reviewed, no practical work, no Stage 09 checkboxes marked.
 4. **Documentation:** stage report, session-log, execution-plan, ADR if needed, evidence,
    tomorrow's review queue and exact next objective. Sync memory ↔ `C:\Repo2`.
 5. **Close:** student explains one thing and names one doubt; unresolved items go first next day.
-6. **Commit/push only on explicit request.** Current preference remains sync-only.
+6. **Commit/push only on explicit request.** Default remains sync-only. At the close of
+   this session the student explicitly requested a commit and push, so `86ca138` was sent
+   to both remotes from `develop`.
 
 **Why not all 18 concepts daily:** the 18/18 pass was a one-time baseline. Repeating it would
 consume 2.5–3 h, leave no practice time, and turn the session into a lecture. Retrieval works
@@ -117,9 +160,9 @@ better with spaced rotation plus deliberate return of fragile items.
 v4 reuses those explanations instead of inventing new ones.
 
 **Files updated:** `AGENTS.md`, `INSTRUCCIONES SESION DIARIA - IA.txt`,
-`docs/execution-plan.md`, `docs/session-log.md`, `README.md`.
+`docs/execution-plan.md`, `docs/environment.md`, `docs/session-log.md`, `README.md`.
 
-**Evidence:** documentation diff; no code or infrastructure changes.
+**Evidence:** documentation diff; no code or infrastructure changes except documentation.
 
 **Questions still open:** none about the model. Pending decision: evaluate Block F before
 Stage 09, or begin Stage 09 directly.
@@ -131,7 +174,8 @@ Stage 09, or begin Stage 09 directly.
 
 **Question bank update:** no new technical questions; process questions defined for review.
 
-**Commit / push:** none (sync-only preference).
+**Commit / push:** `86ca138 docs: complete concept review and v4 session model` — from
+`develop` to GitHub and GitLab; both remote `master` refs contain it. Working tree clean.
 
 ---
 
