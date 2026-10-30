@@ -51,7 +51,7 @@ missing permissions/cache/timeouts (C10); no image scanning or secret scanning (
 
 ## Consequences
 
-- Phase 10 implements items 1–5 alongside the FastAPI evolution; Phase 12 implements 6.
+- Phase 9 implements items 1–5 alongside the Deploy Journal product; Phase 12 implements 6.
 - `:latest` becomes a release-only pointer; local CD simulation (Watchtower, ADR-0004)
   stays local-only.
 - Git tags + GitHub Releases become part of the workflow (semantic versions `v0.x.0`).

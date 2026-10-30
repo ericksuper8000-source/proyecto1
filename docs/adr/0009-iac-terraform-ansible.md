@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2026-10-29
-**Context:** Audit 2026-10-29 — Phase 9 (VPS provisioning) is redefined from "manual Oracle console clicks" to infrastructure-as-code. Builds on ADR-0005 (zero cost).
+**Context:** Audit 2026-10-29 — Phase 10 (VPS provisioning) is redefined from "manual Oracle console clicks" to infrastructure-as-code. Builds on ADR-0005 (zero cost). Renumbered by ADR-0016 (v2.1: product first, then infrastructure).
 
 ---
 
@@ -46,8 +46,9 @@ Junior. The zero-cost rule (ADR-0005) stays absolute.
 
 - New repo structure: `infra/` (Terraform HCL files) + `ansible/` (playbook) added in
   Phase 9/11.
-- Provider decision is a **documented gate** at the start of Stage 09 (Oracle needs card
-  verification but no charge; Hetzner only if already owned).
+- Provider decision is a **documented gate** at the start of Stage 10 (Oracle needs card
+  verification but no charge; Hetzner only if already owned). The server is sized from
+  the product's known stack (ADR-0015/0016): app + MySQL + Nginx + monitoring.
 - Oracle ARM A1 shape forces multi-arch images → ADR-0010.
 - New competencies: HCL, state files, providers, plan/apply lifecycle, idempotency.
 

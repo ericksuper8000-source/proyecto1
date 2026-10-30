@@ -152,28 +152,36 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 9 — VPS Provisioning with Terraform + cloud-init
+## Phase 9 — Deploy Journal: Product, FastAPI & MySQL (product-first)
 
-- [ ] I can explain the difference between a local computer and a cloud VPS.
-- [ ] I can explain what Terraform is for, what a provider/state/resource are, and what
-  `plan`, `apply` and `destroy` each do.
-- [ ] I can explain what cloud-init does at first boot and why the SSH key goes there.
-- [ ] I can explain the free-tier limits of the chosen provider and how to avoid costs
-  (ADR-0005/0009), including what a budget alert is.
-- [ ] I can recreate the server from zero with `terraform apply` and connect over SSH.
-
----
-
-## Phase 10 — FastAPI + MySQL Evolution
-
+- [ ] I can explain the product (Deploy Journal) and why the pipeline derives from it
+  (ADR-0015/0016).
+- [ ] I can justify every stack choice from a product requirement (FastAPI, MySQL 8,
+  server-rendered page) and every tool from a risk it mitigates.
 - [ ] I can explain why the app evolves to FastAPI **before** deployment (ADR-0008).
-- [ ] I can write `GET /health` and explain why monitoring, Nginx and CD all need it.
-- [ ] I can explain why the database is a separate service with its own volume.
+- [ ] I can write `GET /health` (with a real DB check) and explain why monitoring,
+  Nginx and CD all need it.
+- [ ] I can explain the data model (`environments`, `deployments`) and why each
+  column/index exists.
 - [ ] I can explain `requirements.txt` vs `requirements-dev.txt` and why CI pins versions.
 - [ ] I can explain what `pyproject.toml` configures and why Black (88) and Flake8 (79)
   must be harmonized.
 - [ ] I can explain multi-arch builds and verify a manifest covers both platforms.
 - [ ] I can explain what a container smoke test proves that `docker build` does not.
+
+---
+
+## Phase 10 — VPS Provisioning with Terraform + cloud-init
+
+- [ ] I can explain the difference between a local computer and a cloud VPS.
+- [ ] I can explain what Terraform is for, what a provider/state/resource are, and what
+  `plan`, `apply` and `destroy` each do.
+- [ ] I can explain how the product's stack (app + DB + Nginx + monitoring) determines
+  the server size and the free-tier choice (ADR-0016).
+- [ ] I can explain what cloud-init does at first boot and why the SSH key goes there.
+- [ ] I can explain the free-tier limits of the chosen provider and how to avoid costs
+  (ADR-0005/0009), including what a budget alert is.
+- [ ] I can recreate the server from zero with `terraform apply` and connect over SSH.
 
 ---
 
@@ -246,8 +254,8 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 | 6 Registries | ✅ | ✅ | prior work |
 | 7 Orchestration & CD Sim | ✅ | ✅ | prior work |
 | 8 SSH & Remote Access | ✅ | ✅ | 2026-08-25 |
-| 9 VPS + Terraform | ⬜ | ⬜ | |
-| 10 FastAPI + MySQL | ⬜ | ⬜ | |
+| 9 Deploy Journal (product) | ⬜ | ⬜ | |
+| 10 VPS + Terraform | ⬜ | ⬜ | |
 | 11 Linux + Ansible | ⬜ | ⬜ | |
 | 12 Deployment & CD | ⬜ | ⬜ | |
 | 13 Hardening & Backups | ⬜ | ⬜ | |

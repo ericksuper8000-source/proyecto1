@@ -35,7 +35,7 @@ env vars, backups and interview answers would keep drifting.
 
 ## Consequences
 
-- Compose gains a `db` service (mysql:8) with a named volume in Phase 10 (dev) and
+- Compose gains a `db` service (mysql:8) with a named volume in Phase 9 (dev) and
   Phase 12 (server).
 - Env-based config: `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, port 3306 internal
   only.

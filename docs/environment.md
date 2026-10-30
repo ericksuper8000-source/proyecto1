@@ -4,13 +4,14 @@
 **Objective:** Document the local environment where the project lives, so every stage can
 assume a verified baseline instead of unknown state.
 
-**Last verified:** 2026-10-29 (audit session, documentation-only) — docs updated to
-route v2 (ADR-0008…0014) and synced between this folder and `C:\Repo2`. **No commit/push
-was made** (sync-only rule).
+**Last verified:** 2026-10-29 (audit + route v2.1, documentation-only) — docs updated to
+route v2.1 (ADR-0015/0016) and synced between this folder and `C:\Repo2`. **No commit
+made yet** for the v2.1 docs (sync-only rule).
 ✅ Drift fixed this day: memory `requirements.txt` now matches the repo
 (`pytest==9.0.3`); `.dockerignore` normalized to the repo version.
-✅ Repo state at `C:\Repo2`: HEAD `86ca138` on `develop`; working tree was clean at audit
-start (it now contains the route-v2 doc sync, **uncommitted**).
+✅ Repo state: route v2 docs committed as `ec181df` on `develop` (pushed to both remotes);
+`master` `ee5983e` (github) / `d13e8c4` (gitlab, content-identical). Route v2.1 docs are
+in the working tree, **uncommitted**.
 ⚠️ `nuevo.py` stays until Phase 15, where ADR-0014 removes it from the public repo.
 ⚠️ The GitLab repo is currently **private** — ADR-0014 pending decision (make public and
 curated, or stop calling it a public mirror).
@@ -33,10 +34,10 @@ curated, or stop calling it a public mirror).
 | Python 3.11 quality toolchain | flake8, black, ruff, mypy, bandit, pip-audit, pytest 9.0.3 (mirrors the CI jobs) |
 | Docker Desktop | Docker Engine + Compose + BuildKit on Windows |
 | Git Bash | Git CLI and command convenience |
-| Terraform CLI (planned, Phase 9) | Provision the VPS from code — free (ADR-0009) |
+| Terraform CLI (planned, Phase 10) | Provision the VPS from code — free (ADR-0009) |
 | Ansible (planned, Phase 11) | Reproducible server bootstrap — free (ADR-0009) |
-| Docker Buildx + QEMU (planned, Phase 10) | Multi-arch images amd64+arm64 — free (ADR-0010) |
-| Trivy / gitleaks / pre-commit (planned, Phase 10) | Image CVE scan / secret scan / local gate — free (ADR-0013) |
+| Docker Buildx + QEMU (planned, Phase 9) | Multi-arch images amd64+arm64 — free (ADR-0010) |
+| Trivy / gitleaks / pre-commit (planned, Phase 9) | Image CVE scan / secret scan / local gate — free (ADR-0013) |
 
 > Verify with: `git --version`, `python --version`, `docker --version`,
 > `docker compose version`.
