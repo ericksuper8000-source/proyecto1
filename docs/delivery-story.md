@@ -353,3 +353,9 @@ Reglas: orden exacta con máquina exacta; el lector ordena y el ejecutor ejecuta
   The delivery story for Phases 9–15 will be appended here **only when each stage is
   validated**, following the existing rule (never contaminate the story with
   unvalidated tech).
+- **v3.0 (2026-10-29):** Route v2.1 — product-first (ADR-0015/0016). The product
+  (Deploy Journal: FastAPI + MySQL 8 + `/health` + timeline) is defined first and built
+  in Phase 9; infrastructure follows in Phase 10 and is sized from it. New permanent
+  principle: **the pipeline revolves around the product** — every job/tool/resource must
+  trace to a product requirement or a named risk (traceability matrix in ADR-0016).
+  Story append rule unchanged: only validated stages are added.

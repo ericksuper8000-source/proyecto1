@@ -79,6 +79,46 @@ the canonical concept explanations; Session 07 for the v4 process definition.
 
 ---
 
+## 2026-10-29 — Route v2.1: product-first + Deploy Journal (documentation only)
+
+**Phase / Stage:** Route redefinition — no code changed.
+
+**Student principle (drives this session):** *"The pipeline is not defined by the
+technologies I want to use, but by the viability and functionality of the product; the
+stack defines dependencies and tools; the pipeline revolves around the product."*
+
+**Decisions taken:**
+- **ADR-0015 — Product defined:** **Deploy Journal** — records every deployment
+  (version, environment, status, message, author), public timeline, stats, `/health`
+  with DB check, writes protected by `X-API-Key`. Stack: Python + FastAPI + MySQL 8.
+- **ADR-0016 — Product-first engineering & phase order v2.1:** derivation chain
+  (product → behaviors/data → API → stack → tests → tooling → container → pipeline →
+  infrastructure → operations → portfolio) plus a traceability matrix. No pipeline
+  element without a product requirement or named risk.
+- **Renumbering:** Phase 9 = Deploy Journal (product) · Phase 10 = VPS with Terraform
+  (sized from the product) · 11 Linux+Ansible · 12 Deploy+CD+rollback · 13 Hardening ·
+  14 Observability · 15 Portfolio. Stage files renamed: `stage-09-deploy-journal.md`,
+  `stage-10-vps-provisioning.md`; older ADR phase references updated.
+- Pipeline additions derived from the product: **MySQL service container in CI** (API
+  tests), **smoke test** (`curl /health` on the image), **CD writes to the journal**
+  after deploy (Phase 12).
+
+**Why:** route v2 provisioned infrastructure before the product's final shape was
+known, and coupled progress to Oracle account friction. v2.1 makes every later phase
+consume the previous phase's output — nothing is built twice.
+
+**Files updated:** execution-plan, spec, roadmap, stages index + stage 09/10, README,
+environment, AGENTS (Route v2.1), ADR index + ADR-0008/0009/0012/0013 references;
+new ADR-0015/0016; delivery-story changelog.
+
+**Next session:** Stage 09 Session 1 — data model (`environments`, `deployments`) derived
+from the product requirements.
+
+**Commit / push:** none (documentation-only; sync to `C:\Repo2` pending the student's
+request).
+
+---
+
 ## 2026-10-29 — Audit session (technical rival review — route v2, documentation only)
 
 **Phase / Stage:** All — full audit of `C:\Repo2` (HEAD `86ca138`) and the memory folder.

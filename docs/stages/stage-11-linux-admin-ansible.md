@@ -3,7 +3,7 @@
 > **Phase:** Phase 11 — Linux Administration + Ansible (route v2)
 > **Estimated duration:** 5–7 sessions
 > **Status:** ⬜ Pending
-> **Prerequisites:** Stage 09 complete (server provisioned with Terraform). ADR-0009.
+> **Prerequisites:** Stage 10 complete (server provisioned with Terraform). ADR-0009.
 
 ---
 

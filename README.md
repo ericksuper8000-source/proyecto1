@@ -27,11 +27,12 @@ Then, stage by stage, the story unfolds:
 6. The same image is published to **three registries** — Docker Hub, GHCR, and GitLab
    Container Registry (Phase 6).
 7. **Docker Compose + Watchtower** simulate continuous deployment locally (Phase 7).
-8. Next: the application evolves into a **FastAPI service with MySQL 8 and a
-   `/health` endpoint** — *before* deployment, so the server phases are built once
-   (Phase 10, ADR-0008).
-9. The first real server is provisioned **from code** with **Terraform + cloud-init**
-   and configured with **Ansible** (Phases 9 & 11, ADR-0009), on a **zero-cost** VPS.
+8. The **product** comes first (ADR-0015/0016): **Deploy Journal** — a deployment-history
+   service with FastAPI + MySQL 8, a `/health` endpoint and a public timeline; the
+   pipeline is derived from it (Phase 9).
+9. Then the first real server is provisioned **from code** with **Terraform + cloud-init**
+   — sized from the product — and configured with **Ansible** (Phases 10 & 11,
+   ADR-0009), on a **zero-cost** VPS.
 10. The pipeline deploys with an **immutable tag over SSH**, with healthcheck and a
     practiced **rollback** (Phase 12).
 11. The server is **hardened**: Nginx, HTTPS with a free hostname, persistence,
@@ -99,8 +100,9 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 
 ## Phase Map
 
-> **Route v2 (2026-10-29 audit):** phases 9–15 reordered and extended per
-> ADR-0008…0014 — see `docs/execution-plan.md` and the Priority Action List.
+> **Route v2.1 (2026-10-29):** product-first (ADR-0015/0016) — the product (Deploy
+> Journal) is built in Phase 9 before any infrastructure; Phase 10 provisions the VPS
+> sized from it. See `docs/execution-plan.md` and the Priority Action List.
 
 | Phase | Topic | Status |
 |---|---|---|
@@ -113,8 +115,8 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 | 6 | Registries & Image Publishing | ✅ Complete |
 | 7 | Orchestration & CD Simulation | ✅ Complete |
 | 8 | SSH & Remote Connections | ✅ Complete |
-| 9 | VPS Provisioning with Terraform + cloud-init | 🔄 Current |
-| 10 | FastAPI + MySQL Evolution + CI/CD v2 | ⬜ Pending |
+| 9 | Deploy Journal: product + FastAPI + MySQL + CI/CD v2 | 🔄 Current |
+| 10 | VPS Provisioning with Terraform + cloud-init | ⬜ Pending |
 | 11 | Linux Administration + Ansible | ⬜ Pending |
 | 12 | Deployment: immutable tag, CD, rollback | ⬜ Pending |
 | 13 | Hardening: Nginx, HTTPS, backups | ⬜ Pending |
@@ -149,9 +151,9 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 
 ## First Steps
 
-1. Read [`docs/execution-plan.md`](docs/execution-plan.md) → **Current Status** (Phase 9 — VPS Provisioning with Terraform, route v2).
-2. Read [`docs/adr/0009-iac-terraform-ansible.md`](docs/adr/0009-iac-terraform-ansible.md) → provider decision gate.
-3. Start **Stage 09 — Session 0** ([`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)).
+1. Read [`docs/execution-plan.md`](docs/execution-plan.md) → **Current Status** (Phase 9 — Deploy Journal, route v2.1).
+2. Read [`docs/adr/0015-application-deploy-journal.md`](docs/adr/0015-application-deploy-journal.md) and [`docs/adr/0016-product-first-phase-order-v21.md`](docs/adr/0016-product-first-phase-order-v21.md).
+3. Start **Stage 09 — Session 1** ([`docs/stages/stage-09-deploy-journal.md`](docs/stages/stage-09-deploy-journal.md)).
 
 ---
 

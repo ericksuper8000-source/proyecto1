@@ -9,7 +9,7 @@
 ## Decision
 
 The application evolves into a **FastAPI service with a database and a health endpoint
-(Phase 10)** *before* any server provisioning, deployment, or production hardening work.
+(Phase 9)** *before* any server provisioning, deployment, or production hardening work.
 The original order (deploy a print-loop script first, evolve the app later) is discarded.
 
 ## Context & Problem
@@ -41,9 +41,10 @@ A deployment is only real when it serves something verifiable: an HTTP endpoint.
 
 ## Consequences
 
-- New phase order: 9 Terraform VPS → 10 FastAPI+MySQL → 11 Linux+Ansible → 12 Deploy+CD →
-  13 Hardening+HTTPS+Backups → 14 Observability → 15 Portfolio.
-- The VPS is provisioned in Phase 9 but nothing is deployed to it until Phase 12.
+- New phase order (v2.1, ADR-0016): 9 Deploy Journal (FastAPI+MySQL) → 10 Terraform VPS →
+  11 Linux+Ansible → 12 Deploy+CD → 13 Hardening+HTTPS+Backups → 14 Observability →
+  15 Portfolio.
+- The VPS is provisioned in Phase 10 but nothing is deployed to it until Phase 12.
 - Compose grows (app + db) before the first server deployment.
 - `requirements.txt` (runtime) and `requirements-dev.txt` (pinned tools) split.
 

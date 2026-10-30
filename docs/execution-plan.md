@@ -27,36 +27,43 @@ stages — it tells you exactly where the project is and what to do next.
 
 > **This block is updated at the end of every session.**
 
-- **Route:** **v2** (2026-10-29 audit) — phases 9–14 reordered and extended to 9–15 per
-  ADR-0008 … ADR-0014 (see `docs/adr/README.md`). Phases 0–8 are unchanged.
-- **Current phase:** Phase 9 — VPS Provisioning with **Terraform + cloud-init** (was:
-  manual Oracle console clicks) — ADR-0009, `docs/stages/stage-09-vps-provisioning.md`.
-- **Current stage / task:** Stage 09 — **Session 0** (provider decision gate + install
-  Terraform). Stage 09 still has **zero** checkboxes marked.
-- **Last completed item:** Session 07 (2026-10-21, documentation only). No sessions were
-  held between 2026-10-21 and 2026-10-29.
+- **Route:** **v2.1** (2026-10-29, product-first) — phases renumbered per **ADR-0016**;
+  **ADR-0015** defines the product (Deploy Journal). Full index: `docs/adr/README.md`.
+  Phases 0–8 are unchanged.
+- **Current phase:** Phase 9 — **Deploy Journal** (product + FastAPI + MySQL 8 +
+  CI/CD v2). Stage: `docs/stages/stage-09-deploy-journal.md`.
+- **Current stage / task:** Stage 09 — product defined (ADR-0015); next: **Session 1 —
+  data model** (`environments`, `deployments`) + schema explanation. Zero checkboxes
+  marked yet.
+- **Last completed item:** 2026-10-29 — route v2.1 documentation (product-first,
+  reordering, ADR-0015/0016). Previous work: Session 07 (2026-10-21).
 - **Audit 2026-10-29 (technical rival review):** full review of `C:\Repo2` (HEAD
-  `86ca138`) and this memory folder. Verdict: **4.5/10** as a junior portfolio today;
-  **8.5/10** when the revised route is completed. Findings C1–C12 are embedded in this
-  plan, in ADR-0008…0014 and in the Priority Action List below. **Documentation-only
-  session:** no code was changed; no commit/push was made (sync-only rule).
+  `ec181df` at audit close) and this memory folder. Verdict: **4.5/10** as a junior
+  portfolio today; **8.5/10** when the revised route is completed. Findings C1–C12 are
+  embedded in this plan, in ADR-0008…0016 and in the Priority Action List below.
+  **Documentation-only sessions:** no code changed.
+- **Product (ADR-0015):** Deploy Journal — records every deployment (version,
+  environment, status, message, author), public timeline, `/health` with DB check,
+  writes protected by `X-API-Key`. Stack: Python + FastAPI + MySQL 8 + HTML page.
 - **Pending student decisions (resolve and record in `session-log.md`):**
   1. **VPS provider** — Oracle Cloud Always Free (card required for verification, no
-     charge) vs an already-owned Hetzner VPS (no incremental cost). Zero-cost rule
-     (ADR-0005) unchanged. Gate: Stage 09 Session 0 (ADR-0009).
-  2. **MySQL 8** confirmed as the database (ADR-0012) — student to validate.
-  3. **GitLab mirror** — make public with curation (ADR-0014) or stop calling it a
+     charge) vs an already-owned Hetzner VPS (no incremental cost). Gate: **Stage 10
+     Session 0** (ADR-0009).
+  2. **GitLab mirror** — make public with curation (ADR-0014) or stop calling it a
      public mirror (today it is private).
-  4. **Secret scopes/rotation** — Docker Hub PAT, GitLab token, deploy key (ADR-0013).
-- **Drift fixed this day:** memory `requirements.txt` now matches the repo
-  (`pytest==9.0.3`); `.dockerignore` normalized to the repo version. Memory folder and
-  `C:\Repo2` docs are in sync again (2026-10-29).
-- **Blockers / open questions:** none technical. Next session: read ADR-0009, decide the
-  provider, then start Stage 09 Session 0 (Terraform install + first `plan`).
-- **Last session:** 2026-10-29 — Audit session (route v2, documentation only).
-- **Repo state reference:** last verified push remains `86ca138` on `develop`
-  (2026-10-21) to both remotes. The docs changed on 2026-10-29 are synced to `C:\Repo2`
-  but **not yet committed** — commit/push only when the student asks.
+  3. **Secret scopes/rotation** — Docker Hub PAT, GitLab token, journal API key,
+     deploy key (ADR-0013/0015).
+- **Environment:** memory `requirements.txt` = repo; `.dockerignore` normalized;
+  memory folder and `C:\Repo2` docs in sync (2026-10-29).
+- **Blockers / open questions:** none. Next session: read ADR-0016, then Stage 09
+  Session 1 (data model from the product requirements).
+- **Last session:** 2026-10-29 — Route v2.1 (product-first + Deploy Journal,
+  documentation only).
+- **Repo state (verified by fetch 2026-10-29):** `develop` = `ec181df` = `github/develop`
+  = `gitlab/develop`; local `master` = `ee5983e` = `github/master`; `gitlab/master` =
+  `d13e8c4` (SHA differs by GitLab merge commit; `git diff` = 0). `git diff develop
+  master` = 0. Route v2.1 docs are synced to `C:\Repo2` and **pending commit** —
+  commit/push only when the student asks.
 
 ---
 
@@ -64,17 +71,18 @@ stages — it tells you exactly where the project is and what to do next.
 
 | Item | State |
 |---|---|
-| Project | ☒ In progress (route v2) |
-| Plan | ☒ Defined (execution-plan v2 + ADR-0001…0014) |
+| Project | ☒ In progress (route v2.1 — product-first) |
+| Plan | ☒ Defined (execution-plan v2.1 + ADR-0001…0016) |
+| Product | ☒ Defined — Deploy Journal (ADR-0015), implementation next |
 | Zero-cost policy | ☒ Active (ADR-0005; free stack in ADR-0009/0011) |
 | Version control | ☒ Active (GitHub + GitLab mirrored; GitLab private until ADR-0014 decision) |
-| Application | ☒ Basic Python app + tests (FastAPI + MySQL in Phase 10, ADR-0008) |
-| Code quality | ☒ Active (Ruff, Flake8, Black, MyPy, Pytest; pyproject + pinned dev-tools in Phase 10) |
-| CI/CD | ☒ Active (CI/CD v2 rules in ADR-0013; PR gating + smoke test in Phase 10) |
-| Docker | ☒ Active (images, compose, 3 registries; multi-arch in Phase 10, ADR-0010) |
+| Application | 🔄 Next — Python toy app exists; Deploy Journal in Phase 9 |
+| Code quality | ☒ Active (Ruff, Flake8, Black, MyPy, Pytest; pyproject + pinned dev-tools in Phase 9) |
+| CI/CD | ☒ Active (CI/CD v2 rules in ADR-0013; PR gating + smoke test in Phase 9) |
+| Docker | ☒ Active (images, compose, 3 registries; multi-arch in Phase 9, ADR-0010) |
 | CD simulation | ☒ Active (Watchtower, local only) |
 | SSH | ✅ Complete (Phase 8) |
-| VPS + IaC | 🔄 Next (Phase 9 — Terraform + cloud-init) |
+| VPS + IaC | ⬜ Planned (Phase 10 — Terraform + cloud-init) |
 | Observability | ⬜ Planned (Phase 14 — ADR-0011) |
 | Backups | ⬜ Planned (Phase 13) |
 
@@ -274,14 +282,56 @@ stages — it tells you exactly where the project is and what to do next.
 
 ---
 
-## Phase 9 — VPS Provisioning with Terraform + cloud-init (route v2)
+## Phase 9 — Deploy Journal: Product + FastAPI + MySQL + CI/CD v2 (product-first)
 
-**Objective:** Create the first real server **from code** — reproducible, reviewable,
-versionable. Manual console clicks are replaced by `terraform plan/apply` (ADR-0009).
+**Objective:** Build the **product** first (ADR-0015) and let it define the stack,
+dependencies, tooling and pipeline (ADR-0016): a small deployment-history service
+(FastAPI + MySQL 8) with `/health`, tests, container and the upgraded CI/CD v2 gates.
+**Nothing touches a server in this phase.**
+
+**Estimated duration:** 6–8 sessions
+
+**Stage document:** [`docs/stages/stage-09-deploy-journal.md`](docs/stages/stage-09-deploy-journal.md)
+
+**Product (ADR-0015):** Deploy Journal — records every deployment (version,
+environment, status, message, author) and exposes a public timeline + stats. The
+pipeline writes to it; that closes the loop.
+
+- [ ] **Session 1 — data model:** MySQL schema (`environments`, `deployments`) derived
+      from the product requirements; init script; explain every column and index
+- [ ] **Session 2 — API contract:** FastAPI with `GET /health` (checks DB),
+      `GET/POST /api/deployments`, `GET /api/deployments/{id}`, `GET /api/stats`;
+      Pydantic validation; `X-API-Key` on writes; `GET /` timeline page
+- [ ] **Session 3 — tests:** unit tests (stats/logic) + API tests with `TestClient`;
+      **MySQL service container in CI**; coverage ≥ 80 % on app code
+- [ ] **Session 4 — stack & tooling derivation:** `requirements.txt` (runtime) vs
+      `requirements-dev.txt` (pinned); `pyproject.toml` harmonizing Black 88 /
+      Flake8 88 + E203,W503 / Ruff / MyPy; type hints
+- [ ] **Session 5 — container & local stack:** Dockerfile v2 (non-root, HEALTHCHECK,
+      EXPOSE 8000, pinned digest); compose with app + MySQL 8 (named volume,
+      `.env.example`); `docker compose up` healthy locally
+- [ ] **Session 6 — CI/CD v2 (ADR-0013):** docker job gated to push/tags; smoke-test
+      job (run image + curl `/health`); pip cache, `permissions:`, `concurrency`,
+      `timeout-minutes`; Trivy, Dependabot, gitleaks, pre-commit
+- [ ] **Session 7 — multi-arch & publish:** buildx `linux/amd64,linux/arm64`;
+      `docker manifest inspect`; push to the 3 registries from a tag
+- [ ] **Session 8 — product demo evidence:** timeline page renders recorded
+      deployments; screenshots/video of API + page
+- [ ] Document + evidence + update state
+
+**Status:** ⬜ Pending
+
+---
+
+## Phase 10 — VPS Provisioning with Terraform + cloud-init (sized from the product)
+
+**Objective:** Create the first real server **from code** — now that the final stack
+(Deploy Journal + MySQL + Nginx + monitoring, ADR-0015/0011) is known, size it correctly.
+Manual console clicks are replaced by `terraform plan/apply` (ADR-0009).
 
 **Estimated duration:** 3–4 sessions
 
-**Stage document:** [`docs/stages/stage-09-vps-provisioning.md`](docs/stages/stage-09-vps-provisioning.md)
+**Stage document:** [`docs/stages/stage-10-vps-provisioning.md`](docs/stages/stage-10-vps-provisioning.md)
 
 **Provider decision gate (Session 0, ADR-0009 + ADR-0005):**
 - **Default:** Oracle Cloud Always Free (A1.Flex ARM, free forever). ⚠️ Oracle asks for a
@@ -305,38 +355,6 @@ versionable. Manual console clicks are replaced by `terraform plan/apply` (ADR-0
       `free -h`, `nproc`, `df -h`, `ip a`; host-key prompt understood (Stage 08)
 - [ ] Reproducibility drill: `terraform destroy` + `terraform apply` again (or a second
       workspace) to prove the server is code
-- [ ] Document + evidence + update state
-
-**Status:** ⬜ Pending
-
----
-
-## Phase 10 — FastAPI + MySQL Evolution (moved BEFORE deployment — ADR-0008)
-
-**Objective:** Turn the app into a real HTTP service with a database and a `/health`
-endpoint **before** any deployment work, so the server phases are built once, on the
-final architecture.
-
-**Estimated duration:** 5–7 sessions
-
-**Stage document:** [`docs/stages/stage-10-fastapi-mysql-evolution.md`](docs/stages/stage-10-fastapi-mysql-evolution.md)
-
-- [ ] FastAPI app: `GET /health` (JSON), `GET /api/suma` moving the core functions;
-      uvicorn server; `EXPOSE 8000`
-- [ ] API tests with `TestClient` (httpx) + existing unit tests; coverage gate
-      (pytest-cov, ≥ 80 % app code)
-- [ ] MySQL 8 service in `docker-compose.yml` (local dev), named volume, internal port
-      only (ADR-0012)
-- [ ] Env-based config: `.env.example` committed, `.env` ignored
-- [ ] `requirements.txt` (runtime) split from `requirements-dev.txt` (pinned tools)
-- [ ] `pyproject.toml`: Black line-length 88; Flake8 max-line-length 88 + ignore
-      E203/W503; Ruff rules; MyPy config + type hints (ADR-0013)
-- [ ] **CI/CD v2 (ADR-0013):** docker job only on push/tags; container smoke test
-      (`docker run` + curl `/health`); pip cache; `permissions:`; `concurrency`;
-      `timeout-minutes`; Dependabot; Trivy scan; gitleaks + pre-commit locally
-- [ ] **Multi-arch build** with buildx/QEMU: `linux/amd64,linux/arm64` (ADR-0010)
-- [ ] Dockerfile v2: non-root `USER`, `HEALTHCHECK`, pinned base digest
-- [ ] Pipeline green end-to-end with the new stack; tags pushed to the 3 registries
 - [ ] Document + evidence + update state
 
 **Status:** ⬜ Pending
@@ -473,40 +491,40 @@ understand in 5 minutes — and that the student can defend.
 The audit's 15 actions, mapped to their phase. Each closes one documented finding
 (C1–C12) and has an acceptance criterion.
 
-| # | Action | Phase | Acceptance criterion |
+| # | Action | Phase (v2.1) | Acceptance criterion |
 |---|---|---|---|
-| 1 | Multi-arch builds (buildx amd64+arm64) | 10 | `docker manifest inspect` shows both platforms (C1) |
-| 2 | Gate docker job to push/tags; `:latest` only from releases | 10 | A PR publishes nothing (C2) |
-| 3 | `pyproject.toml` with Black/Flake8/Ruff/MyPy coherent (88) | 10 | All four green with the same config (C4) |
-| 4 | `requirements-dev.txt` pinned + pip-audit | 10 | Reproducible CI; fails on new CVE (C5) |
-| 5 | FastAPI + `/health` + API tests + smoke test job | 10 | CI runs the image and curls 200 (C3, C9) |
-| 6 | Terraform + cloud-init for the VPS | 9 | `terraform apply` creates the server from zero |
+| 1 | Multi-arch builds (buildx amd64+arm64) | 9 | `docker manifest inspect` shows both platforms (C1) |
+| 2 | Gate docker job to push/tags; `:latest` only from releases | 9 | A PR publishes nothing (C2) |
+| 3 | `pyproject.toml` with Black/Flake8/Ruff/MyPy coherent (88) | 9 | All four green with the same config (C4) |
+| 4 | `requirements-dev.txt` pinned + pip-audit | 9 | Reproducible CI; fails on new CVE (C5) |
+| 5 | Deploy Journal API + `/health` + API tests + smoke test | 9 | CI runs the image and curls 200 (C3, C9) |
+| 6 | Terraform + cloud-init for the VPS | 10 | `terraform apply` creates the server from zero |
 | 7 | Ansible playbook (idempotent bootstrap) | 11 | Two consecutive runs change nothing |
 | 8 | CD over SSH: immutable tag + healthcheck + rollback | 12 | Rollback to previous tag in < 1 min, drilled |
 | 9 | Nginx + free domain + HTTPS (auto-renew) | 13 | `curl https://…` valid certificate |
 | 10 | Backups + restore drill | 13 | DB restored on a clean environment, evidenced |
 | 11 | Observability + Telegram alert drill | 14 | Killing the app triggers a phone alert |
-| 12 | Trivy + Dependabot + gitleaks + pre-commit | 10 | PR with CVE/secret fails (C11) |
+| 12 | Trivy + Dependabot + gitleaks + pre-commit | 9 | PR with CVE/secret fails (C11) |
 | 13 | Public README v2 + diagram + demo + LICENSE + tags | 15 | A stranger runs the project in 5 min (C6) |
 | 14 | Curation: internal docs out of public repo; remove `nuevo.py`; rename repo | 15 | Public repo reads like a product (C8, C12) |
-| 15 | Secrets scopes/rotation documented; memory↔repo drift closed | 10/12 | Repo is the single source of truth (C7, C11) |
+| 15 | Secrets scopes/rotation documented; memory↔repo drift closed | 9/12 | Repo is the single source of truth (C7, C11) |
 
 ---
 
-## Timeline (route v2 — 5 sessions/week, ~2 h each + weekly consolidation)
+## Timeline (route v2.1 — 5 sessions/week, ~2 h each + weekly consolidation)
 
-| Phase | Topic (route v2) | Sessions |
+| Phase | Topic (route v2.1) | Sessions |
 |---|---|---|
 | 0–8 | Planning → SSH (completed) | ✅ prior work |
-| 9 | VPS Provisioning with Terraform + cloud-init | 3–4 |
-| 10 | FastAPI + MySQL evolution + CI/CD v2 | 5–7 |
+| 9 | Deploy Journal: product + FastAPI + MySQL + CI/CD v2 | 6–8 |
+| 10 | VPS Provisioning with Terraform + cloud-init | 3–4 |
 | 11 | Linux administration + Ansible | 5–7 |
 | 12 | Deployment: immutable tag, CD, rollback | 2–3 |
 | 13 | Hardening: Nginx, HTTPS, backups | 5–7 |
 | 14 | Observability & alerting | 4–5 |
 | 15 | Portfolio & interview | 2–3 |
 
-> Total remaining ~ 26–36 sessions ~ 6–8 weeks at 5 sessions/week. Cadence may be adjusted;
+> Total remaining ~ 27–38 sessions ~ 6–8 weeks at 5 sessions/week. Cadence may be adjusted;
 > understanding is the only fixed requirement. Do not compress by skipping review or
 > documentation.
 

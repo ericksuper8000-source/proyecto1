@@ -26,12 +26,22 @@ Everything is built publicly as professional evidence of learning.
 
 ## 2. Main Objective
 
-Build, step by step, a real software delivery pipeline that starts as a small Python
-application and evolves into a **FastAPI + MySQL service** that is automatically tested,
-built (multi-arch), published to three registries, and deployed to a free VPS
-**provisioned with Terraform and configured with Ansible** — then hardened (Nginx,
-HTTPS, backups) and **observed** (monitoring, dashboards, alerts) — all documented end
-to end with good engineering practices.
+Build, step by step, the **Deploy Journal** product — a small deployment-history service
+(Python + FastAPI + MySQL 8) — and around it a real delivery pipeline that tests the
+product, builds multi-arch images, publishes them to three registries, and deploys to a
+free VPS **provisioned with Terraform and configured with Ansible** — then hardens it
+(Nginx, HTTPS, backups) and **observes** it (monitoring, dashboards, alerts) — all
+documented end to end with good engineering practices.
+
+### The product (ADR-0015)
+
+**Deploy Journal** records every deployment of this pipeline: version (immutable tag),
+environment, status (success/failed/rollback), message and author. It exposes a public
+timeline page, stats, and a `/health` endpoint that checks the database. The pipeline
+writes to the app after each deploy — the product is the pipeline's own mirror.
+
+The pipeline, tooling and infrastructure are **derived from this product** (ADR-0016),
+never the other way around.
 
 The student must understand each component **before** automating it.
 
@@ -41,7 +51,8 @@ The student must understand each component **before** automating it.
 
 Included:
 
-- Python application development (and **FastAPI**, moved before deployment — ADR-0008)
+- **Deploy Journal** (product, ADR-0015): deployment-history API + public timeline,
+  built with Python + FastAPI + MySQL 8
 - Code quality: Ruff, Flake8, Black, MyPy (harmonized in `pyproject.toml`, ADR-0013)
 - Automated testing with Pytest (unit + API tests + coverage)
 - Supply-chain checks: Bandit, pip-audit, Trivy, Dependabot, gitleaks, pre-commit
@@ -112,10 +123,10 @@ The project already completed Phases 1–7 (application, quality, version contro
 containerization, registries, orchestration/CD simulation). See
 [`execution-plan.md`](execution-plan.md) for the verified state of each phase.
 
-What remains to be built from here (route v2, 2026-10-29):
+What remains to be built from here (route v2.1, 2026-10-29):
 
-- A VPS provisioned **from code** (Terraform + cloud-init)
-- The FastAPI + MySQL 8 evolution of the application (before deployment)
+- The product: **Deploy Journal** (FastAPI + MySQL 8 + CI/CD v2) — ADR-0015/0016
+- A VPS provisioned **from code** (Terraform + cloud-init), sized from the product
 - Linux administration + Ansible bootstrap
 - Deployment through the pipeline (immutable tag → CD over SSH → healthcheck → rollback)
 - Production hardening: Nginx, HTTPS, persistence, logs, backups + restore drill
@@ -219,8 +230,8 @@ Observability (Uptime Kuma, Prometheus, Grafana, Alerts)
 | 6 | Registries | Docker Hub, GHCR, GitLab Registry | ✅ |
 | 7 | Orchestration & CD Sim | Docker Compose + Watchtower | ✅ |
 | 8 | SSH & Remote Access | Understand and use SSH | ✅ |
-| 9 | VPS Provisioning (IaC) | Terraform + cloud-init, Oracle Free/Hetzner | 🔄 Current |
-| 10 | FastAPI + MySQL Evolution | Real service + DB + CI/CD v2 + multi-arch | ⬜ |
+| 9 | Deploy Journal (product-first) | FastAPI + MySQL 8 + timeline + CI/CD v2 | 🔄 Current |
+| 10 | VPS Provisioning (IaC) | Terraform + cloud-init, sized from the product | ⬜ |
 | 11 | Linux Admin + Ansible | Users, firewall, Docker, idempotent playbook | ⬜ |
 | 12 | Deployment | Immutable tag, CD over SSH, rollback | ⬜ |
 | 13 | Production Hardening | Nginx, HTTPS, persistence, backups + restore | ⬜ |
@@ -236,6 +247,7 @@ Observability (Uptime Kuma, Prometheus, Grafana, Alerts)
 By the end of the project, the student can:
 
 - Explain the full delivery lifecycle: code → test → build → publish → deploy → observe
+- Derive the pipeline and infrastructure from product requirements (ADR-0016)
 - Write and justify CI/CD pipelines on GitHub Actions and GitLab CI
 - Build, publish, and pull multi-arch Docker images across multiple registries
 - Operate Docker Compose stacks (app + database)
@@ -289,6 +301,8 @@ The project is successful when there is evidence that the student can:
 
 - Operate a software delivery pipeline with judgment
 - Justify every pipeline and infrastructure decision (ADRs)
+- Show that every pipeline element traces to a product requirement or a named risk
+  (ADR-0016)
 - Provision infrastructure from code (Terraform) and configure it reproducibly (Ansible)
 - Diagnose problems in CI/CD and on a live server
 - Document professionally

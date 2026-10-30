@@ -42,6 +42,8 @@ Do **not** write an ADR for routine tasks ("installed a text editor").
 | 0012 | Accepted | [Database: MySQL 8](0012-database-mysql8.md) |
 | 0013 | Accepted | [CI/CD v2: hardening, release strategy, supply-chain checks](0013-cicd-v2-hardening-release.md) |
 | 0014 | Accepted | [Public repository curation (portfolio presentation)](0014-public-repo-curation.md) |
+| 0015 | Accepted | [Application definition: Deploy Journal](0015-application-deploy-journal.md) |
+| 0016 | Accepted | [Product-first engineering & phase order v2.1](0016-product-first-phase-order-v21.md) |
 
 ## Naming & workflow
 
