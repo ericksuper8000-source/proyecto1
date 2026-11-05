@@ -30,7 +30,7 @@ stages — it tells you exactly where the project is and what to do next.
 - **Route:** **v2.1** (2026-10-29, product-first) — phases renumbered per **ADR-0016**;
   **ADR-0015** defines the product (Deploy Journal). Full index: `docs/adr/README.md`.
   Phases 0–8 are unchanged.
-- **Current phase:** Phase 9 — **Deploy Journal** (product + FastAPI + MySQL 8 +
+- **Current phase:** Phase 9 — **Deploy Journal** (product + FastAPI + PostgreSQL +
   CI/CD v2). Stage: `docs/stages/stage-09-deploy-journal.md`.
 - **Current stage / task:** Stage 09 — product defined (ADR-0015); next: **Session 1 —
   data model** (`environments`, `deployments`) + schema explanation. Zero checkboxes
@@ -44,7 +44,7 @@ stages — it tells you exactly where the project is and what to do next.
   **Documentation-only sessions:** no code changed.
 - **Product (ADR-0015):** Deploy Journal — records every deployment (version,
   environment, status, message, author), public timeline, `/health` with DB check,
-  writes protected by `X-API-Key`. Stack: Python + FastAPI + MySQL 8 + HTML page.
+  writes protected by `X-APIKey`. Stack: Python + FastAPI + PostgreSQL + HTML page.
 - **Pending student decisions (resolve and record in `session-log.md`):**
   1. **VPS provider** — Oracle Cloud Always Free (card required for verification, no
      charge) vs an already-owned Hetzner VPS (no incremental cost). Gate: **Stage 10
@@ -55,10 +55,11 @@ stages — it tells you exactly where the project is and what to do next.
      deploy key (ADR-0013/0015).
 - **Environment:** memory `requirements.txt` = repo; `.dockerignore` normalized;
   memory folder and `C:\Repo2` docs in sync (2026-10-29).
-- **Blockers / open questions:** none. Next session: read ADR-0016, then Stage 09
-  Session 1 (data model from the product requirements).
-- **Last session:** 2026-10-29 — Route v2.1 (product-first + Deploy Journal,
-  documentation only).
+- **Blockers / open questions:** none. Documentation sync to PostgreSQL completed
+  2026-11-04. Next session: Stage 09 Session 1 (PostgreSQL data model from the product
+  requirements).
+- **Last session:** 2026-11-04 — Review session (día nuevo): concepts 1–21 reviewed and
+  canonically logged in `session-log.md`; no code changes, no commit/push.
 - **Repo state (verified by fetch 2026-10-29):** `develop` = `ec181df` = `github/develop`
   = `gitlab/develop`; local `master` = `ee5983e` = `github/master`; `gitlab/master` =
   `d13e8c4` (SHA differs by GitLab merge commit; `git diff` = 0). `git diff develop
@@ -282,11 +283,11 @@ stages — it tells you exactly where the project is and what to do next.
 
 ---
 
-## Phase 9 — Deploy Journal: Product + FastAPI + MySQL + CI/CD v2 (product-first)
+## Phase 9 — Deploy Journal: Product + FastAPI + PostgreSQL + CI/CD v2 (product-first)
 
 **Objective:** Build the **product** first (ADR-0015) and let it define the stack,
 dependencies, tooling and pipeline (ADR-0016): a small deployment-history service
-(FastAPI + MySQL 8) with `/health`, tests, container and the upgraded CI/CD v2 gates.
+(FastAPI + PostgreSQL) with `/health`, tests, container and the upgraded CI/CD v2 gates.
 **Nothing touches a server in this phase.**
 
 **Estimated duration:** 6–8 sessions
@@ -297,18 +298,18 @@ dependencies, tooling and pipeline (ADR-0016): a small deployment-history servic
 environment, status, message, author) and exposes a public timeline + stats. The
 pipeline writes to it; that closes the loop.
 
-- [ ] **Session 1 — data model:** MySQL schema (`environments`, `deployments`) derived
+- [ ] **Session 1 — data model:** PostgreSQL schema (`environments`, `deployments`) derived
       from the product requirements; init script; explain every column and index
 - [ ] **Session 2 — API contract:** FastAPI with `GET /health` (checks DB),
       `GET/POST /api/deployments`, `GET /api/deployments/{id}`, `GET /api/stats`;
       Pydantic validation; `X-API-Key` on writes; `GET /` timeline page
 - [ ] **Session 3 — tests:** unit tests (stats/logic) + API tests with `TestClient`;
-      **MySQL service container in CI**; coverage ≥ 80 % on app code
+      **PostgreSQL service container in CI**; coverage ≥ 80 % on app code
 - [ ] **Session 4 — stack & tooling derivation:** `requirements.txt` (runtime) vs
       `requirements-dev.txt` (pinned); `pyproject.toml` harmonizing Black 88 /
       Flake8 88 + E203,W503 / Ruff / MyPy; type hints
 - [ ] **Session 5 — container & local stack:** Dockerfile v2 (non-root, HEALTHCHECK,
-      EXPOSE 8000, pinned digest); compose with app + MySQL 8 (named volume,
+      EXPOSE 8000, pinned digest); compose with app + PostgreSQL (named volume,
       `.env.example`); `docker compose up` healthy locally
 - [ ] **Session 6 — CI/CD v2 (ADR-0013):** docker job gated to push/tags; smoke-test
       job (run image + curl `/health`); pip cache, `permissions:`, `concurrency`,
@@ -326,7 +327,7 @@ pipeline writes to it; that closes the loop.
 ## Phase 10 — VPS Provisioning with Terraform + cloud-init (sized from the product)
 
 **Objective:** Create the first real server **from code** — now that the final stack
-(Deploy Journal + MySQL + Nginx + monitoring, ADR-0015/0011) is known, size it correctly.
+(Deploy Journal + PostgreSQL + Nginx + monitoring, ADR-0015/0011) is known, size it correctly.
 Manual console clicks are replaced by `terraform plan/apply` (ADR-0009).
 
 **Estimated duration:** 3–4 sessions
@@ -423,10 +424,10 @@ post-deploy healthcheck, and a proven way back (ADR-0013).
 - [ ] Nginx (or Caddy) reverse proxy: app bound to 127.0.0.1:8000; only 80/443 exposed
 - [ ] Domain: **free** hostname via DuckDNS / sslip.io / nip.io (zero-cost rule) +
       Let's Encrypt certificate with auto-renewal; verify rating
-- [ ] Persistence: named volumes for MySQL; container log rotation limits
+- [ ] Persistence: named volumes for PostgreSQL; container log rotation limits
       (`json-file` max-size/max-file)
 - [ ] Secrets: `.env` chmod 600; document token scopes + rotation (ADR-0013)
-- [ ] Backups: daily `mysqldump` (container/cron) + off-site copy to a **free** target
+- [ ] Backups: daily `pg_dump` (container/cron) + off-site copy to a **free** target
       (Cloudflare R2 free 10 GB / Google Drive 15 GB via rclone); **restore drill with
       evidence**
 - [ ] Watchtower stays a local CD simulation only; production redeploys are
@@ -516,7 +517,7 @@ The audit's 15 actions, mapped to their phase. Each closes one documented findin
 | Phase | Topic (route v2.1) | Sessions |
 |---|---|---|
 | 0–8 | Planning → SSH (completed) | ✅ prior work |
-| 9 | Deploy Journal: product + FastAPI + MySQL + CI/CD v2 | 6–8 |
+| 9 | Deploy Journal: product + FastAPI + PostgreSQL + CI/CD v2 | 6–8 |
 | 10 | VPS Provisioning with Terraform + cloud-init | 3–4 |
 | 11 | Linux administration + Ansible | 5–7 |
 | 12 | Deployment: immutable tag, CD, rollback | 2–3 |

@@ -16,7 +16,7 @@ single platform.
 
 A `docker build` on GitHub Actions produces an amd64 image. Running it on an Oracle A1.Flex
 (ARM) instance fails with `exec format error`. The alternative x86 free shape
-(E2.1.Micro) has 1/8 OCPU and 1 GB RAM — too small for app + MySQL + Nginx + monitoring.
+(E2.1.Micro) has 1/8 OCPU and 1 GB RAM — too small for app + PostgreSQL + Nginx + monitoring.
 Therefore: either we build for ARM, or the free-tier server cannot host the final stack.
 
 ## Alternatives Considered
@@ -41,7 +41,7 @@ Therefore: either we build for ARM, or the free-tier server cannot host the fina
 
 - Docker build step moves to Buildx (QEMU emulation for arm64; slower builds, ~2–3 min).
 - Registries store manifest lists (both variants under one tag).
-- MySQL 8 and monitoring images must also be multi-arch — official images already are;
+- PostgreSQL and monitoring images must also be multi-arch — official images already are;
   verify each new service image in Phase 13/14.
 - Dockerfile stays unchanged; the CI workflow gains a `platforms:` argument.
 

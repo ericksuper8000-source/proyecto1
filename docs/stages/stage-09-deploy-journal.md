@@ -1,10 +1,10 @@
-# Stage 09 — Deploy Journal: Product, FastAPI, MySQL & CI/CD v2
+# Stage 09 — Deploy Journal: Product, FastAPI, PostgreSQL & CI/CD v2
 
 > **Phase:** Phase 9 — Deploy Journal (product-first)
 > **Estimated duration:** 6–8 sessions
 > **Status:** ⬜ Pending — Current
 > **Prerequisites:** Phases 0–8 complete. **ADR-0015** (product), **ADR-0016**
-> (product-first derivation), ADR-0010 (multi-arch), ADR-0012 (MySQL 8),
+> (product-first derivation), ADR-0010 (multi-arch), ADR-0017 (PostgreSQL),
 > ADR-0013 (CI/CD v2), ADR-0008 (why the app comes before deployment).
 
 ---
@@ -12,7 +12,7 @@
 ## Objective
 
 Build the **product first**: Deploy Journal, a small deployment-history service
-(Python + FastAPI + MySQL 8) with a `/health` endpoint, tests, a container, and the
+(Python + FastAPI + PostgreSQL) with a `/health` endpoint, tests, a container, and the
 upgraded CI/CD v2 gates — deriving every stack choice and pipeline element from the
 product's requirements (ADR-0016). **No server is touched in this stage.**
 
@@ -43,7 +43,7 @@ must be built around this product — not the other way around."*
 
 ### Session 1 — Data model
 
-- [ ] MySQL schema: `environments(id, name)` seeded dev/prod;
+- [ ] PostgreSQL schema: `environments(id, name)` seeded dev/prod;
       `deployments(id, version, environment_id FK, status ENUM, message, deployed_by,
       created_at)` with indexes
 - [ ] Init script (SQL) + explain every column/index/FK
@@ -61,12 +61,12 @@ must be built around this product — not the other way around."*
 
 - [ ] Unit tests for stats/logic
 - [ ] API tests with `TestClient` (httpx)
-- [ ] **MySQL service container in CI** for integration tests
+- [ ] **PostgreSQL service container in CI** for integration tests
 - [ ] Coverage gate ≥ 80 % on app code (pytest-cov)
 
 ### Session 4 — Stack & tooling derivation
 
-- [ ] `requirements.txt` (runtime: fastapi, uvicorn, sqlalchemy/pymysql…) vs
+- [ ] `requirements.txt` (runtime: fastapi, uvicorn, sqlalchemy/psycopg…) vs
       `requirements-dev.txt` (pinned: pytest, httpx, coverage, ruff, black, flake8, mypy,
       bandit, pip-audit, pre-commit, gitleaks)
 - [ ] `pyproject.toml`: Black 88 / Flake8 88 + E203,W503 / Ruff / MyPy + type hints
@@ -75,7 +75,7 @@ must be built around this product — not the other way around."*
 ### Session 5 — Container & local stack
 
 - [ ] Dockerfile v2: non-root USER, HEALTHCHECK, EXPOSE 8000, pinned base digest
-- [ ] `docker-compose.yml`: app + MySQL 8 (named volume, internal port only)
+- [ ] `docker-compose.yml`: app + PostgreSQL (named volume, internal port only)
 - [ ] `docker compose up` → `curl /health` → ok (evidence)
 
 ### Session 6 — CI/CD v2 (ADR-0013)
@@ -120,7 +120,7 @@ must be built around this product — not the other way around."*
 |---|---|
 | `uvicorn app.main:app` | Run the service |
 | `pytest --cov` | Tests + coverage gate |
-| `docker compose up -d` | Local stack (app + MySQL) |
+| `docker compose up -d` | Local stack (app + PostgreSQL) |
 | `docker buildx build --platform linux/amd64,linux/arm64` | Multi-arch image |
 | `docker manifest inspect` | Verify both platforms |
 | `trivy image …` | Scan the image for CVEs |
@@ -140,7 +140,7 @@ must be built around this product — not the other way around."*
 
 - [ ] Schema + explain every column/index
 - [ ] `/docs` (OpenAPI) screenshot + `curl /health` output
-- [ ] Tests green with MySQL service container in CI
+- [ ] Tests green with PostgreSQL service container in CI
 - [ ] Pipeline green (GitHub + GitLab) screenshots
 - [ ] `docker manifest inspect` output
 - [ ] Smoke-test log showing `curl /health` → 200

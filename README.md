@@ -28,7 +28,7 @@ Then, stage by stage, the story unfolds:
    Container Registry (Phase 6).
 7. **Docker Compose + Watchtower** simulate continuous deployment locally (Phase 7).
 8. The **product** comes first (ADR-0015/0016): **Deploy Journal** — a deployment-history
-   service with FastAPI + MySQL 8, a `/health` endpoint and a public timeline; the
+   service with FastAPI + PostgreSQL, a `/health` endpoint and a public timeline; the
    pipeline is derived from it (Phase 9).
 9. Then the first real server is provisioned **from code** with **Terraform + cloud-init**
    — sized from the product — and configured with **Ansible** (Phases 10 & 11,
@@ -115,7 +115,7 @@ strategy is documented in [`docs/adr/0005-zero-cost-cloud-strategy.md`](docs/adr
 | 6 | Registries & Image Publishing | ✅ Complete |
 | 7 | Orchestration & CD Simulation | ✅ Complete |
 | 8 | SSH & Remote Connections | ✅ Complete |
-| 9 | Deploy Journal: product + FastAPI + MySQL + CI/CD v2 | 🔄 Current |
+| 9 | Deploy Journal: product + FastAPI + PostgreSQL + CI/CD v2 | 🔄 Current |
 | 10 | VPS Provisioning with Terraform + cloud-init | ⬜ Pending |
 | 11 | Linux Administration + Ansible | ⬜ Pending |
 | 12 | Deployment: immutable tag, CD, rollback | ⬜ Pending |

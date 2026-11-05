@@ -83,7 +83,7 @@ Remotes: `github` (https://github.com/ericksuper8000-source/proyecto1.git) and
 | GHCR | `ghcr.io/ericksuper8000-source/mi-app` | Registry 2 |
 | GitLab Container Registry | `registry.gitlab.com/ericksuper80-group/repo2` | Registry 3 |
 | Oracle Cloud (planned) | Free Tier (Phase 9) | VPS |
-| MySQL 8 (planned) | official image, multi-arch (ADR-0012) | Database |
+| PostgreSQL (planned) | official image, multi-arch (ADR-0017) | Database |
 | DuckDNS / sslip.io / nip.io (planned) | free hostname (ADR-0005) | HTTPS in Phase 13 |
 | Telegram Bot API (planned) | free alert channel (ADR-0011) | Alerts in Phase 14 |
 | Cloudflare R2 / Google Drive (planned) | free off-site backup target (ADR-0005) | Backups in Phase 13 |

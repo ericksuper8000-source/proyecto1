@@ -39,7 +39,8 @@ Do **not** write an ADR for routine tasks ("installed a text editor").
 | 0009 | Accepted | [Infrastructure as Code: Terraform + cloud-init, Ansible for bootstrap](0009-iac-terraform-ansible.md) |
 | 0010 | Accepted | [Multi-architecture images (amd64 + arm64)](0010-multi-arch-images.md) |
 | 0011 | Accepted | [Observability & alerting stack (zero-cost, self-hosted)](0011-observability-alerting.md) |
-| 0012 | Accepted | [Database: MySQL 8](0012-database-mysql8.md) |
+| 0012 | Superseded | [Database: MySQL 8](0012-database-mysql8.md) |
+| 0017 | Accepted | [Database: PostgreSQL](0017-database-postgresql.md) |
 | 0013 | Accepted | [CI/CD v2: hardening, release strategy, supply-chain checks](0013-cicd-v2-hardening-release.md) |
 | 0014 | Accepted | [Public repository curation (portfolio presentation)](0014-public-repo-curation.md) |
 | 0015 | Accepted | [Application definition: Deploy Journal](0015-application-deploy-journal.md) |

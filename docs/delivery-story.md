@@ -349,12 +349,12 @@ Reglas: orden exacta con máquina exacta; el lector ordena y el ejecutor ejecuta
   images, and the remote-house/padlock analogy. The v3 review list is complete.
 - **v2.9 (2026-10-29):** Audit session (route v2) — no new concept validated; the *route*
   changed. The project now follows ADR-0008…0014 and the reordered phases 9–15
-  (Terraform → FastAPI+MySQL → Ansible → Deploy → Hardening → Observability → Portfolio).
+  (Terraform → FastAPI+PostgreSQL → Ansible → Deploy → Hardening → Observability → Portfolio).
   The delivery story for Phases 9–15 will be appended here **only when each stage is
   validated**, following the existing rule (never contaminate the story with
   unvalidated tech).
 - **v3.0 (2026-10-29):** Route v2.1 — product-first (ADR-0015/0016). The product
-  (Deploy Journal: FastAPI + MySQL 8 + `/health` + timeline) is defined first and built
+  (Deploy Journal: FastAPI + PostgreSQL + `/health` + timeline) is defined first and built
   in Phase 9; infrastructure follows in Phase 10 and is sized from it. New permanent
   principle: **the pipeline revolves around the product** — every job/tool/resource must
   trace to a product requirement or a named risk (traceability matrix in ADR-0016).

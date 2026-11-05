@@ -12,12 +12,12 @@ way around. Supersedes the undefined "evolve the app later" placeholder.
 
 The application is **Deploy Journal** — a small internal deployment-history service.
 Every deployment of this project's pipeline records itself in the app; a public page
-shows the timeline. Stack: **Python + FastAPI + MySQL 8**.
+shows the timeline. Stack: **Python + FastAPI + PostgreSQL**.
 
 ## Context & Problem
 
 The project needs a real product to justify a real pipeline. The product must be small
-(pipeline is the star), non-generic (portfolio), and must exercise MySQL, FastAPI and
+(pipeline is the star), non-generic (portfolio), and must exercise PostgreSQL, FastAPI and
 Python meaningfully — with a `/health` endpoint that later phases (Nginx, CD, monitoring,
 backups) genuinely need.
 
@@ -39,7 +39,7 @@ Functional requirements:
 Non-functional requirements:
 
 - **NFR1** — Small: ~200–300 lines of Python + one HTML template.
-- **NFR2** — Stateless app + stateful MySQL 8 with a named volume.
+- **NFR2** — Stateless app + stateful PostgreSQL with a named volume.
 - **NFR3** — Contract-first: OpenAPI docs (`/docs`) are the source of truth.
 - **NFR4** — Testable: unit + API tests; `/health` covers the DB path.
 - **NFR5** — Container-ready: port 8000, non-root user, `HEALTHCHECK`.
@@ -90,7 +90,7 @@ deployments(
   status page, adds an incident lifecycle state machine, weaker direct integration with
   the deploy flow.
 - **Job application tracker** — useful personally; rejected: generic CRUD disconnected
-  from the delivery flow — it would teach FastAPI/MySQL but nothing about deployments.
+  from the delivery flow — it would teach FastAPI/PostgreSQL but nothing about deployments.
 - **Keep the print-loop script** — rejected: nothing to deploy, nothing to monitor,
   nothing to back up.
 
@@ -98,14 +98,14 @@ deployments(
 
 - Small, unique, and it makes the pipeline legible: every later phase has a concrete
   reason to exist (healthcheck, DB volume, backups, monitoring, CD write-back).
-- Exercises MySQL for real (schema, joins/aggregations, persistence, restore) and FastAPI
+- Exercises PostgreSQL for real (schema, joins/aggregations, persistence, restore) and FastAPI
   for real (validation, OpenAPI, API key, DB dependency).
 - Produces the best portfolio demo: `git push` → URL timeline updates live.
 
 ## Consequences
 
 - Phase 9 implements the product (data model → API → tests → container → CI/CD v2).
-- The MySQL service enters compose in Phase 9 (dev) and Phase 12 (server).
+- The PostgreSQL service enters compose in Phase 9 (dev) and Phase 12 (server).
 - The API key becomes a real secret (CI + server `.env`), covered by ADR-0013.
 - `/health` with a DB check becomes the monitoring target (ADR-0011) and the CD
   post-deploy gate.

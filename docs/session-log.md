@@ -79,6 +79,952 @@ the canonical concept explanations; Session 07 for the v4 process definition.
 
 ---
 
+## 2026-11-04 — Session close (repaso día nuevo — Bloques A–H)
+
+**Phase / Stage:** Phase 9 — Deploy Journal · Stage 09 (pending) — review only; no code changed.
+
+**Type:** Review session (día nuevo). No practical work, no checkboxes, no commit/push.
+
+**Concepts reviewed (canonical explanations saved verbatim in this log):**
+1. Producto define el stack (ADR-0016)
+2. Modelo de datos del Deploy Journal
+3. API del Deploy Journal
+4. Conexión PostgreSQL ↔ FastAPI
+5. El contenedor (Docker): Dockerfile, compose, .dockerignore, CI job
+6. Smoke test / healthcheck
+7. Pytest y tipos de pruebas
+8. Ruff (linter)
+9. Flake8 (linter clásico)
+10. Black (formateador)
+11. MyPy (tipos)
+12. Bandit (seguridad del código)
+13. pip-audit (dependencias)
+14. Runners y pipelines
+15. Imágenes y Docker Desktop
+16. Registries
+17. Compose y Watchtower
+18. VPS/SSH
+19. YAML
+20. .gitignore vs .dockerignore + secretos
+21. Git y repos
+
+**Feedback / confusion:** the session started with confusion about the review order; the
+student corrected it (concepts had been skipped) and asked for the format
+"qué hace → analogía → ejemplo → conexión", with canonical explanations saved verbatim.
+All 21 concepts now use that format.
+
+**Next review queue (3–5, v4):** fragile first → new → dependencies → older. Suggested:
+Concepto 6 (smoke test), Concepto 16 (registries), Concepto 14 (runners),
+Concepto 17 (Compose/Watchtower), Concepto 2 (data model) — with varied questions.
+
+**Next practical objective:** Stage 09 — Session 1: PostgreSQL data model
+(`environments`, `deployments`) + `schema.sql` + explain each column/index/FK.
+
+**Pending documentation:** none. MySQL→PostgreSQL sync completed 2026-11-04 —
+`stage-09` title/objective/Sessions 3 & 5/prerequisites; `delivery-story`,
+`project-specification`, `learning-roadmap`, `AGENTS.md`, `README.md`, `docs/stages/*`,
+ADR-0008/0009/0010/0015/0016, `execution-plan`, `stages/README`. ADR-0012 stays as
+Superseded; session-log keeps historical MySQL entries.
+
+**Commit / push:** none (explicit-request rule).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 21: Git y repos (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 21. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 21 — Git y repos (commit, push, ramas, PR)
+
+### 0. La idea en una frase
+Git es el **álbum de fotos del proyecto**: `commit` **sella** una foto local; `push` la **envía** al edificio central (GitHub/GitLab).
+
+### 1. Las 3 zonas de Git
+- **Working tree:** tus archivos tal como están.
+- **Staging (`git add`):** lo que entrará en la próxima foto.
+- **Repositorio (`git commit`):** la foto **sellada** (snapshot).
+- `git status` muestra tracked/staged/untracked.
+- **Commit es local**; `push` es otro paso.
+
+### 2. `commit` vs `push`
+- **commit:** sella la foto **localmente**.
+- **push:** envía los commits al **remoto**.
+- `push` **no** sube cambios sin commitear ni archivos ignorados.
+
+### 3. Los remotos del proyecto
+- **github** (`proyecto1`): pipeline completo + publicación.
+- **gitlab** (`repo2`): espejo, **solo validación**.
+- **No hay `origin`** → push explícito a cada uno.
+- `develop` = rama de trabajo; `master` = estable/showcase.
+
+### 4. Flujo normal
+- `status` → `add` lo que corresponde → `commit` → `fetch github` → `push github develop`.
+- El push dispara el workflow (`on.push.develop`) → lint/test/security.
+- **Local = ensayo; CI remoto = veredicto oficial.**
+
+### 5. Espejo (mirror)
+- `git push gitlab develop` **por separado**.
+- Git **no** hace push automático a todos los remotos.
+
+### 6. PR y ramas
+- **PR develop → master** también dispara CI.
+- Push de una **feature branch** sola **no** dispara este workflow.
+- **Push directo a master no está en `on`** → evitarlo.
+- **Merge después de verde.**
+
+### 7. Errores comunes
+- **Non-fast-forward rechazado** → fetch/integrar; **nunca** `--force` en ramas compartidas.
+- `pull` = fetch + integrar; `fetch` solo descarga refs.
+- GitHub por HTTPS/token; GitLab por SSH; **nada de secretos en el YAML**.
+
+### 8. Analogía
+- **commit** = sellar y etiquetar el paquete.
+- **push** = entregarlo al edificio central.
+- **pipeline** = los inspectores deciden si llega a la fábrica.
+
+### 9. Conexión
+- Código → **commit** → **push** → **runner ejecuta YAML** → gate → build → publish.
+- Complementa: Concepto 19 (YAML), Concepto 14 (runners).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 20: .gitignore vs .dockerignore + secretos (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 20. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 20 — `.gitignore` vs `.dockerignore` vs `.gitattributes` (+ `.env`/secrets)
+
+### 0. La idea en una frase
+`.gitignore` decide **qué NO va a Git**; `.dockerignore` decide **qué NO entra al build de Docker**; `.gitattributes` controla **finales de línea**, no ignora; `.env` guarda **secretos reales** (y se ignora).
+
+### 1. `.gitignore` — el álbum de fotos
+- Excluye archivos **no rastreados** de Git; **no los borra**.
+- Un archivo ya trackeado sigue en Git → `git rm --cached <file>` + commit.
+- `git check-ignore -v` muestra qué regla lo ignora.
+- **Analogía:** Git es el **álbum de fotos**; `.gitignore` es la **lista de qué no fotografiar** (basura temporal, perecederos, documentos privados).
+
+### 2. Reglas del proyecto (`.gitignore`)
+- `_archive/`, cachés de Python (`__pycache__/`, `*.py[cod]`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/`).
+- `.venv/`/`venv/`, basura de SO/editor.
+- `*.key`, `*.pem`, `.env`, `.env.*` (con `!.env.example`), `*.log`.
+- Patrones de arriba a abajo; `!` **niega**.
+
+### 3. Qué SÍ se commitea
+- Código, tests, `requirements.txt`, `Dockerfile`, CI, `.gitignore`, `.gitattributes`, docs, `.env.example`.
+- **Nunca:** virtualenvs, cachés, logs, `.env` real, claves, estado local de Docker.
+
+### 4. `.gitignore` NO es barrera de seguridad
+- Un secreto commiteado **queda en el historial**.
+- Si pasa: **rotar** la clave y eliminarla.
+
+### 5. `.dockerignore` — la caja de envío
+- Filtra el **contexto de build** antes de que el daemon lo vea.
+- **No borra** archivos, **no** cambia Git, **no** altera la imagen por sí solo.
+- `COPY` decide qué entra a la imagen.
+- **Analogía:** `.gitignore` cuida el **álbum**; `.dockerignore` cuida la **caja de envío** al taller.
+
+### 6. Reglas del proyecto (`.dockerignore`)
+- Excluye `.git`, cachés/venvs, logs, basura de SO/editor, claves/`.env`, `_archive/`, `docs/`, `screenshots/`, `scripts/`, `CICD.txt`.
+- **Debe conservar** `requirements.txt` y `Principal.py`.
+- Los tests pueden estar en el contexto, pero este Dockerfile **no los copia**.
+
+### 7. `.gitattributes`
+- Controla **finales de línea** (LF/CRLF), **no** ignores.
+- No es un `.gitignore`.
+
+### 8. `.env` y secretos
+- **`.env` real** → ignorado (nunca a Git).
+- **`.env.example`** → commiteado, documenta las variables (sin valores reales).
+- `X-API-Key` se documenta como **secreto**; el valor real vive en `.env`/CI.
+
+### 9. Conexión
+- Código → `.gitignore` (qué no va a Git) → `.dockerignore` (qué no va a la imagen) → build → pipeline.
+- Complementa: Concepto 15 (imágenes), Concepto 14 (runner).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 19: YAML, el manual del pipeline (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 19. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 19 — YAML (el manual del pipeline)
+
+### 0. La idea en una frase
+**YAML** es el **manual de instrucciones escrito** del pipeline: declara **qué** hacer y en **qué orden**; **no ejecuta nada** por sí mismo.
+
+### 1. ¿Qué es YAML?
+- Lenguaje de **declaración de datos/configuración** (no de programación).
+- Se lee como una lista de "clave: valor".
+- **No ejecuta:** solo describe; el **runner** lo ejecuta.
+
+### 2. Sintaxis básica (con ejemplos)
+- **Indentación con 2 espacios** (nada de tabs) → marca la jerarquía.
+- `clave: valor` → pares.
+- `- elemento` → listas.
+- Comillas: `"3.11"` (para que no sea número) y strings con `:`.
+- Ejemplo:
+```yaml
+on:
+  push:
+    branches: ["develop"]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ruff check .
+```
+
+### 3. ¿Por qué lo leen los pipelines?
+- GitHub Actions y GitLab CI **leen YAML** para saber qué ejecutar.
+- **YAML = orden de trabajo; runner = taller.**
+- Vive en **Git** → versionado, revisado, con historial.
+
+### 4. Ejemplo en tu proyecto (GitHub)
+- `on:` push develop + PR master (push directo a master **no** incluido).
+- `jobs:` lint/test/security/docker.
+- `runs-on: ubuntu-latest`.
+- `steps:` con `uses:` y `run:`.
+- `needs:` → docker espera lint/test/security.
+
+### 5. Ejemplo en tu proyecto (GitLab)
+- `stages:` lint → test → security.
+- Jobs con `stage`/`image`/`script`.
+- Mismo stage = **paralelo**; siguiente stage **espera**.
+- **Solo valida**; publica solo GitHub (ADR-0007).
+
+### 6. Errores típicos
+- **Tabs** en vez de espacios → YAML roto.
+- **Mala indentación** → jerarquía equivocada.
+- Olvidar comillas en `"3.11"` → lo interpreta como número.
+- Olvidar `needs:` → el job arranca sin esperar (publica roto en GitHub).
+
+### 7. Analogía
+- **YAML = orden de trabajo del taller:** estaciones, tareas y orden; el **runner** es el taller que la ejecuta.
+
+### 8. Conexión
+- Código → push → **YAML** (plan) → **runner** ejecuta → jobs → build → publish.
+- Complementa: Concepto 14 (runners/pipelines).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 18: El servidor VPS/SSH (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 18. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 18 — El servidor (VPS/SSH)
+
+### 0. La idea en una frase
+El **VPS** es una **casa en otra ciudad** (servidor Linux 24/7); **SSH** es la **puerta blindada con intercomunicador** para administrarla a distancia.
+
+### 1. ¿Qué es un VPS?
+- **Máquina virtual persistente** en un datacenter (IP propia, 24/7).
+- **No es un contenedor:** es el **servidor** donde corren los contenedores.
+- Plan: **Oracle Always Free** (Fase 9/10).
+
+### 2. ¿Qué es SSH?
+- Canal **cifrado** de control remoto: cliente `ssh` ↔ `sshd` en el **puerto 22**.
+- Da una **terminal remota**, no GUI.
+- Secuencia: IP → puerto 22 → host key → aviso `known_hosts` (primera vez) → túnel cifrado → autenticación → shell remota.
+
+### 3. Claves SSH (lo más importante)
+- **Pública** = candado que pones en el servidor.
+- **Privada** = llave que **nunca sale** de tu máquina.
+- **Una llave por puerta:** GitHub, GitLab, VPS (`id_ed25519_vps`); alias `mi-vps` en `~/.ssh/config`.
+- Nunca compartir/commitear la privada. Primer aviso = normal; **fingerprint cambiado** después = alerta.
+
+### 4. Detalles clave
+- Es **headless** (sin GUI): todo por terminal.
+- Cerrar SSH **no apaga** el servidor ni los contenedores.
+- El VPS **pulla** la imagen, **nunca construye**; Compose la ejecuta.
+
+### 5. Seguridad (Fase 10)
+- Endurecer SSH: **solo claves**, sin root, sin password.
+- El VPS fija el **tag del commit** (no `latest`).
+- Local `latest` + Watchtower = simulación; VPS = **CD real**.
+
+### 6. Analogía completa
+- **VPS = casa en otra ciudad** sin recepcionista.
+- **SSH = puerta blindada con intercomunicador.**
+- **Clave pública = candado** en la puerta; **privada = llave en tu bolsillo**; una llave por puerta.
+
+### 7. Conexión
+- Push → gate → registry → **VPS pull** → Compose → contenedor.
+- **SSH es la puerta de administración.**
+- Complementa: Concepto 16 (registries), Concepto 17 (Compose).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 17: Compose y Watchtower (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 17. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 17 — Compose y Watchtower
+
+### 0. La idea en una frase
+**Compose** es el **director de orquesta** que declara qué servicios deben correr; **Watchtower** es el **vigilante nocturno** que cambia la caja cuando aparece una nueva.
+
+### 1. ¿Qué es Compose?
+- Declara el **estado deseado** de varios contenedores en `docker-compose.yml`.
+- El **Engine** es quien ejecuta.
+- Aquí **no** hay `build:` → Compose **pulla** imágenes.
+
+### 2. Los servicios del proyecto
+- **app:** `erickdev8/mi-app:latest`, nombre fijo, `restart: always` (la app imprime en bucle cada 5s).
+- **watchtower:** `containrrr/watchtower:1.7.1` (pinneada), `restart: always`, socket de Docker, API 1.41, `--interval 30`.
+
+### 3. Comandos clave
+- `docker compose up -d` → levanta.
+- `docker compose ps` → estado.
+- `docker compose logs -f app` → logs.
+- `docker compose down` → quita contenedores/red (no imágenes).
+- **Compose NO vigila el registry.**
+
+### 4. ¿Qué es Watchtower?
+- Cada **30 s** comprueba si hay imagen nueva.
+- Si la hay: **para, elimina, pull, recrea** el contenedor.
+- **Nunca reconstruye** (no hace build).
+- En local usa `latest` a propósito → **simulación de CD** (ADR-0004); en el VPS se fija el **tag del commit**.
+
+### 5. Socket de Docker (seguridad)
+- Montar `/var/run/docker.sock` da **poder total** sobre Docker.
+- Por eso Watchtower es **solo local**, nunca en producción.
+- **Analogía:** darle al vigilante la **llave maestra** del edificio.
+
+### 6. Watchtower vs CD real
+- **Watchtower = CD de mentira:** cambia ciego, sin aprobación, sin healthcheck.
+- **CD real:** el pipeline ordena al VPS (`ssh ... "docker compose pull && up -d"`), con **versión fijada** y solo si lint+test pasaron.
+
+### 7. Analogía completa
+- **Compose = director de orquesta** (dice qué suena).
+- **Engine = los músicos** (ejecutan).
+- **Watchtower = vigilante nocturno** que cambia la caja por una nueva **sin reconstruirla**.
+
+### 8. Conexión
+- Build → registry → **Compose** levanta app+watchtower → **Watchtower** actualiza.
+- Complementa: Concepto 16 (registries), Concepto 15 (imágenes).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 16: Registries (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 16. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 16 — Registries (las bodegas de imágenes)
+
+### 0. La idea en una frase
+Un **registry** es una **bodega permanente de imágenes**: allí viven las cajas selladas para que cualquier máquina las pueda **pull**.
+
+### 1. ¿Qué es un registry?
+- Almacén de **imágenes y capas** Docker (**no** código fuente).
+- **Nombre:** `registry/namespace/repo:tag`.
+- Sin registry → **Docker Hub** por defecto.
+
+### 2. Los 3 registries del proyecto
+- **Docker Hub:** `erickdev8/mi-app` (consumo).
+- **GHCR:** `ghcr.io/ericksuper8000-source/mi-app`.
+- **GitLab Registry:** `registry.gitlab.com/ericksuper80-group/repo2`.
+- Misma imagen en los 3 → **redundancia**. **Solo GitHub Actions publica** (ADR-0007); GitLab valida.
+
+### 3. El trabajo del job `docker`
+- Login en los 3 con tokens (`--password-stdin`).
+- Build **una vez**.
+- Tag del **SHA del commit** + `latest`.
+- `docker tag` a cada nombre + `docker push` a cada uno.
+- **El tag es un alias, no una copia.**
+
+### 4. Tags: SHA vs latest
+- **SHA (8 caracteres):** número de serie pintado en la caja → identidad del contenido, viaja con la imagen, permite **rollback**.
+- **`latest`:** el **letrero del estante** ("lo último que llegó") → no dice nada del contenido; **mutable**.
+- **Drift silencioso:** si cada registry tiene un `latest` distinto, **nada falla**… y corres software que no probaste. Por eso un push fallido debe poner el pipeline **rojo**.
+
+### 5. Seguridad
+- **Tokens**, no passwords; secrets fuera del YAML/repo; **rotar** si se filtran.
+- El tag del commit **rastrea** la imagen hasta el código; `latest` mutable; **digest** inmutable.
+
+### 6. Analogía
+- **Bodega de cajas selladas:** dirección + etiqueta; `latest` = estante de novedades; tag SHA = número de lote.
+- **Git guarda recetas; el registry guarda cajas.**
+
+### 7. Conexión
+- Build → imagen → **push a 3 registries** → el VPS hace **pull** → contenedor.
+- Complementa: Concepto 15 (imagen), Concepto 14 (runner efímero).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 15: Imágenes y Docker Desktop (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 15. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 15 — Imágenes y Docker Desktop
+
+### 0. La idea en una frase
+Una **imagen** es una **caja sellada** con todo lo necesario para correr la app; **Docker Desktop** es el **edificio** del PC donde se construye y se abre esa caja.
+
+### 1. El problema que resuelven los contenedores
+- "En mi máquina funciona" → pero **no en el servidor**.
+- La imagen incluye **SO base + Python + dependencias + código** → **portabilidad** real.
+
+### 2. ¿Cómo se crea una imagen? (build)
+- `Dockerfile` = **receta**.
+- `docker build -t mi-app:latest .` = **construye** la imagen.
+- El `.` = **contexto de build** (qué archivos ve Docker); `.dockerignore` filtra lo que no entra.
+
+### 3. Capas (la lasaña)
+- Cada `FROM`/`COPY`/`RUN` = **capa congelada**.
+- Cambias una capa → se reconstruye esa y las siguientes; las anteriores se **reutilizan** (caché).
+- Por eso `COPY requirements.txt` + `RUN pip install` va **antes** de `COPY Principal.py`.
+
+### 4. Imagen vs contenedor
+- **Imagen** = molde **inmutable** (caja sellada).
+- **Contenedor** = instancia **en ejecución** (caja abierta y corriendo).
+- `docker rm` borra el **contenedor**; la imagen sigue. `docker rmi` borra la **imagen**.
+
+### 5. Docker Desktop
+- = **Engine** (motor que ejecuta) + **Compose** (orquestador) + **BuildKit** (constructor).
+- **Analogía:** el **edificio en tu PC**: taller (BuildKit), bodega (imágenes) y sala de máquinas (Engine).
+
+### 6. ¿Dónde vive la imagen?
+- En el **disco de tu PC** (Docker Desktop).
+- En el **runner de CI** es **efímero** → por eso hay que **push** al registry.
+- En el **VPS** persiste tras `pull`.
+
+### 7. Ejemplo con tu `Dockerfile`
+- `FROM python:3.11-slim` → base.
+- `COPY requirements.txt` + `RUN pip install` → **deps primero** (caché).
+- `COPY Principal.py` → código.
+- `CMD ["python", "Principal.py"]` → arranque.
+- `docker build -t mi-app:latest .` → imagen.
+
+### 8. Conexión
+- Dockerfile → **build** → imagen → contenedor → **smoke test** → push a registries.
+- Complementa: Concepto 5 (contenedor), Concepto 14 (runner).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 14: Runners y pipelines (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 14. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 14 — Runners y pipelines
+
+### 0. La idea en una frase
+El **pipeline** es la **línea de montaje** automática; el **runner** es el **operario/máquina** que la ejecuta; el **YAML** es el **manual de la línea**.
+
+### 1. ¿Qué es un pipeline?
+- Secuencia automatizada de etapas: `lint → test → security → build → publish → deploy`.
+- Se dispara por **eventos**: push, pull request, tags.
+- Objetivo: que **cada cambio** pase por los mismos controles, sin depender de la memoria humana.
+
+### 2. ¿Qué es un runner?
+- La **máquina/agente** que ejecuta los pasos del YAML.
+- **GitHub Actions:** runner alojado (`ubuntu-latest`) o self-hosted.
+- **GitLab:** GitLab Runner.
+- **Analogía:** el **taller** donde se ejecuta la orden de trabajo.
+
+### 3. Piezas del YAML (con ejemplos)
+- `on:` → **disparadores** (push a develop, PR a master).
+- `jobs:` → **trabajos** (lint, test, security, docker).
+- `runs-on:` → **qué runner** (`ubuntu-latest`).
+- `steps:` → **pasos** (`uses:` reutiliza actions; `run:` ejecuta comandos).
+- `needs:` → **dependencias** entre jobs (docker espera lint+test+security).
+
+### 4. Detalle clave: runner nuevo por job
+- Cada job arranca en un **runner limpio**.
+- Por eso cada job repite `checkout` + instalar dependencias.
+- **Analogía:** cada estación de la línea recibe una **mesa limpia**.
+
+### 5. GitHub vs GitLab
+- **GitHub:** jobs en **paralelo por defecto**; `needs` crea la dependencia explícita.
+- **GitLab:** **stages secuenciales por defecto** (lint → test → security); jobs del mismo stage en paralelo.
+- En este proyecto: **GitHub publica**; **GitLab solo valida** (ADR-0007).
+
+### 6. Ejemplo en tu proyecto (`ci.yml`)
+- `on: push develop` + `pull_request master`.
+- Jobs `lint`, `test`, `security` en **paralelo**.
+- `docker` con `needs: [lint, test, security]` → build → tag → push a 3 registries.
+- Cada job: `checkout` + `setup-python` + instalar + ejecutar.
+
+### 7. Analogía completa
+- **Pipeline = línea de montaje del restaurante:** estaciones (lint, test, security, build), un **runner** en cada estación y el **YAML = manual de la línea**.
+- Si una estación falla, el plato **no avanza** (docker no corre).
+
+### 8. Conexión
+- Código → push → **runner ejecuta el YAML** → lint/test/security → build → smoke → publish.
+- Complementa: Conceptos 8–13 son las herramientas que corren **dentro** de los jobs.
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 13: pip-audit, seguridad de dependencias (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 13. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 13 — pip-audit (seguridad de dependencias)
+
+### 0. La idea en una frase
+pip-audit es el **inspector de retiradas de proveedores**: revisa tus **dependencias** buscando **vulnerabilidades conocidas**.
+
+### 1. ¿Qué es pip-audit?
+- **Auditor de seguridad de dependencias** de Python.
+- Lee `requirements.txt`, resuelve dependencias **transitivas** y las compara con bases de vulnerabilidades (**PyPI Advisory Database / OSV**).
+- **No** escanea tu código → eso es **Bandit**.
+
+### 2. Qué detecta (con ejemplos)
+- **CVEs conocidos** en paquetes Python (ej.: una versión de `pytest` con un fallo conocido).
+- Incluye **dependencias transitivas** (las que traen tus dependencias).
+- En tu repo: `pip-audit -r requirements.txt` audita también las de `pytest`.
+
+### 3. Qué NO hace (límites)
+- ❌ No escanea tu código → **Bandit**.
+- ❌ No detecta malware desconocido ni **zero-days**.
+- ❌ No audita el **SO**, la **imagen base de Docker** ni las **GitHub Actions**.
+- ❌ No garantiza seguridad total.
+
+### 4. Analogía
+- El **inspector de retiradas de proveedores**: revisa si algún **ingrediente** tiene una alerta sanitaria conocida.
+- **Bandit** revisa **cómo cocinas**; **pip-audit** revisa **qué ingredientes usas**.
+
+### 5. Ejemplo en tu proyecto
+- `ci.yml` → job `security`: `pip-audit -r requirements.txt`.
+- `requirements.txt` **no es un lock file** → los resultados pueden cambiar según versiones transitivas.
+- Si hay vulnerabilidad conocida → `security` rojo → `docker` **bloqueado** (por `needs`).
+- Se instala ad hoc en CI; sin config/ignores aquí.
+
+### 6. Matices importantes
+- Un **lock file** mejora la **reproducibilidad**, no la seguridad.
+- También se auditan **dependencias de desarrollo**.
+- Proyectos reales usan `--ignore-vuln` justificado y `--fix`.
+
+### 7. Conexión
+- Dependencias → **pip-audit** (seguridad) → gate → build → smoke → pipeline.
+- **Diferencia clave:** Bandit escanea **tu código**; pip-audit escanea **tus dependencias**.
+- Complementa: Pytest (comportamiento), Ruff/Flake8 (lint), Black (formato), MyPy (tipos), Bandit (seguridad del código).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 12: Bandit, el inspector de seguridad (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 12. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 12 — Bandit (el inspector de seguridad)
+
+### 0. La idea en una frase
+Bandit es el **inspector de higiene** del código: lee sin ejecutar y busca **patrones peligrosos** de seguridad.
+
+### 1. ¿Qué es Bandit?
+- **SAST** (Static Application Security Testing) para Python.
+- Lee el código **sin ejecutarlo** y busca **patrones de riesgo**.
+- No es test, ni formateador, ni type checker, ni auditor de dependencias.
+
+### 2. Qué detecta (con ejemplos)
+- **Secretos/passwords hardcodeados.**
+- **`eval`/`exec`** (ejecutan strings como código → peligro).
+- **`pickle` inseguro** y **`yaml.load`** (sin `safe_load`).
+- **`subprocess(shell=True)` / `os.system`** (inyección de comandos).
+- **`tempfile.mktemp`** y **criptografía débil**.
+- **`assert` en producción** (se elimina con `-O` → no valides con `assert` en prod).
+- Hallazgos con **severidad/confianza** → requieren **triaje**.
+
+### 3. Qué NO hace (límites)
+- ❌ No detecta CVEs en dependencias → **pip-audit**.
+- ❌ No ejecuta el programa ni prueba lógica → **Pytest**.
+- ❌ No revisa estilo/tipos → **Ruff/Flake8/MyPy**.
+- ❌ No sustituye el diseño seguro ni la revisión humana.
+- ⚠️ Puede dar **falsos positivos/negativos**.
+
+### 4. Analogía
+- El **inspector de higiene** de la cocina: detecta pollo crudo junto a la ensalada o limpiadores cerca de la comida; no prueba el plato (tests) ni revisa proveedores (pip-audit).
+
+### 5. Ejemplo en tu proyecto
+- `ci.yml` → job `security`: `bandit -r . -x "./__pycache__,./test_principal.py"`.
+- **Excluye tests** porque usan `assert` a propósito; `assert` en producción es inseguro (se elimina con `-O`).
+- Sin config de Bandit → **defaults**.
+
+### 6. Severidad y triaje
+- Cada hallazgo trae **severidad** (LOW/MEDIUM/HIGH) y **confianza**.
+- No todo hallazgo se "arregla": hay que **evaluarlo** (¿es real? ¿es aceptable?).
+- Proyectos reales ponen **umbrales** y justifican `# nosec`.
+
+### 7. Conexión
+- Código → **Bandit** (seguridad) → gate → build → smoke → pipeline.
+- **Diferencia clave:** Bandit escanea **tu código**; pip-audit escanea **tus dependencias**.
+- Complementa: Pytest (comportamiento), Ruff/Flake8 (lint), Black (formato), MyPy (tipos), pip-audit (dependencias).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 11: MyPy, el inspector de tipos (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 11. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 11 — MyPy (el inspector de tipos)
+
+### 0. La idea en una frase
+MyPy es el **inspector de unidades de medida** del código: sin ejecutarlo, comprueba que los **tipos** cuadren (que no mezcles gramos con litros).
+
+### 1. ¿Qué son los tipos y qué hace MyPy?
+- Los **type hints** son anotaciones: `def suma(a: int, b: int) -> int`.
+- MyPy lee esas anotaciones y verifica **coherencia** **sin ejecutar** el código.
+- No es test, ni formateador, ni herramienta de seguridad.
+
+### 2. Qué detecta (con ejemplos)
+- **Tipos de argumentos/retorno incorrectos:** `suma("2", 3)` → error.
+- **`Optional` sin comprobar `None`:** usar `x.upper()` cuando `x: str | None`.
+- **Contenedores/atributos incompatibles** y **overrides** incorrectos.
+- En Python las anotaciones **no se aplican en runtime** → MyPy es la **red de seguridad estática**.
+
+### 3. Qué NO hace (límites)
+- ❌ No ejecuta tests → **Pytest**.
+- ❌ No formatea → **Black**.
+- ❌ No lint de estilo → **Ruff/Flake8** (aunque comparte el job).
+- ❌ No escanea seguridad → **Bandit**.
+- ❌ No audita dependencias → **pip-audit**.
+- ❌ No detecta división por cero ni lógica.
+
+### 4. Analogía
+- El **inspector de medidas** de la cocina: comprueba gramos vs litros **antes de cocinar**; no prueba el plato (tests) ni la higiene (Bandit).
+
+### 5. Ejemplo en tu proyecto
+- `Principal.py` y `test_principal.py` **no tienen anotaciones** → `mypy .` corre, pero con **cobertura limitada** (muchos `Any`; MyPy por defecto no revisa a fondo funciones sin tipos).
+- Anotar funciones es una **deuda/mejora**: permitiría detectar `suma("2", 3)`.
+- Se instala ad hoc en CI; sin config de MyPy aquí.
+
+### 6. Ejemplo en tu pipeline
+- `ci.yml` → job `lint`: **último paso** (`flake8 .` → `black --check .` → `ruff check .` → `mypy .`).
+- Si falla → `lint` rojo → `docker` **bloqueado** (por `needs`).
+
+### 7. Conexión
+- Código → **MyPy** (tipos) → gate → build → smoke → pipeline.
+- Complementa: Pytest (comportamiento), Ruff/Flake8 (lint/estilo), Black (formato), Bandit (seguridad), pip-audit (dependencias).
+- **Diferencia clave:** los tests comprueban **valores** en ejecución; MyPy comprueba **coherencia de tipos** antes de ejecutar.
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 10: Black, el formateador (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 10. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 10 — Black (el formateador)
+
+### 0. La idea en una frase
+Black es el **planchador** del código: no opina ni avisa, **reescribe** todo con un formato único y consistente.
+
+### 1. ¿Qué es Black?
+- **Formateador**, no linter.
+- Reescribe los archivos a un estilo **único, opinionado y determinista** (mismo código → mismo formato siempre).
+- Normaliza **comillas, espacios, paréntesis, saltos de línea** y longitud (**88 columnas** por defecto).
+- **No cambia la lógica**, no renombra variables, no ordena imports ni corrige errores.
+
+### 2. Local vs CI (muy importante)
+- **Local:** `black .` → **reescribe** los archivos.
+- **CI:** `black --check .` → **solo verifica**; si falla, corres Black local, revisas el diff, commit y push.
+
+### 3. Qué NO hace (límites)
+- ❌ No ejecuta tests → **Pytest**.
+- ❌ No revisa tipos → **MyPy**.
+- ❌ No escanea seguridad → **Bandit**.
+- ❌ No audita dependencias → **pip-audit**.
+- ❌ No detecta errores lógicos → **Ruff/Flake8** (solo formato).
+
+### 4. Analogía
+- El **planchador/tipógrafo** del código: deja la presentación **impecable y consistente**, pero no juzga si la receta es buena (tests) o segura (Bandit).
+
+### 5. Ejemplo en tu pipeline
+- `ci.yml` → job `lint`: `flake8 .` → `black --check .` → `ruff check .` → `mypy .`.
+- Si falla → `lint` rojo → `docker` **bloqueado** (por `needs`).
+- Sin config de Black → **defaults** (88 columnas).
+
+### 6. Black vs Flake8 (contraste clave)
+- **Flake8 reporta; Black reescribe.**
+- Flake8 (79 columnas) vs Black (88) → en proyectos reales se **alinean**.
+- Black solapa con `ruff format`, pero aquí Ruff se usa **solo como linter**.
+
+### 7. Conexión
+- Código → **Black** (formato) → gate → build → smoke → pipeline.
+- Complementa: Pytest (comportamiento), Ruff/Flake8 (lint), MyPy (tipos), Bandit (seguridad), pip-audit (dependencias).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 9: Flake8 (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 9. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 9 — Flake8 (el linter clásico)
+
+### 0. La idea en una frase
+Flake8 es el **corrector de estilo** del código: lee sin ejecutar y **reporta** problemas de estilo y errores comunes, **sin reescribir** nada.
+
+### 1. ¿Qué es Flake8?
+- Linter estático de Python.
+- Combina **3 herramientas**: **PyFlakes** (errores lógicos simples), **pycodestyle** (estilo PEP 8) y **mccabe** (complejidad).
+- **Reporta, no corrige** (eso lo hace Black).
+
+### 2. Qué detecta (con ejemplos)
+- **Líneas largas** (>79 por defecto).
+- **Espaciado/indentación** y líneas en blanco mal puestas.
+- **Imports sin usar** y **nombres indefinidos**.
+- **Comparaciones raras** con `None` (ej.: `== None`).
+- **`except` vacío o demasiado amplio**.
+- **Complejidad excesiva** (mccabe: funciones con demasiados caminos).
+- En tu repo: sin `.flake8`/`setup.cfg`/`tox.ini` → **config por defecto**.
+
+### 3. Qué NO hace (límites)
+- ❌ No ejecuta tests → **Pytest**.
+- ❌ No revisa tipos → **MyPy**.
+- ❌ No escanea secretos → **Bandit**.
+- ❌ No audita dependencias → **pip-audit**.
+- ❌ No formatea/corrige → **Black**.
+
+### 4. Analogía
+- El **corrector de estilo** (proofreader) de la receta: revisa que sea **legible y consistente**; **no** prueba el plato (Pytest) ni la higiene (Bandit).
+
+### 5. Ejemplo en tu pipeline
+- `ci.yml` → job `lint`: `flake8 .` (antes de Black/Ruff/MyPy).
+- Si falla → `lint` rojo → `docker` **bloqueado** (por `needs`).
+- Se instala ad hoc en CI (`pip install flake8 black ruff mypy`), **no** en `requirements.txt`.
+
+### 6. Flake8 vs Ruff vs Black
+- **Flake8:** reporta estilo + errores simples + complejidad.
+- **Ruff:** reporta (rápido, moderno) → **solapa mucho** con Flake8.
+- **Black:** **reescribe** el formato.
+- **Contraste clave:** Flake8 **reporta**, Black **reescribe**.
+- Aquí se usan los tres para aprender; en un proyecto real podrías consolidar Flake8+Ruff.
+
+### 7. Conexión
+- Código → **Flake8** (lint) → gate → build → smoke → pipeline.
+- Complementa: Pytest (comportamiento), Black (formato), MyPy (tipos), Bandit (seguridad), pip-audit (dependencias).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 8: Ruff, el linter (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 8. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 8 — Ruff (el linter)
+
+### 0. La idea en una frase
+Un **linter** es el **detector de pelusas** del código: lee el código **sin ejecutarlo** y avisa de errores, rarezas y cosas sospechosas antes de que lleguen al pipeline.
+
+### 1. ¿Qué es un linter?
+- Herramienta de **análisis estático**: lee el código fuente y lo revisa **sin ejecutarlo**.
+- No prueba comportamiento: solo señala **patrones problemáticos**.
+- **Analogía:** el **inspector de la cocina** que, sin probar la comida, avisa de ingredientes sin etiqueta o cuchillos fuera de sitio.
+
+### 2. ¿Qué es Ruff?
+- Linter de Python escrito en **Rust** → **muy rápido**.
+- **Comando:** `ruff check .` (revisa todo el proyecto).
+- En tu proyecto: se ejecuta en el job `lint` del CI.
+- Sin `pyproject.toml`/`ruff.toml` → usa sus **reglas por defecto**.
+
+### 3. Qué detecta (con ejemplos)
+- **Imports sin usar:** `import os` que nunca se usa → `F401`.
+- **Variables sin usar:** `x = 5` que nunca se lee.
+- **Nombres indefinidos:** usar `variable_inexistente` → `F821`.
+- **Comparaciones sospechosas:** `== None` (mejor `is None`), `== True`.
+- **`except` demasiado amplio:** `except:` que se traga todos los errores.
+- **Código muerto** y **f-strings sin placeholders** (`f"hola"` sin `{}`).
+- En tu repo: marcó un **import** en `test_principal.py`.
+
+### 4. Qué NO hace (límites)
+- ❌ No ejecuta tests → eso es **Pytest**.
+- ❌ No formatea → eso es **Black** (`ruff format` existe, pero aquí no se usa para eso).
+- ❌ No revisa tipos → eso es **MyPy**.
+- ❌ No escanea seguridad → eso es **Bandit**.
+- ❌ No audita dependencias → eso es **pip-audit**.
+
+### 5. Analogía completa
+- **Ruff = inspector rápido con checklist:** detecta lo obvio (ingredientes sin usar, utensilios mal puestos, etiquetas faltantes).
+- **No** prueba el plato (Pytest), **no** revisa la presentación (Black), **no** comprueba medidas (MyPy), **no** revisa higiene (Bandit), **no** audita proveedores (pip-audit).
+
+### 6. Ejemplo en tu pipeline
+- `ci.yml` → job `lint`: `flake8 .` → `black --check .` → `ruff check .` → `mypy .`.
+- Si `ruff check .` falla → `lint` rojo → el job `docker` **no corre** (por `needs: [lint, test, security]`).
+- Se instala ad hoc en CI (`pip install flake8 black ruff mypy`), **no** está en `requirements.txt`.
+
+### 7. Ruff vs Flake8
+- Ambos son linters y **solapan** mucho.
+- **Ruff:** Rust → muy rápido, moderna.
+- **Flake8:** Python → más lento, clásico (PyFlakes + pycodestyle + mccabe).
+- Aquí se usan **ambos** para aprender; en un proyecto real se podría consolidar en uno.
+
+### 8. Conexión
+- Código → **Ruff** (lint) → gate → build → smoke → pipeline.
+- Complementa: Pytest (comportamiento), Black (formato), MyPy (tipos), Bandit (seguridad), pip-audit (dependencias).
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 7: Pytest y tipos de pruebas (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 7. Se reproduce verbatim y se reutilizará **idéntica** en futuros
+repasos.
+
+## 🧠 Concepto 7 — Pytest y los tipos de pruebas
+
+### 0. La idea en una frase
+Un **test** es una **pregunta automática** que le haces al código: *"¿haces lo que prometiste?"* — y que se puede repetir mil veces sin cansarse.
+
+### 1. ¿Qué es un test?
+- Es **código que ejecuta tu código** y **compara** el resultado con el esperado.
+- Coincide → **PASS ✅**. No coincide → **FAIL ❌**.
+- **Analogía:** el **control de calidad** de un restaurante: no basta con cocinar; hay que **probar** antes de servir.
+
+### 2. Los tipos de pruebas (cada una con analogía + ejemplo)
+
+**a) Unitarias** — prueban **una función aislada**
+- Analogía: probar **un ingrediente** solo (¿la sal es sal?).
+- Ejemplo: `assert suma(2, 3) == 5` · `assert es_par(4) is True`.
+- Rápidas, muchas, **sin BD ni red**.
+
+**b) Integración** — prueban **varias piezas juntas**
+- Analogía: probar **la salsa con la pasta** (¿se mezclan bien?).
+- Ejemplo: FastAPI + PostgreSQL → `POST /api/deployments` y verificar que **se guardó en la BD**.
+- Más lentas; necesitan BD (por eso el **service container de PostgreSQL** en CI, Fase 9).
+
+**c) End-to-end (E2E)** — el **flujo completo**, como el usuario
+- Analogía: pedir el **menú completo** como cliente, de la entrada al postre.
+- Ejemplo: abrir navegador → crear deployment → verlo en el timeline.
+- Lentas y frágiles; **pocas**.
+
+**d) API** — prueban los **endpoints** (contrato)
+- Analogía: probar que el **mesero entiende el pedido** y responde lo correcto.
+- Ejemplo: `GET /health` → `200`; `POST /api/deployments` sin API key → `401`.
+
+**e) Carga** — ¿aguanta **muchos usuarios**?
+- Analogía: ver si la cocina aguanta un **banquete de 500 personas**.
+- Herramientas: k6/Locust (futuro; no ahora).
+
+**f) Seguridad** — ¿hay **agujeros**?
+- Analogía: el **inspector de higiene**.
+- Ejemplo: Bandit (código) y pip-audit (dependencias) — conceptos más adelante.
+
+**g) Smoke** — ya visto (Concepto 6): ¿el **contenedor** arranca y responde?
+
+### 3. Pytest — el "ejecutor" de pruebas
+- **Qué hace:** descubre archivos `test_*.py`, ejecuta funciones `test_*`, compara con `assert` y reporta PASS/FAIL.
+- **Analogía:** el **degustador** que recorre la cocina probando cada plato de la lista.
+- **Comando:** `pytest` (local) · job `test` en CI.
+- **Extras:** `fixtures` (preparar datos), `parametrize` (mismo test con varios datos), `-v`, `coverage`.
+
+### 4. Ejemplo real: `test_principal.py`
+- **4 tests** para 3 funciones: `suma`, `division`, `es_par` (ej.: `10 / 2 == 5`, `4 es par`).
+- **No** prueba división por cero ni el `while True`.
+- **Analogía:** el degustador probó 4 platos, pero no probó el horno encendido 24/7.
+
+### 5. La pirámide de pruebas
+- **Muchas** unitarias → **menos** integración → **pocas** E2E.
+- **Analogía:** muchos ingredientes probados, pocas salsas combinadas, pocos menús completos.
+- **Por qué:** unitarias son rápidas/baratas; E2E lentas/frágiles.
+
+### 6. Coverage (cobertura)
+- % del código que ejecutan los tests. **Es un mapa, no una meta:** 100 % no garantiza buenos tests.
+- **Plan Fase 9:** gate ≥ 80 %.
+
+### 7. Conexión
+- Código → **Pytest** (unitarias/integración) → gate → build → **smoke test** (Concepto 6) → pipeline.
+- **Diferencia clave:** Pytest prueba **funciones**; el smoke test prueba el **contenedor**; Bandit/pip-audit prueban **seguridad**.
+
+---
+
+## 2026-11-04 — Repaso (día nuevo) — Concepto 6: smoke test (explicación canónica)
+
+**Phase / Stage:** Phase 9 (planificación) — revisión de conceptos; sin cambios de código.
+
+**Nota:** El estudiante pidió guardar esta explicación **exactamente así** como memoria
+canónica del Concepto 6. Se reproduce verbatim.
+
+## Por qué está en este punto del orden
+
+El orden que seguimos es el **flujo real de una app**: producto → datos → API → conexión BD → contenedor → **¿lo empaquetado funciona?** → pipeline. El smoke test es justo la pregunta que aparece **después de construir el contenedor** (Concepto 5) y **antes de publicarlo**. Por eso va aquí: **no se publica lo que no arranca**.
+
+Y en tu repo aún no existe porque falta el Deploy Journal (Fase 9), que trae el endpoint `/health`. Te lo explico como **pieza planificada**, no como algo presente.
+
+## Concepto 6 — Smoke test, desde cero
+
+### 1. Qué es (y de dónde viene el nombre)
+- **Smoke test** = "prueba de humo". Viene de la electrónica: al encender un equipo por primera vez, si sale humo, no sigas probando.
+- En software: es la **prueba mínima** que responde una sola pregunta: **"¿arranca y responde?"**. No prueba todas las funciones; prueba que está **vivo**.
+
+### 2. Qué hace exactamente
+- Toma la **imagen ya construida**, la corre en un contenedor y le pregunta: "¿estás bien?".
+- En una API: hace una petición HTTP a un endpoint de salud (`/health`) y espera `200 OK`.
+- Si responde → la imagen es desplegable → el pipeline puede publicar.
+- Si no responde → el pipeline **falla y no publica nada**.
+
+### 3. Analogía
+- **Cocinar** (build) vs **probar el plato** (smoke test) antes de servirlo. Si el plato está malo, no sale a la mesa (no se publica).
+
+### 4. Ejemplo con tu proyecto
+- **Hoy:** `Principal.py` es un script en bucle que imprime; **no hay servidor HTTP** → no hay nada que pueda responder por HTTP. Por eso no hay smoke test.
+- **En Fase 9 (Deploy Journal):** la app FastAPI tendrá `GET /health` (responde `{"status":"ok"}` y comprueba la BD).
+- El smoke test en CI sería: **build → `docker run` → `curl /health` → 200 → push**. Si falla, no publica.
+
+### 5. Diferencia con los tests que YA tienes
+- `test_principal.py`: **tests unitarios** → prueban funciones (suma, división, es_par) **sin contenedor**.
+- **Smoke test:** prueba el **contenedor completo en ejecución** → "¿la imagen arranca y responde?".
+- Son complementarios, no lo mismo.
+
+### 6. Conexión
+- **Concepto 5** (contenedor) → **Concepto 6** (¿funciona?) → pipeline (publicar solo si está vivo).
+
+---
+
 ## 2026-10-29 — Route v2.1: product-first + Deploy Journal (documentation only)
 
 **Phase / Stage:** Route redefinition — no code changed.

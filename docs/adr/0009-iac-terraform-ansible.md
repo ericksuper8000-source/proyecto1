@@ -48,7 +48,7 @@ Junior. The zero-cost rule (ADR-0005) stays absolute.
   Phase 9/11.
 - Provider decision is a **documented gate** at the start of Stage 10 (Oracle needs card
   verification but no charge; Hetzner only if already owned). The server is sized from
-  the product's known stack (ADR-0015/0016): app + MySQL + Nginx + monitoring.
+  the product's known stack (ADR-0015/0016): app + PostgreSQL + Nginx + monitoring.
 - Oracle ARM A1 shape forces multi-arch images → ADR-0010.
 - New competencies: HCL, state files, providers, plan/apply lifecycle, idempotency.
 

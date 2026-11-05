@@ -11,7 +11,7 @@
 | Stage | Title | Phase | Status |
 |---|---|---|---|
 | 08 | [SSH & Remote Connections](stage-08-ssh-remote-connection.md) | 8 | ✅ Complete (2026-08-25) |
-| 09 | [Deploy Journal: product, FastAPI, MySQL & CI/CD v2](stage-09-deploy-journal.md) | 9 | ⬜ Pending — Current (route v2.1) |
+| 09 | [Deploy Journal: product, FastAPI, PostgreSQL & CI/CD v2](stage-09-deploy-journal.md) | 9 | ⬜ Pending — Current (route v2.1) |
 | 10 | [VPS Provisioning with Terraform + cloud-init](stage-10-vps-provisioning.md) | 10 | ⬜ Pending (route v2.1) |
 | 11 | [Linux Administration + Ansible](stage-11-linux-admin-ansible.md) | 11 | ⬜ Pending (route v2.1) |
 | 12 | [Deployment: immutable tag, CD, rollback](stage-12-deployment-cd-rollback.md) | 12 | ⬜ Pending (route v2.1) |

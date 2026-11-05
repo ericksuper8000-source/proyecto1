@@ -25,7 +25,7 @@ to guide the student toward technical reasoning — never to hand over finished 
 The project was re-audited as a "technical rival" on 2026-10-29 and then reordered by
 the **product-first principle** (ADR-0016). The route:
 
-- **Phase 9 = product first:** Deploy Journal (Python + FastAPI + MySQL 8 + CI/CD v2) —
+- **Phase 9 = product first:** Deploy Journal (Python + FastAPI + PostgreSQL + CI/CD v2) —
   built, tested, containerized and published **before any server exists** (ADR-0015).
 - **Phases 10–15:** 10 Terraform VPS (sized from the product) → 11 Linux+Ansible →
   12 Deploy+CD+rollback → 13 Hardening+HTTPS+backups → 14 Observability → 15 Portfolio.
@@ -38,7 +38,7 @@ the **product-first principle** (ADR-0016). The route:
   findings (C1–C12) to phases and acceptance criteria. Every practical block should
   advance one of these actions.
 - **Zero-cost stays absolute** (ADR-0005): Terraform, Ansible, buildx/QEMU, Trivy,
-  Dependabot, gitleaks, Uptime Kuma, Prometheus, Grafana, Telegram, MySQL 8, DuckDNS/
+  Dependabot, gitleaks, Uptime Kuma, Prometheus, Grafana, Telegram, PostgreSQL, DuckDNS/
   sslip.io — all free. Any new tool must be free or pre-approved.
 - **Pending student decisions** (record resolution in `docs/session-log.md`): provider
   (Oracle vs owned Hetzner — gate at Stage 10 Session 0), GitLab public/private

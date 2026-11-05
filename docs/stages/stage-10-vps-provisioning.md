@@ -13,7 +13,7 @@
 
 Provision the **first real server from code** with Terraform + cloud-init —
 reproducible, reviewable, free — sized from the known product stack (Deploy Journal +
-MySQL + Nginx + monitoring), and connect over SSH understanding every choice.
+PostgreSQL + Nginx + monitoring), and connect over SSH understanding every choice.
 
 ## Scenario (real world)
 
