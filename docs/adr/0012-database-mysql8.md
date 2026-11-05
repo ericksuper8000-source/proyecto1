@@ -1,6 +1,6 @@
 # ADR-0012 — Database: MySQL 8
 
-**Status:** Accepted
+**Status:** Superseded by ADR-0017 (2026-11-04)
 **Date:** 2026-10-29
 **Context:** Audit 2026-10-29, finding C8 (docs contradict each other): execution-plan said PostgreSQL while the student's learning path is MySQL. Fixes the contradiction permanently.
 

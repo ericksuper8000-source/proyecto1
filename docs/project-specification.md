@@ -27,7 +27,7 @@ Everything is built publicly as professional evidence of learning.
 ## 2. Main Objective
 
 Build, step by step, the **Deploy Journal** product — a small deployment-history service
-(Python + FastAPI + MySQL 8) — and around it a real delivery pipeline that tests the
+(Python + FastAPI + PostgreSQL) — and around it a real delivery pipeline that tests the
 product, builds multi-arch images, publishes them to three registries, and deploys to a
 free VPS **provisioned with Terraform and configured with Ansible** — then hardens it
 (Nginx, HTTPS, backups) and **observes** it (monitoring, dashboards, alerts) — all
@@ -52,7 +52,7 @@ The student must understand each component **before** automating it.
 Included:
 
 - **Deploy Journal** (product, ADR-0015): deployment-history API + public timeline,
-  built with Python + FastAPI + MySQL 8
+  built with Python + FastAPI + PostgreSQL
 - Code quality: Ruff, Flake8, Black, MyPy (harmonized in `pyproject.toml`, ADR-0013)
 - Automated testing with Pytest (unit + API tests + coverage)
 - Supply-chain checks: Bandit, pip-audit, Trivy, Dependabot, gitleaks, pre-commit
@@ -65,7 +65,7 @@ Included:
 - **Infrastructure as Code: Terraform + cloud-init (ADR-0009)**
 - **Configuration management: Ansible bootstrap playbook (ADR-0009)**
 - VPS provisioning (Oracle Always Free or owned Hetzner) and Linux administration
-- **Database: MySQL 8 (ADR-0012)**
+- **Database: PostgreSQL (ADR-0017)**
 - Production practices: Nginx, HTTPS (free domain), environment variables, volumes,
   logs, backups + restore drill
 - **Observability: Uptime Kuma, cAdvisor, Prometheus, Grafana, Telegram alerts (ADR-0011)**
@@ -125,7 +125,7 @@ containerization, registries, orchestration/CD simulation). See
 
 What remains to be built from here (route v2.1, 2026-10-29):
 
-- The product: **Deploy Journal** (FastAPI + MySQL 8 + CI/CD v2) — ADR-0015/0016
+- The product: **Deploy Journal** (FastAPI + PostgreSQL + CI/CD v2) — ADR-0015/0016
 - A VPS provisioned **from code** (Terraform + cloud-init), sized from the product
 - Linux administration + Ansible bootstrap
 - Deployment through the pipeline (immutable tag → CD over SSH → healthcheck → rollback)
@@ -151,7 +151,7 @@ Future infrastructure (all free — ADR-0005):
 - Free VPS (Oracle Cloud Always Free, or an owned Hetzner server) provisioned with
   Terraform + cloud-init
 - Ansible for server bootstrap
-- MySQL 8 as the database service
+- PostgreSQL as the database service
 - Nginx + Let's Encrypt with a free hostname (DuckDNS / sslip.io / nip.io)
 - Monitoring stack: Uptime Kuma, cAdvisor, Prometheus, Grafana, Alertmanager
 - Telegram bot API for alerts
@@ -190,7 +190,7 @@ Knowledge is built in layers, and each layer depends on full understanding of th
 previous one:
 
 ```
-Developer / Code (FastAPI + MySQL)
+Developer / Code (FastAPI + PostgreSQL)
   ↓
 Version Control (Git)
   ↓
@@ -230,7 +230,7 @@ Observability (Uptime Kuma, Prometheus, Grafana, Alerts)
 | 6 | Registries | Docker Hub, GHCR, GitLab Registry | ✅ |
 | 7 | Orchestration & CD Sim | Docker Compose + Watchtower | ✅ |
 | 8 | SSH & Remote Access | Understand and use SSH | ✅ |
-| 9 | Deploy Journal (product-first) | FastAPI + MySQL 8 + timeline + CI/CD v2 | 🔄 Current |
+| 9 | Deploy Journal (product-first) | FastAPI + PostgreSQL + timeline + CI/CD v2 | 🔄 Current |
 | 10 | VPS Provisioning (IaC) | Terraform + cloud-init, sized from the product | ⬜ |
 | 11 | Linux Admin + Ansible | Users, firewall, Docker, idempotent playbook | ⬜ |
 | 12 | Deployment | Immutable tag, CD over SSH, rollback | ⬜ |

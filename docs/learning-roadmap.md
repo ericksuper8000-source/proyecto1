@@ -152,11 +152,11 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 
 ---
 
-## Phase 9 — Deploy Journal: Product, FastAPI & MySQL (product-first)
+## Phase 9 — Deploy Journal: Product, FastAPI & PostgreSQL (product-first)
 
 - [ ] I can explain the product (Deploy Journal) and why the pipeline derives from it
   (ADR-0015/0016).
-- [ ] I can justify every stack choice from a product requirement (FastAPI, MySQL 8,
+- [ ] I can justify every stack choice from a product requirement (FastAPI, PostgreSQL,
   server-rendered page) and every tool from a risk it mitigates.
 - [ ] I can explain why the app evolves to FastAPI **before** deployment (ADR-0008).
 - [ ] I can write `GET /health` (with a real DB check) and explain why monitoring,
@@ -216,7 +216,7 @@ the phase is **not** complete — regardless of how many checkboxes are ticked.
 - [ ] I can explain volumes vs bind mounts and why the database needs persistence.
 - [ ] I can read container and Nginx logs to diagnose a failure, and why log rotation
   limits exist.
-- [ ] I can explain the backup strategy (mysqldump + off-site free target) and
+- [ ] I can explain the backup strategy (pg_dump + off-site free target) and
   **demonstrate a restore**.
 
 ---

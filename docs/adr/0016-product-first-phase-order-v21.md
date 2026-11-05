@@ -17,11 +17,11 @@ it.
    the pipeline (job, tool, stage, server resource) may exist without a product
    requirement or a named risk that justifies it.**
 2. **Phase order v2.1** (supersedes the order in ADR-0008/0009/0012/0013):
-   **9 Deploy Journal (product + FastAPI + MySQL + CI/CD v2) → 10 VPS with Terraform →
+   **9 Deploy Journal (product + FastAPI + PostgreSQL + CI/CD v2) → 10 VPS with Terraform →
    11 Linux + Ansible → 12 Deploy + CD + rollback → 13 Hardening + backups →
    14 Observability → 15 Portfolio.**
 3. The app is built, tested, containerized and published **before** any server exists.
-   The server is sized and configured **from the product's known stack** (app + MySQL +
+   The server is sized and configured **from the product's known stack** (app + PostgreSQL +
    Nginx + monitoring).
 
 ## Context & Problem
@@ -38,7 +38,7 @@ flow. The student's principle fixes the direction of derivation.
 Product scope & users
   → user-facing behaviors + data
   → API contract (endpoints, validation)
-  → stack & dependencies (FastAPI, MySQL 8)
+  → stack & dependencies (FastAPI, PostgreSQL)
   → test strategy (unit + API, DB in CI)
   → quality tooling (pyproject: Black/Ruff/Flake8/MyPy)
   → security tooling (API key, Bandit, pip-audit, Trivy, gitleaks, Dependabot)
@@ -54,8 +54,8 @@ Product scope & users
 | Product requirement / risk | Derived element | Phase |
 |---|---|---|
 | API must respond and be verifiable | FastAPI, `/health`, smoke test | 9 |
-| Deployment history must persist | MySQL 8, named volume | 9 |
-| History must survive loss | `mysqldump` + off-site + restore drill | 13 |
+| Deployment history must persist | PostgreSQL, named volume | 9 |
+| History must survive loss | `pg_dump` + off-site + restore drill | 13 |
 | Writes must be protected | `X-API-Key`, CI secret, server `.env` | 9/12 |
 | Code must be correct | pytest (unit + API), coverage ≥ 80 % | 9 |
 | Code must be consistent/typed | Black/Ruff/Flake8/MyPy via `pyproject.toml` | 9 |
@@ -95,7 +95,7 @@ If a proposed tool has no row in this matrix, it does not enter the project.
   `stage-10-vps-provisioning.md`. References in ADR-0008/0009/0012/0013 were updated.
 - VPS provider decision moves to Phase 10 (Stage 10 Session 0); it no longer blocks the
   start of the project.
-- CI gains the MySQL service container (API tests), the smoke test and the journal
+- CI gains the PostgreSQL service container (API tests), the smoke test and the journal
   write-back in CD — all derived from product requirements (ADR-0013/0015).
 - The zero-cost rule (ADR-0005) is unchanged; the derived stack is entirely free.
 

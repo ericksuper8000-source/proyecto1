@@ -41,7 +41,7 @@ A deployment is only real when it serves something verifiable: an HTTP endpoint.
 
 ## Consequences
 
-- New phase order (v2.1, ADR-0016): 9 Deploy Journal (FastAPI+MySQL) → 10 Terraform VPS →
+- New phase order (v2.1, ADR-0016): 9 Deploy Journal (FastAPI+PostgreSQL) → 10 Terraform VPS →
   11 Linux+Ansible → 12 Deploy+CD → 13 Hardening+HTTPS+Backups → 14 Observability →
   15 Portfolio.
 - The VPS is provisioned in Phase 10 but nothing is deployed to it until Phase 12.

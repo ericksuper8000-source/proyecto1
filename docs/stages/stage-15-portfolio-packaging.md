@@ -74,7 +74,7 @@ of their attention before they decide whether to invite you to a technical inter
 1. What should a stranger understand from your repo in the first minute?
 2. Why do the internal AI docs leave the public repo (ADR-0014)?
 3. What is the difference between a screenshot and evidence?
-4. Defend: why three registries? why Terraform? why MySQL? why rollback by tag?
+4. Defend: why three registries? why Terraform? why PostgreSQL? why rollback by tag?
 5. What is the one sentence that describes the whole project?
 
 ## Report (student fills after the session)
